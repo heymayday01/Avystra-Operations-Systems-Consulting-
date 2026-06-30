@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import {
@@ -9,16 +9,33 @@ import {
   type DimensionCode,
 } from "@/lib/ogi-data";
 
-// ── Resend client ──────────────────────────────────────────────────────────
-// NOTE: Until avystra.co.in is verified with Resend DNS, we must use the
-// shared onboarding sender. Once the domain is verified, swap FROM_EMAIL to
-// something like "AVYSTRA <noreply@avystra.co.in>".
-const RESEND_API_KEY = process.env.RESEND_API_KEY?.trim();
-const FROM_EMAIL = "AVYSTRA <onboarding@resend.dev>";
+// ── SMTP transport (Gmail) ──────────────────────────────────────────────────
+// Uses Gmail's SMTP server with an App Password. Free, 500 emails/day, and
+// delivers to any recipient worldwide (no domain verification needed).
+//
+// NOTE: Gmail no longer accepts your regular account password for SMTP — you
+// must generate a 16-character App Password at
+// https://myaccount.google.com/apppasswords (requires 2-Step Verification).
+const SMTP_USER = process.env.SMTP_USER?.trim();
+const SMTP_PASS = process.env.SMTP_PASS?.trim();
+const SMTP_HOST = process.env.SMTP_HOST?.trim() || "smtp.gmail.com";
+const SMTP_PORT = Number(process.env.SMTP_PORT?.trim() || "465");
+const FROM_EMAIL =
+  process.env.SMTP_FROM?.trim() ||
+  (SMTP_USER ? `AVYSTRA <${SMTP_USER}>` : "AVYSTRA <noreply@avystra.co.in>");
 const AVYSTRA_NOTIFY_EMAIL =
   process.env.AVYSTRA_NOTIFY_EMAIL?.trim() || "info@avystra.co.in";
 
-const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
+// Single reusable transport — created once per process, pooled across requests.
+const transporter =
+  SMTP_USER && SMTP_PASS
+    ? nodemailer.createTransport({
+        host: SMTP_HOST,
+        port: SMTP_PORT,
+        secure: SMTP_PORT === 465, // true for 465 (SSL), false for 587 (STARTTLS)
+        auth: { user: SMTP_USER, pass: SMTP_PASS },
+      })
+    : null;
 
 // ── Zod validation ─────────────────────────────────────────────────────────
 const BodySchema = z.object({
@@ -296,32 +313,21 @@ export async function POST(request: Request) {
     );
   }
 
-  // 2. Send emails via Resend. Each send is independently handled so a
-  //    failure in one doesn't block the other. If RESEND_API_KEY is not
-  //    configured, we skip both and return emailSent: false — the DB record
-  //    is still saved, which is the user's primary requirement.
-  //
-  //    NOTE: The Resend SDK resolves (does not throw) on API-level errors
-  //    like 403/422. It returns { data, error } — we must check `.error`
-  //    explicitly, not just rely on try/catch (which only catches network
-  //    errors).
+  // 2. Send emails via Gmail SMTP. Each send is independently try/caught so
+  //    a failure in one doesn't block the other. If SMTP creds are missing,
+  //    we skip both and return emailSent: false — the DB record is still
+  //    saved, which is the user's primary requirement.
   let emailSent = false;
 
-  if (resend) {
+  if (transporter) {
     // Email #1 → AVYSTRA (full data)
     try {
-      const result = await resend.emails.send({
+      await transporter.sendMail({
         from: FROM_EMAIL,
         to: AVYSTRA_NOTIFY_EMAIL,
         subject: `New OGI Submission — ${data.name} (${data.role})`,
         html: buildAvystraEmailHtml(data),
       });
-      if (result.error) {
-        console.error(
-          "[ogi/submit] AVYSTRA notification email rejected by Resend:",
-          result.error
-        );
-      }
     } catch (err) {
       console.error("[ogi/submit] AVYSTRA notification email failed:", err);
     }
@@ -329,7 +335,7 @@ export async function POST(request: Request) {
     // Email #2 → User (result summary), only if a valid email was provided
     if (data.email) {
       try {
-        const result = await resend.emails.send({
+        await transporter.sendMail({
           from: FROM_EMAIL,
           to: data.email,
           subject: "Your AVYSTRA OGI Result",
@@ -339,20 +345,13 @@ export async function POST(request: Request) {
             band: data.band,
           }),
         });
-        if (result.error) {
-          console.error(
-            "[ogi/submit] User result email rejected by Resend:",
-            result.error
-          );
-        } else {
-          emailSent = true;
-        }
+        emailSent = true;
       } catch (err) {
         console.error("[ogi/submit] User result email failed:", err);
       }
     }
   } else {
-    console.warn("[ogi/submit] RESEND_API_KEY not set — skipping email sends");
+    console.warn("[ogi/submit] SMTP credentials not set — skipping email sends");
   }
 
   return NextResponse.json({
