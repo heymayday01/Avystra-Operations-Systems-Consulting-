@@ -77,7 +77,7 @@ export default function FourPillars() {
             </span>
           </div>
 
-          <h2 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.1] mb-4 uppercase">
+          <h2 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-4 uppercase">
             The Four Pillars of{" "}
             <span className="font-serif italic font-light text-gold relative inline-block px-1">
               Organizational Excellence

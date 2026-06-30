@@ -269,7 +269,7 @@ export default function Hero() {
             className="mb-4 md:mb-6 transform-gpu relative z-20 max-w-[95vw] lg:max-w-none"
           >
             <h1
-              className="font-display font-bold text-[clamp(1.85rem,6.2vw,5rem)] leading-[1.1] sm:leading-[1.08] tracking-[-0.035em] text-navy-deep select-none text-center flex flex-wrap justify-center items-center gap-y-1.5 heading-balance"
+              className="font-display font-bold text-[clamp(1.85rem,6.2vw,5rem)] leading-[1.25] sm:leading-[1.2] tracking-[-0.035em] text-navy-deep select-none text-center flex flex-wrap justify-center items-center gap-y-1.5 heading-balance py-1"
             >
               <span className="inline-flex flex-wrap justify-center gap-x-[0.22em] mr-[0.22em]">
                 {["You", "Built", "A", "Team."].map((word, i) => (
@@ -329,7 +329,7 @@ export default function Hero() {
                   </motion.span>
                 ))}
               </span>
-              <LiquidHeading className="relative inline-flex overflow-visible pb-2 -mb-1.5 items-baseline text-gold font-serif italic font-semibold whitespace-nowrap pl-[0.1em] align-baseline">
+              <LiquidHeading className="relative inline-flex overflow-visible pb-3 -mb-1 items-baseline text-gold font-serif italic font-semibold whitespace-nowrap pl-[0.1em] align-baseline">
                 <motion.span
                   initial={{
                     opacity: 0,

@@ -149,7 +149,7 @@ export default function StatsFounder() {
                 The Numbers Don&apos;t Lie
               </span>
             </div>
-            <h2 className="font-display font-bold text-3xl sm:text-4xl text-red-500 tracking-tight mb-3">
+            <h2 className="font-display font-bold text-3xl sm:text-4xl text-red-500 tracking-tight mb-3 leading-[1.2]">
               India is Bleeding{" "}
               <span className="font-serif italic font-light relative inline-block">
                 Performance

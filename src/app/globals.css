@@ -624,3 +624,84 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+/* ═══ iOS / CROSS-DEVICE TEXT CLIPPING FIXES ═══
+   Problem: On iOS Safari and some Android devices, serif italic fonts
+   (Cormorant Garamond) and tight line-heights cause descenders (y, p, g, j, ?)
+   and ascenders to be clipped. The fixes below add protective bottom padding
+   to italic text, ensure the question mark glyph has room, and improve
+   overall text rendering on mobile devices. */
+
+/* 1. Serif italic text — add bottom padding so descenders (?, y, p, g) are not clipped.
+   This targets every element using the Cormorant Garamond italic font. */
+.font-serif.italic {
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em; /* compensate so layout isn't affected */
+}
+
+/* 2. Hero h1 specifically — ensure the question mark has full vertical room.
+   The clamp() font size + serif italic + tight leading was the root cause. */
+h1 .font-serif.italic,
+h2 .font-serif.italic {
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+
+/* 3. iOS Safari text size adjustment — prevent text from being scaled
+   incorrectly in landscape mode. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* 4. Improved font rendering on iOS — smoother antialiasing for serif text. */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* 5. Safe area insets for iOS devices with notches / home indicators.
+   Ensures content isn't hidden behind the notch or home bar. */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* 6. Prevent text clipping in flex/grid containers with overflow-hidden.
+   Allow descenders to render by adding minimal vertical padding to headings
+   inside overflow-hidden sections. */
+section[class*="overflow-hidden"] h1,
+section[class*="overflow-hidden"] h2,
+section[class*="overflow-hidden"] h3 {
+  padding-top: 0.05em;
+}
+
+/* 7. LiquidHeading / decorative serif spans — ensure the SVG filter region
+   doesn't clip the text. The filter region is already 120% but we add
+   explicit overflow-visible to the text container. */
+.LiquidHeading,
+[class*="liquid-glass"] {
+  overflow: visible !important;
+}
+
+/* 8. iOS input zoom prevention — inputs below 16px font-size trigger
+   automatic zoom on focus in iOS Safari. Force 16px minimum. */
+@media (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* 9. Prevent horizontal scroll from long words on small screens. */
+h1, h2, h3, h4, p {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}

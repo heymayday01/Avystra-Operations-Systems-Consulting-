@@ -307,7 +307,7 @@ export default function ProgramsSection() {
               Operational Portfolios
             </span>
           </div>
-          <h2 className="font-display font-medium text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.1] mb-6 inline-flex flex-wrap justify-center gap-x-2">
+          <h2 className="font-display font-medium text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-6 inline-flex flex-wrap justify-center gap-x-2">
             <TextReveal
               text="Where Most "
               delay={0.2}

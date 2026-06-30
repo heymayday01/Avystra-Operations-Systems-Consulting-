@@ -83,7 +83,7 @@ export default function FAQSection() {
           </div>
 
           {/* Heading */}
-          <h2 className="font-display font-medium text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.1] mb-6">
+          <h2 className="font-display font-medium text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-6">
             Frequently Asked{" "}
             <span className="font-serif italic font-light text-gold">
               Questions

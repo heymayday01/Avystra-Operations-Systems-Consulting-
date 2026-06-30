@@ -63,7 +63,7 @@ export default function Footer({ leadCount }: FooterProps) {
               <AvystraLogo size="lg" showTagline={true} theme="dark" />
             </div>
 
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-medium text-white mb-3 tracking-tight leading-[1.15]">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-medium text-white mb-3 tracking-tight leading-[1.25]">
               Let&apos;s re-engineer your{" "}
               <span className="text-gold">business performance.</span>
             </h2>

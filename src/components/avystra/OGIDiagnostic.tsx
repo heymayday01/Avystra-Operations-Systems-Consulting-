@@ -292,7 +292,7 @@ export default function OGIDiagnostic() {
                     </span>
                   </div>
 
-                  <h2 className="font-display font-medium text-3xl sm:text-5xl text-[#2C3947] tracking-tighter leading-[0.95] mb-5">
+                  <h2 className="font-display font-medium text-3xl sm:text-5xl text-[#2C3947] tracking-tighter leading-[1.15] mb-5">
                     OGI — <span className="font-serif italic text-[#C2A56D]">Organizational Growth Index</span>
                   </h2>
 

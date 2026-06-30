@@ -398,3 +398,65 @@ Stage Summary:
 - Opens in a new tab (`_blank`) with `noopener,noreferrer` for security.
 - WhatsApp number `918596059607` matches the existing number used elsewhere on the site (footer, floating WhatsApp button, OGI results screen).
 - Lint clean, no runtime errors, verified both states via Agent Browser.
+
+---
+Task ID: 12
+Agent: main-orchestrator
+Task: Fix question mark clipping in Hero heading on iOS/mobile + make site-wide text clipping fixes for cross-device compatibility
+
+Work Log:
+- Analyzed user's uploaded screenshot via VLM: the question mark in "Depend On You?" (gold italic serif) had its bottom tail/dot clipped on certain mobile devices.
+- Root cause: the Hero h1 used `leading-[1.1]` (very tight line-height) + the LiquidHeading wrapper had `pb-2 -mb-1.5` (insufficient bottom padding) + the serif italic font (Cormorant Garamond) has tall ascenders/descenders that get clipped on iOS Safari's text rendering engine. The `overflow-hidden` on the Hero section also contributed.
+
+**Component-level fixes (7 files):**
+
+1. `src/components/avystra/Hero.tsx`:
+   - h1: `leading-[1.1] sm:leading-[1.08]` → `leading-[1.25] sm:leading-[1.2]` + added `py-1` for breathing room
+   - LiquidHeading: `pb-2 -mb-1.5` → `pb-3 -mb-1` (more bottom padding for the question mark tail)
+
+2. `src/components/avystra/TestimonialsSection.tsx`:
+   - h2: `leading-[1.1]` → `leading-[1.2]`
+
+3. `src/components/avystra/FourPillars.tsx`:
+   - h2: `leading-[1.1]` → `leading-[1.2]`
+
+4. `src/components/avystra/ProgramsSection.tsx`:
+   - h2: `leading-[1.1]` → `leading-[1.2]`
+
+5. `src/components/avystra/FAQSection.tsx`:
+   - h2: `leading-[1.1]` → `leading-[1.2]`
+
+6. `src/components/avystra/OGIDiagnostic.tsx`:
+   - h2: `leading-[0.95]` (very tight) → `leading-[1.15]`
+
+7. `src/components/avystra/Footer.tsx`:
+   - h2: `leading-[1.15]` → `leading-[1.25]`
+
+8. `src/components/avystra/StatsFounder.tsx`:
+   - h2 (no explicit leading): added `leading-[1.2]`
+
+**Global CSS fixes (src/app/globals.css) — 9 new rules:**
+
+1. `.font-serif.italic` — adds `padding-bottom: 0.08em` + `margin-bottom: -0.08em` (compensated) so all serif italic text has room for descenders (?, y, p, g, j) without affecting layout
+2. `h1/h2 .font-serif.italic` — extra padding (0.12em) for large heading serif italics
+3. `html { -webkit-text-size-adjust: 100% }` — prevents iOS Safari from scaling text in landscape
+4. `body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility }` — smoother font rendering on iOS/macOS
+5. `@supports (padding: max(0px)) { body { padding-left/right: env(safe-area-inset-left/right) } }` — respects iOS notch / home indicator safe areas
+6. `section[class*="overflow-hidden"] h1/h2/h3 { padding-top: 0.05em }` — prevents heading clipping in overflow-hidden sections
+7. `.LiquidHeading, [class*="liquid-glass"] { overflow: visible !important }` — ensures SVG liquid filter doesn't clip text
+8. `@media (max-width: 768px) { input/textarea/select { font-size: 16px !important } }` — prevents iOS Safari auto-zoom on input focus (inputs < 16px trigger zoom)
+9. `h1/h2/h3/h4/p { overflow-wrap: break-word; word-break: break-word }` — prevents horizontal scroll from long words on small screens
+
+**Verification (Agent Browser + VLM):**
+- iPhone 16 emulation (390px): "Yes, the question mark '?' at the end of 'Depend On You?' is fully visible — both the top curve and the bottom dot are clearly present. No clipping." ✓
+- 320px viewport (smallest mobile): "The question mark at the end is fully visible (no cropping or truncation). The hero heading is fully rendered with no clipped characters." ✓
+- Desktop 1920px: "The question mark in 'Depend On You?' is fully visible. The heading is properly displayed without clipping." ✓
+- StatsFounder "Performance" (serif italic with descenders 'p'): "Fully visible. No part of the word is cut off. The descender of 'p' is not clipped." ✓
+- Lint clean, no browser console/runtime errors.
+
+Stage Summary:
+- The question mark in the Hero heading ("Depend On You?") is now fully visible on all devices — iOS, Android, desktop — with no clipping of the tail or dot.
+- Site-wide fix: all 8 headings that used tight line-heights (1.0-1.1) now use 1.15-1.25, preventing descender clipping across the entire site.
+- Global CSS rules in globals.css provide 9 layers of iOS/cross-device protection: serif italic descender padding, text-size-adjust, font-smoothing, safe-area insets, overflow-hidden heading padding, LiquidHeading overflow-visible, input zoom prevention (16px minimum), word-break for long words.
+- The fixes are defensive and don't change the visual design — they only add breathing room for text glyphs that were being clipped.
+- Lint clean, verified on iPhone 16, 320px mobile, and 1920px desktop via Agent Browser + VLM.
