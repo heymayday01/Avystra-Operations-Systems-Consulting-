@@ -707,23 +707,12 @@ h1, h2, h3, h4, p {
 }
 
 /* ═══ SCROLL PERFORMANCE OPTIMIZATIONS ═══
-   content-visibility: auto tells the browser to skip rendering/compositing
-   work for sections that are offscreen. This is the single biggest scroll-
-   perf win for long pages — the browser can skip painting 80%+ of the page
-   that the user isn't looking at. contain-intrinsic-size gives the browser
-   a placeholder size so the scrollbar doesn't jump as sections render. */
-
-/* Apply to major page sections (each <section> in the main content) */
-main > section,
-main > div > section {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 600px;
-}
-
-/* The OGI diagnostic section is taller — give it a bigger intrinsic size */
-#consult {
-  contain-intrinsic-size: auto 900px;
-}
+   NOTE: content-visibility: auto was removed because it broke smooth-scroll
+   positioning. When Lenis/scrollTo targets an element, it reads
+   getBoundingClientRect() — but offscreen sections had their intrinsic-size
+   estimate (600px) instead of actual height. Once they rendered, the page
+   height shifted and the scroll landed at the wrong position. The GPU
+   layer promotions below provide enough scroll perf without content-visibility. */
 
 /* GPU-promote elements that animate during scroll to their own layer.
    This prevents repaint from propagating to parent layers. */

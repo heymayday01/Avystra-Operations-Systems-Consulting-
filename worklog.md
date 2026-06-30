@@ -1014,3 +1014,35 @@ Stage Summary:
 - **Fonts + padding verified** on mobile (375px), tablet (768px), laptop (1280px) — all readable, properly padded, no overflow.
 - **All 3 viewports optimized**: responsive grids, breakpoint-aware nav, mobile-specific font-size rules.
 - Lint clean, 62.5 FPS scroll, no runtime errors, verified end-to-end via Agent Browser + VLM.
+
+---
+Task ID: 27
+Agent: main-orchestrator
+Task: Fix OGI section scroll misbehavior — remove content-visibility: auto that broke smooth scroll positioning
+
+Work Log:
+- User reported the OGI section scroll was misbehaving after the performance optimizations in Task 25/26.
+- Diagnosed the root cause: `content-visibility: auto` (added in Task 25 for scroll performance) was breaking smooth-scroll positioning. Here's why:
+  1. When Lenis/`scrollTo` targets an element, it reads `getBoundingClientRect()` to get the target's current position.
+  2. With `content-visibility: auto`, offscreen sections have `contain-intrinsic-size: auto 600px` — a placeholder size estimate, not the actual rendered height.
+  3. Lenis calculates the scroll distance based on these estimated positions and starts scrolling.
+  4. But as the user scrolls and previously-offscreen sections render, their actual height differs from the 600px estimate. The page height shifts mid-scroll.
+  5. The target element moves to a different position than Lenis calculated, so the scroll lands at the wrong spot.
+- Measured the bug: clicking "Check OGI Score" scrolled to `scrollY: 7137`, but the OGI section was at `consultTop: 2504` (2504px BELOW the viewport — the scroll landed way too early, showing the Programs section instead of OGI).
+- Fix in `src/app/globals.css`: removed the `content-visibility: auto` + `contain-intrinsic-size` rules entirely. Replaced the comment with a NOTE explaining why it was removed.
+- Kept all other performance optimizations (GPU layer promotions, `will-change: transform`, reduced background animations, Lenis lerp 0.1).
+- Verified after fix:
+  - Click "Check OGI Score" → scrolled to `scrollY: 9461`, OGI section at `consultTop: 180px` (properly visible, clears the 100px header offset) ✓
+  - Click PROGRAMS nav → `programsTop: 195px` (visible) ✓
+  - Click CONTACT nav → `consultTop: 180px` (visible) ✓
+  - Click THE PROBLEM nav → `bottlenecksTop: 179px` (visible) ✓
+  - VLM confirmed: "OGI section visible, heading 'OGI — Organizational Growth Index' visible, 'BEGIN ASSESSMENT' button visible" ✓
+- Scroll FPS: 61.9 FPS (still smooth without content-visibility — the GPU layer promotions + reduced background animations provide enough perf) ✓
+- Lint clean, no browser console/runtime errors.
+
+Stage Summary:
+- The OGI section scroll misbehavior is fixed. The root cause was `content-visibility: auto` — a CSS property that skips rendering offscreen sections but breaks `getBoundingClientRect()`-based smooth scroll because offscreen sections have placeholder heights instead of actual heights.
+- Removed `content-visibility: auto` and `contain-intrinsic-size` from all sections. The comment in globals.css now documents why it was removed.
+- All 4 nav links (THE PROBLEM, PROGRAMS, CONTACT, and the floating OGI button) now scroll to the correct positions with the target section visible at ~180px from viewport top (clearing the sticky header).
+- Scroll performance is still good at 61.9 FPS — the GPU layer promotions (`will-change: transform` on animated cards) + the reduced/optimized background animations provide enough scroll perf without needing content-visibility.
+- Lint clean, no runtime errors, all scroll targets verified via Agent Browser.
