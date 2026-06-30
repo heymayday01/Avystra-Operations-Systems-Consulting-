@@ -1070,3 +1070,61 @@ Stage Summary:
 - This eliminates the fighting between Lenis's programmed scroll (0.8s duration) and the user's manual scroll that was causing the jittery/shaky feeling.
 - The form, questions, and results screens still auto-scroll into view when needed (e.g. if the user has scrolled away and then answers a question that triggers a screen change).
 - Lint clean, no runtime errors, verified via scroll trace + VLM.
+
+---
+Task ID: 29
+Agent: main-orchestrator
+Task: Optimize + refactor Lenis and GSAP setup
+
+Work Log:
+
+**PROBLEMS FOUND:**
+1. `gsap.registerPlugin(ScrollTrigger)` was called 4 times across 3 files (useSmoothScroll x2, Header, Hero) — redundant, scattered setup
+2. `ScrollTrigger.refresh()` called 4 times — redundant recalculations
+3. Duplicate hash-link click handler code — defined twice (mobile + desktop branches) with near-identical logic
+4. Duplicate resize handler code — same pattern duplicated
+5. No centralized GSAP module — each file imported gsap + ScrollTrigger independently
+
+**REFACTOR:**
+
+1. **Created `src/lib/gsap.ts`** — centralized GSAP setup module:
+   - Imports gsap + ScrollTrigger
+   - Calls `gsap.registerPlugin(ScrollTrigger)` ONCE at module load
+   - Exports `{ gsap, ScrollTrigger }` for consumers
+   - No more per-component `registerPlugin` calls for ScrollTrigger
+
+2. **Refactored `src/hooks/useSmoothScroll.ts`**:
+   - Imports from `@/lib/gsap` instead of direct gsap/ScrollTrigger imports
+   - Removed 2 redundant `gsap.registerPlugin(ScrollTrigger)` calls (now centralized)
+   - Extracted `createResizeHandler()` factory — eliminates duplicate resize code between mobile/desktop branches
+   - Extracted `createHashClickHandler()` factory — eliminates duplicate hash-link click code
+   - Extracted `nativeScrollToId()` helper — mobile branch is now 3 lines instead of 15
+   - Cleaner code organization: helpers at top, main hook at bottom, clear section comments
+   - Same behavior, ~40 lines less duplication
+
+3. **Cleaned `src/components/avystra/Header.tsx`**:
+   - Changed imports from `import { gsap } from "gsap"` + `import { ScrollTrigger } from "gsap/ScrollTrigger"` → `import { gsap, ScrollTrigger } from "@/lib/gsap"`
+   - Removed `gsap.registerPlugin(ScrollTrigger)` — now centralized
+   - Kept `ScrollTrigger.refresh()` (still needed after creating triggers)
+   - Kept the cleanup return block (was temporarily lost during edit, restored)
+
+4. **Cleaned `src/components/avystra/Hero.tsx`**:
+   - Changed imports to use `@/lib/gsap`
+   - Changed `gsap.registerPlugin(ScrollTrigger, CustomEase)` → `gsap.registerPlugin(CustomEase)` — ScrollTrigger is now registered globally, only CustomEase (Hero-specific) needs local registration
+
+**VERIFICATION:**
+- Lint: clean ✓
+- Dev server: Ready in 1100ms ✓
+- Page loads: hero heading renders ✓
+- PROGRAMS nav scroll: scrollY 6529, programsTop 196px (visible) ✓
+- OGI scroll (floating button): scrollY 9461, consultTop 180px (visible) ✓
+- Scroll FPS: 62.5 FPS ✓
+- No browser console errors ✓
+- No dev log warnings ✓
+
+Stage Summary:
+- GSAP + ScrollTrigger setup is now centralized in `src/lib/gsap.ts` — one `registerPlugin` call at module load instead of 4 scattered calls.
+- `useSmoothScroll.ts` refactored: extracted 3 helper factories (`createResizeHandler`, `createHashClickHandler`, `nativeScrollToId`), eliminated ~40 lines of duplicate code between mobile/desktop branches. Same behavior, cleaner code.
+- Header + Hero cleaned: removed redundant `registerPlugin(ScrollTrigger)` calls, use centralized import.
+- All scroll behavior preserved: nav links, floating OGI button, hash-links all scroll to correct positions at 62.5 FPS.
+- Lint clean, no runtime errors, verified end-to-end.

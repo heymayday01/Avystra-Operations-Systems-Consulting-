@@ -3,8 +3,7 @@
 import React, { useRef, useEffect, useCallback, useState, useSyncExternalStore } from "react";
 import { ArrowRight, UserPlus, TrendingUp, Building2, Banknote, ClipboardList } from "lucide-react";
 import { motion, useMotionValue, useSpring } from "motion/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { CustomEase } from "gsap/CustomEase";
 import { UnderlineSquiggle } from "./DoodleWidgets";
 import LiquidHeading from "./LiquidHeading";
@@ -56,7 +55,9 @@ export default function Hero() {
   }, []);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger, CustomEase);
+    // ScrollTrigger is registered globally via @/lib/gsap.
+    // CustomEase needs registration here since it's Hero-specific.
+    gsap.registerPlugin(CustomEase);
 
     if (reducedMotion) {
       const validTargets = [

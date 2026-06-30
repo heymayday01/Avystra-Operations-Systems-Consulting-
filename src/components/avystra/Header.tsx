@@ -3,8 +3,7 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import AvystraLogo from "./AvystraLogo";
 import { smoothScrollTo, scrollToTop, getLenis } from "@/lib/scroll";
 
@@ -24,8 +23,6 @@ export default function Header() {
   const activeSectionRef = useRef("bottlenecks");
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
     // ── Header "scrolled" state via Lenis scroll event (single subscription) ──
     const handleScrollState = () => {
       const isScrolled = window.scrollY > 15;
