@@ -8,7 +8,7 @@ import {
   dimensionLabels,
   type DimensionCode,
 } from "@/lib/ogi-data";
-import { appendOgiSubmissionToSheet } from "@/lib/sheets";
+import { exportOgiSubmissionsToExcel } from "@/lib/excel-export";
 
 // ── SMTP transport (Gmail) ──────────────────────────────────────────────────
 // Uses Gmail's SMTP server with an App Password. Free, 500 emails/day, and
@@ -456,19 +456,18 @@ export async function POST(request: Request) {
         })
     : Promise.resolve();
 
-  const sheetTask = appendOgiSubmissionToSheet({
-    name: data.name,
-    role: data.role,
-    contact: data.contact,
-    email: data.email ?? null,
-    score: data.score,
-    band: data.band,
+  // Excel export task — regenerates /public/ogi-submissions.xlsx with the
+  // latest data (including the submission we just saved). Best-effort:
+  // wrapped so a failure never blocks the response.
+  const excelTask = exportOgiSubmissionsToExcel().catch((err) => {
+    console.error("[ogi/submit] Excel export failed:", err);
+    throw err;
   });
 
-  const [avystraResult, userResult, sheetResult] = await Promise.allSettled([
+  const [avystraResult, userResult, excelResult] = await Promise.allSettled([
     avystraEmailTask,
     userEmailTask,
-    sheetTask,
+    excelTask,
   ]);
 
   // emailSent reflects ONLY whether the user result email delivered —
@@ -478,10 +477,9 @@ export async function POST(request: Request) {
   if (avystraResult.status === "rejected") {
     // already logged inside the .catch above; nothing more to do
   }
-  if (sheetResult.status === "rejected") {
-    // appendOgiSubmissionToSheet swallows its own errors, so this branch
-    // is effectively unreachable — but we log defensively just in case.
-    console.error("[ogi/submit] Sheet append rejected unexpectedly:", sheetResult.reason);
+  if (excelResult.status === "rejected") {
+    // exportOgiSubmissionsToExcel re-throws on failure; logged in .catch.
+    console.error("[ogi/submit] Excel export rejected unexpectedly:", excelResult.reason);
   }
 
   return NextResponse.json({

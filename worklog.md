@@ -283,3 +283,54 @@ Stage Summary:
   6. Restart the dev server.
 - Until creds are added, sheet logging is silently skipped — the existing DB + email flow is completely unaffected.
 - Lint clean, no runtime errors, full flow verified end-to-end via Agent Browser.
+
+---
+Task ID: 9
+Agent: main-orchestrator
+Task: Replace Google Sheets approach with local Excel file auto-export (simpler, no external service)
+
+Work Log:
+- User feedback: the Google Sheets setup (service account, JSON keys, sharing) was too tedious. Pivoted to a local Excel-file approach — no external service, no credentials, just a .xlsx file in /public that auto-regenerates on every submission.
+- Removed the Google Sheets integration:
+  - Deleted `src/lib/sheets.ts`.
+  - Ran `bun remove googleapis` (removed 53 packages).
+  - Removed `GOOGLE_SHEETS_CLIENT_EMAIL`, `GOOGLE_SHEETS_PRIVATE_KEY`, `GOOGLE_SHEET_ID` from `.env`.
+- Installed `exceljs@4.4.0` via `bun add exceljs`.
+- Created `src/lib/excel-export.ts`:
+  - Exports `exportOgiSubmissionsToExcel()` — async, queries all OgiSubmission records (newest first), builds a styled .xlsx, writes to `public/ogi-submissions.xlsx`.
+  - Exports `EXCEL_PUBLIC_PATH = "/ogi-submissions.xlsx"` for callers that need the URL.
+  - 8 columns: ID, Name, Role, Contact, Email, Score, Band, Submitted At.
+  - Header row: navy background (`FF0B1B2E`), bold white text, centered, gold bottom border (`FFB8924E`), frozen (ySplit:1) so it stays visible when scrolling.
+  - Band cell: colour-tinted based on band value (emerald for High Growth, blue for Growth Ready, amber for Execution Gap, red for Immediate Attention).
+  - Score cell: bold + centered.
+  - Auto-fitted column widths: iterates every cell, measures max content length, sets width = max(header_len, max_content_len) + 2 padding, capped at 50.
+  - Timestamp formatted as IST via `Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Kolkata" })` → "30 Jun 2026, 07:52 pm IST".
+  - If zero submissions exist, adds a placeholder row "No submissions yet" so the file is never empty.
+- Updated `src/app/api/ogi/submit/route.ts`:
+  - Replaced `import { appendOgiSubmissionToSheet }` with `import { exportOgiSubmissionsToExcel }`.
+  - Replaced the `sheetTask` in the `Promise.allSettled` array with `excelTask = exportOgiSubmissionsToExcel().catch(...)`.
+  - Same parallel execution pattern: DB save (sync) → [AVYSTRA email, user email, Excel regen] all run concurrently via `Promise.allSettled`. A failure in any one never blocks the others.
+- Created `src/app/api/ogi/export/route.ts` (GET handler):
+  - Regenerates the xlsx on-demand and streams it back as a download with `Content-Disposition: attachment; filename="ogi-submissions-YYYY-MM-DD.xlsx"`.
+  - Sets proper MIME type + `Cache-Control: no-store` so the download is always fresh.
+  - Try/catch wraps the whole thing — returns 500 JSON on failure.
+- Ran `bun run lint` → clean.
+- Restarted dev server.
+- Tested via curl:
+  - Submit OGI #1 → `emailSent: true`, xlsx file created (7035 bytes). Python openpyxl verification: 1 header row (navy fill, bold) + 1 data row with all 8 fields populated correctly.
+  - Submit OGI #2 → `emailSent: true`, xlsx auto-updated to 2 data rows (Priya Mehta first since newest-first, Rohan Kapoor second). Column widths auto-fitted (ID col 27, Name 14, Email 28, etc.).
+  - Download via static URL `/ogi-submissions.xlsx` → HTTP 200, 7035 bytes, correct MIME type, valid xlsx file.
+  - Download via API `/api/ogi/export?XTransformPort=3000` → HTTP 200, 7036 bytes, `Content-Disposition: attachment`, valid xlsx file.
+- Agent Browser end-to-end test: filled form (Ananya Desai, Director, +91 98765 43210, aryanthakare2003@gmail.com), answered all 16 questions, clicked GET MY FULL REPORT → "Your results have been emailed to you" success state. xlsx file regenerated (7039 bytes), no browser errors.
+- Cleaned up test records + xlsx file.
+
+Stage Summary:
+- Google Sheets integration fully replaced with a local Excel-file approach. Zero external dependencies, zero credentials, zero setup.
+- `src/lib/excel-export.ts` generates a styled .xlsx with: frozen navy header row with gold accent, colour-tinted Band cells, auto-fitted column widths, IST timestamps, newest-first ordering.
+- The file lives at `public/ogi-submissions.xlsx` and is downloadable via two paths:
+  1. **Static URL**: `https://avystra.co.in/ogi-submissions.xlsx` (auto-regenerated on every new submission, always fresh)
+  2. **API endpoint**: `GET /api/ogi/export?XTransformPort=3000` (force-regenerates on-demand, returns as a download with a dated filename)
+- Auto-update flow: every POST /api/ogi/submit → DB save → [AVYSTRA email + user email + Excel regen] in parallel via Promise.allSettled. The Excel file in /public is always in sync with the DB.
+- Failure isolation: if Excel generation fails (e.g. disk full), the DB save and emails still succeed — the response still returns `emailSent: true` and the submission is preserved.
+- Lint clean, no runtime errors, full flow verified end-to-end via Agent Browser.
+- Files changed: deleted `src/lib/sheets.ts`; created `src/lib/excel-export.ts` + `src/app/api/ogi/export/route.ts`; edited `src/app/api/ogi/submit/route.ts` (swapped sheet task → excel task); removed googleapis; added exceljs; cleaned .env.
