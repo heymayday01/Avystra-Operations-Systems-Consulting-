@@ -1,0 +1,178 @@
+"use client";
+
+import { Quote, Star, MessageSquare } from "lucide-react";
+import { motion } from "motion/react";
+import TextReveal from "./TextReveal";
+
+interface Testimonial {
+  id: string;
+  quote: string;
+  name: string;
+  role: string;
+  company: string;
+  initial: string;
+}
+
+export default function TestimonialsSection() {
+  const testimonials: Testimonial[] = [
+    {
+      id: "testimonial-1",
+      quote:
+        '"Three months after the program, our managers are having conversations they would have avoided before. Measurable change — not just a good day."',
+      name: "Rajesh M.",
+      role: "HR Head",
+      company: "Manufacturing, Delhi",
+      initial: "R",
+    },
+    {
+      id: "testimonial-2",
+      quote:
+        '"The assessment before the program made all the difference. They understood our actual problems before walking in. It felt built for us, not off a shelf."',
+      name: "Sunita K.",
+      role: "Founder",
+      company: "Technology Firm, Noida",
+      initial: "S",
+    },
+    {
+      id: "testimonial-3",
+      quote:
+        '"Accountability was our biggest gap. Six weeks later, project follow-through has improved significantly. The frameworks are actually being used."',
+      name: "Amit S.",
+      role: "CEO",
+      company: "80-person Company, Gurgaon",
+      initial: "A",
+    },
+  ];
+
+  return (
+    <section
+      id="testimonials"
+      className="relative py-6 bg-transparent border-none overflow-hidden md:py-10 scroll-mt-24"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 select-none">
+        {/* Section Heading Container */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col items-center text-center max-w-3xl mx-auto mb-6 md:mb-8"
+        >
+          {/* Aesthetic Capsule Badge */}
+          <div className="border border-gold/20 bg-gradient-to-br from-white to-slate-50 px-4 py-1.5 rounded-full inline-flex items-center gap-2.5 mb-3 shadow-sm">
+            <MessageSquare className="w-3.5 h-3.5 text-gold" />
+            <span className="text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase">
+              Client Success Stories
+            </span>
+          </div>
+
+          {/* Heading */}
+          <h2 className="font-display font-medium text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.1] mb-6 inline-flex flex-wrap justify-center gap-x-2">
+            <TextReveal
+              text="Trusted by "
+              delay={0.2}
+              blur={true}
+              wordClassName="inline-block"
+            />
+            <TextReveal
+              text="Industry"
+              delay={0.4}
+              blur={true}
+              wordClassName="font-serif italic font-light text-gold inline-block"
+            />
+            <TextReveal
+              text="Leaders"
+              delay={0.5}
+              blur={true}
+              wordClassName="inline-block"
+            />
+          </h2>
+        </motion.div>
+
+        {/* Testimonials Grid Row */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 gsap-stagger-container">
+          {testimonials.map((testimonial, idx) => (
+            <motion.div
+              key={testimonial.id}
+              initial={{ opacity: 0, y: 40, rotateX: -8 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.8,
+                delay: idx * 0.12,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="group relative bg-gradient-to-br from-white to-slate-50 border border-slate-100 rounded-2xl p-6 sm:p-8 lg:p-10 transition-all duration-700 hover:border-gold/40 hover:shadow-[0_40px_80px_-20px_rgba(11,27,46,0.15)] flex flex-col justify-between will-change-transform overflow-hidden"
+              style={{ transformPerspective: 1000 }}
+            >
+              {/* Shimmer sweep on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-gold/0 via-gold/5 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+              <div className="relative z-10">
+                {/* Quote Icon Badge — animated entrance */}
+                <motion.div
+                  initial={{ scale: 0, rotate: -45 }}
+                  whileInView={{ scale: 1, rotate: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.12 + 0.3, type: "spring", stiffness: 200, damping: 15 }}
+                  className="w-9 h-9 rounded-full bg-gold/5 border border-gold/10 flex items-center justify-center mb-6 text-gold group-hover:bg-gold/10 group-hover:scale-110 transition-all duration-500"
+                >
+                  <Quote className="w-4 h-4 fill-gold/10" />
+                </motion.div>
+
+                {/* Star Ratings — staggered */}
+                <div className="flex items-center gap-1 mb-5">
+                  {[...Array(5)].map((_, starIdx) => (
+                    <motion.span
+                      key={starIdx}
+                      initial={{ opacity: 0, scale: 0, rotate: -90 }}
+                      whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        delay: idx * 0.12 + 0.4 + starIdx * 0.06,
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 12,
+                      }}
+                    >
+                      <Star className="w-4 h-4 fill-gold text-gold stroke-[1.5] group-hover:scale-110 transition-transform duration-300" />
+                    </motion.span>
+                  ))}
+                </div>
+
+                {/* Elegant Testimonial Quote */}
+                <p className="font-serif italic text-slate-700 text-base sm:text-lg leading-[1.65] font-light mb-8">
+                  {testimonial.quote}
+                </p>
+              </div>
+
+              {/* Card Footer Divider & Avatar */}
+              <div className="border-t border-slate-100/90 pt-6 mt-auto">
+                <div className="flex items-center gap-3.5">
+                  {/* Luxury Initials Avatar */}
+                  <div className="w-11 h-11 rounded-full bg-gold/10 text-gold font-serif italic font-bold text-base flex items-center justify-center shrink-0 border border-gold/20 shadow-inner group-hover:scale-110 transition-transform duration-500">
+                    {testimonial.initial}
+                  </div>
+
+                  {/* Authorship Info */}
+                  <div className="flex flex-col">
+                    <span className="font-display font-medium text-sm text-navy-deep tracking-wide">
+                      {testimonial.name}
+                    </span>
+                    <span className="text-xs text-slate-500 mt-0.5 font-sans font-light">
+                      {testimonial.role},{" "}
+                      <span className="text-gold font-medium">
+                        {testimonial.company}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
