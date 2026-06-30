@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -17,18 +17,39 @@ export const metadata: Metadata = {
     "management consulting",
   ],
   authors: [{ name: "AVYSTRA Consulting" }],
+  metadataBase: new URL("https://avystra.co.in"),
   openGraph: {
     title: "AVYSTRA | Operations & Systems Consulting",
     description: DESCRIPTION,
     url: "https://avystra.co.in/",
     siteName: "AVYSTRA",
     type: "website",
+    locale: "en_IN",
   },
   twitter: {
     card: "summary_large_image",
     title: "AVYSTRA | Operations & Systems Consulting",
     description: DESCRIPTION,
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+    },
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F7F4ED" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B1B2E" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
