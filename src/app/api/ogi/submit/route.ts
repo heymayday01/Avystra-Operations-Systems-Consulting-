@@ -417,7 +417,7 @@ export async function POST(request: Request) {
   }
 
   // 2. Fire off the three side-effects in parallel: AVYSTRA notification
-  //    email, user result email, and Google Sheets row append. Each is
+  //    email, user result email, and Excel file regeneration. Each is
   //    wrapped so a failure in one never blocks the others. The DB record
   //    (saved above) is the source of truth — all three are best-effort.
   //
@@ -428,7 +428,7 @@ export async function POST(request: Request) {
   //    Index mapping:
   //      [0] → AVYSTRA notification email
   //      [1] → User result email (only sent if data.email present)
-  //      [2] → Google Sheets row append
+  //      [2] → Excel file regeneration
   const avystraEmailTask = transporter
     ? transporter
         .sendMail({

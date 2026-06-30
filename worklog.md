@@ -1194,3 +1194,67 @@ Stage Summary:
 - "has a cost" now stays on one line for all 5 penalty items on all viewports (mobile, tablet, desktop).
 - Fix was two CSS classes: `whitespace-nowrap` (prevents mid-phrase break) + `shrink-0` (prevents the suffix from being squeezed by long main text).
 - Lint clean, verified on mobile + desktop via Agent Browser + VLM.
+
+---
+Task ID: 32
+Agent: main-orchestrator
+Task: Deep code cleanup — stale comments, unused packages, code audit
+
+Work Log:
+
+**AUDIT FINDINGS:**
+- ✅ Lint clean (ESLint passes)
+- ✅ No unused component files (all 20 components in avystra/ are imported)
+- ✅ No TODO/FIXME/HACK/XXX comments
+- ✅ No `console.log` (only `console.error`/`warn` for server-side error logging — acceptable)
+- ✅ No duplicate type/interface definitions (Question, ResultBand, PillarDatum each defined once)
+- ✅ No stale env vars (all 7 process.env references are active: SMTP_*, AVYSTRA_NOTIFY_EMAIL, NODE_ENV)
+- ✅ All lib exports used (smoothScrollTo: 16 uses, getLenis: 10 uses, scrollToTop: 3 uses)
+- ❌ Stale "Google Sheets" comments in API route (now uses Excel export)
+- ❌ Stale "replaces Google Sheets" comment in excel-export.ts
+- ❌ 7 unused npm packages from boilerplate setup
+- ⚠️ `as any` in TextReveal.tsx (acceptable — dynamic component pattern)
+- ⚠️ 81 inline style objects + 81 magic duration/delay values (acceptable — these are component-specific, extracting to constants would add indirection without much benefit)
+- ⚠️ 7 inline functions in OGIDiagnostic RESULTS screen (acceptable — they're inside an IIFE that runs once when RESULTS renders, not on every component render)
+
+**CLEANUP PERFORMED:**
+
+1. **Fixed stale comments in `src/app/api/ogi/submit/route.ts`**:
+   - "Google Sheets row append" → "Excel file regeneration" (2 occurrences in the Promise.allSettled comment block)
+   - The comment block now accurately describes the 3 parallel tasks: AVYSTRA email, user email, Excel regeneration
+
+2. **Fixed stale comment in `src/lib/excel-export.ts`**:
+   - Removed "This replaces the earlier Google Sheets approach." — no longer relevant since the Google Sheets code was deleted in Task 19
+
+3. **Removed 7 unused npm packages** (boilerplate from initial project setup, 0 imports in src/):
+   - `framer-motion` — replaced by `motion` (the new package name for the same library)
+   - `@reactuses/core` — 0 imports
+   - `next-intl` — 0 imports (not using internationalization)
+   - `zustand` — 0 imports (not using client state management)
+   - `@tanstack/react-query` — 0 imports (not using server state)
+   - `@tanstack/react-table` — 0 imports (not using data tables)
+   - `sharp` — 0 imports (not using image optimization server-side)
+   - Kept: `@hookform/resolvers`, `date-fns`, `tailwindcss-animate` (might be needed by shadcn/ui form/calendar components)
+
+**VERIFICATION:**
+- Lint: clean ✓
+- Dev server: Ready in 1105ms ✓
+- Page loads: hero heading renders ✓
+- OGI submit API: `{"success":true,"submissionId":"...","emailSent":true}` ✓
+- Excel export API: HTTP 200 ✓
+- No browser console/runtime errors ✓
+- No dev log warnings ✓
+- Cleaned up test records + generated xlsx file.
+
+**What was NOT changed (intentionally):**
+- `as any` in TextReveal.tsx — standard pattern for dynamic component rendering, safe
+- 81 inline style objects — component-specific, extracting would add indirection
+- 7 inline functions in OGIDiagnostic RESULTS screen — inside an IIFE, run once per RESULTS render, not per component render
+- Magic duration/delay values — each is component-specific animation timing, no benefit to extracting
+- `console.error`/`console.warn` in API routes — proper server-side error logging, should stay
+
+Stage Summary:
+- Deep code cleanup complete. Fixed 3 stale comments (Google Sheets → Excel export), removed 7 unused npm packages.
+- Codebase is clean: no dead code, no unused imports, no stale comments, no TODO markers, no duplicate definitions.
+- The 7 package removals reduce node_modules size + install time with zero functional impact (none were imported anywhere).
+- Lint clean, all APIs + pages verified working, no runtime errors.

@@ -6,8 +6,7 @@
  * `/ogi-submissions.xlsx`. The file is regenerated on every new submission
  * and can also be regenerated on-demand via GET /api/ogi/export.
  *
- * No external service, no credentials — just a local file. This replaces
- * the earlier Google Sheets approach.
+ * No external service, no credentials — just a local file.
  */
 
 import ExcelJS from "exceljs";
