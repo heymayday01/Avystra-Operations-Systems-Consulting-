@@ -178,3 +178,37 @@ Stage Summary:
   2. Swap `FROM_EMAIL` in `src/app/api/ogi/submit/route.ts` from `"AVYSTRA <onboarding@resend.dev>"` to a verified sender like `"AVYSTRA <noreply@avystra.co.in>"`
 - Until domain verification is done, the flow still works end-to-end: DB record always saves, the user email delivers to the account owner's inbox for testing, and `emailSent` accurately tells the frontend which message to show.
 - Lint clean, no runtime errors, full flow verified via Agent Browser.
+
+---
+Task ID: 6
+Agent: main-orchestrator
+Task: Swap Resend → Gmail SMTP so emails deliver to any recipient (not just the account owner)
+
+Work Log:
+- Installed `nodemailer@9.0.3` + `@types/nodemailer@8.0.1` via `bun add`.
+- Updated `.env` — removed `RESEND_API_KEY`, added Gmail SMTP config: `SMTP_HOST=smtp.gmail.com`, `SMTP_PORT=465`, `SMTP_USER=info.avystra@gmail.com`, `SMTP_PASS=<App Password>`, `SMTP_FROM="AVYSTRA <info.avystra@gmail.com>"`, `AVYSTRA_NOTIFY_EMAIL=info@avystra.co.in`.
+- Rewrote `src/app/api/ogi/submit/route.ts`:
+  - Removed `resend` import + client; added `import nodemailer from "nodemailer"`.
+  - Created a single pooled `transporter` via `nodemailer.createTransport({ host, port, secure: port===465, auth: { user, pass } })` — reused across requests, null if creds missing.
+  - Replaced both `resend.emails.send({...})` calls with `transporter.sendMail({ from, to, subject, html })`. Same HTML templates, same `emailSent` logic, same try/catch isolation.
+  - First attempt with the user's regular Gmail password (`@Avystra123`) failed with Gmail error `535 5.7.8 Username and Password not accepted` — expected, since Google requires an App Password for SMTP since 2022.
+  - User generated a 16-character App Password via https://myaccount.google.com/apppasswords. Updated `.env` `SMTP_PASS` to the App Password (spaces stripped).
+  - Restarted dev server (Next.js doesn't hot-reload `.env`).
+- Tested via curl:
+  - Test 1 (self-send to `info.avystra@gmail.com`): `emailSent: true` — SMTP auth succeeded, email delivered. ✓
+  - Test 2 (external send to `aryanthakare2003@gmail.com`): `emailSent: true` — **delivered to an external address**, which Resend's onboarding mode blocked. ✓
+- Agent Browser end-to-end test: filled form (Priya Mehta, VP of Operations, +91 98765 43210, aryanthakare2003@gmail.com), answered all 16 questions, clicked GET MY FULL REPORT → after ~5s (Gmail SMTP round-trip) success state showed "Your results have been emailed to you". DB record confirmed: score 75, band "Growth Ready", all 16 answers saved.
+- Dev log clean: no errors, no rejections, only expected `prisma:query INSERT` entries and `POST /api/ogi/submit 200` responses.
+- Browser console + errors → both empty.
+- Ran `bun run lint` → clean.
+- Cleaned up test records from the DB.
+
+Stage Summary:
+- Email delivery is now fully working via Gmail SMTP (free, 500 emails/day, no domain verification required).
+- Two emails sent per submission:
+  1. User email → whatever email the user entered (subject "Your AVYSTRA OGI Result", branded HTML with score + band + closing line)
+  2. AVYSTRA notification → `info@avystra.co.in` (subject "New OGI Submission — {name} ({role})", branded HTML with full data table of all 16 answers grouped by dimension)
+- Both emails now deliver to ANY email address worldwide — the Resend onboarding limitation (only the account owner could receive) is resolved.
+- Sender shows as `AVYSTRA <info.avystra@gmail.com>` — Gmail address, not a custom domain. Acceptable for lead-gen. Can upgrade to `noreply@avystra.co.in` later by verifying the domain in Resend and swapping back, but that's optional.
+- The App Password is stored only in server-side `.env` — never exposed to the client. The user should keep it secret and can revoke it anytime at https://myaccount.google.com/apppasswords if compromised.
+- Lint clean, no runtime/console errors, full flow verified end-to-end via Agent Browser.
