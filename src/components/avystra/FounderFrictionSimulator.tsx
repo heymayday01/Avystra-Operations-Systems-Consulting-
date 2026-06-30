@@ -50,10 +50,14 @@ function FounderImages({ isResolved }: { isResolved: boolean }) {
         alt="Founder — confident, system in place"
         referrerPolicy="no-referrer"
         loading="lazy"
+        // object-position "center 45%" (vs 25% for frustrated) — the confident
+        // image has crossed arms lower in the frame, so we shift the viewport
+        // down to keep both the face AND the crossed arms visible inside the
+        // circle without clipping the hands.
         className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
         style={{
           opacity: isResolved ? 1 : 0,
-          objectPosition: "center 25%",
+          objectPosition: "center 45%",
         }}
       />
       {/* Green tint overlay for confident state */}

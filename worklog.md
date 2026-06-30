@@ -817,3 +817,23 @@ Stage Summary:
 - **Code cleanup**: Verified no dead code, no unused imports, no console.log, no TODO comments. All event listeners and rAF loops have proper cleanup.
 - **Already good**: env security (gitignored, no client-exposed secrets), SQL injection (Prisma only), XSS (no unsafe dangerouslySetInnerHTML), lazy loading, SEO metadata, accessibility basics.
 - Lint clean, all APIs + pages verified working, no runtime errors.
+
+---
+Task ID: 22
+Agent: main-orchestrator
+Task: Fix clipping on AVYSTRA system (confident) founder image only — frustrated image unchanged
+
+Work Log:
+- User reported only the AVYSTRA system image (confident founder with crossed arms) was getting cut, specifically at the bottom where the crossed hands are. The frustrated image (hand on forehead) looked good and should not be changed.
+- Root cause: both images used the same `objectPosition: "center 25%"` which biases the viewport toward the top 25% of the portrait. This works perfectly for the frustrated image (important content — hand on forehead — is at the top), but the confident image's crossed arms are lower in the frame, so they got clipped by the circle's bottom edge.
+- Fix in `src/components/avystra/FounderFrictionSimulator.tsx`: changed ONLY the confident image's `objectPosition` from `"center 25%"` → `"center 45%"`. The frustrated image stays at `"center 25%"` (unchanged).
+- The 45% position shifts the viewport down enough to include both the face AND the crossed arms/hands inside the circle, while still keeping the hair visible at the top.
+- VLM verification (confident state): "crossed arms fully visible with no hands cut off, face visible, hair/top of head visible, nothing clipped at the bottom." ✓
+- VLM verification (frustrated state — unchanged): "image still big and filling the circle, face and hand-on-forehead gesture clearly visible, nothing cut off." ✓
+- Lint clean, no browser console/runtime errors.
+
+Stage Summary:
+- The AVYSTRA system (confident) founder image no longer clips the crossed arms at the bottom of the circle.
+- Fix was surgical: only the confident image's `objectPosition` changed from `center 25%` → `center 45%`. The frustrated image is untouched and still looks good.
+- Both images now display fully: frustrated shows face + hand-on-forehead, confident shows face + crossed arms (hands visible).
+- Lint clean, no runtime errors, verified both states via Agent Browser + VLM.
