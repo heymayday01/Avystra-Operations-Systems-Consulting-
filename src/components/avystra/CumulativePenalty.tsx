@@ -133,7 +133,10 @@ export default function CumulativePenalty() {
                       <span className="font-display font-bold text-navy-deep text-base sm:text-lg leading-snug">
                         {item.text}
                       </span>
-                      <span className="font-sans text-slate-400 italic text-sm sm:text-base font-light">
+                      {/* whitespace-nowrap ensures "has a cost" never breaks
+                          mid-phrase, even on narrow viewports. shrink-0
+                          prevents it from being squeezed by the main text. */}
+                      <span className="font-sans text-slate-400 italic text-sm sm:text-base font-light whitespace-nowrap shrink-0">
                         {item.suffix}
                       </span>
                     </div>

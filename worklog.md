@@ -1174,3 +1174,23 @@ Stage Summary:
 - The key fix was changing the visibility check from "is the WHOLE box visible" (never true for tall RESULTS) to "is the box TOP in the upper viewport" (works for all screen heights).
 - Verified: box position stayed at exactly 204px through all 16 question transitions (zero shaking/jitter).
 - Lint clean, no runtime errors, all transitions verified via Agent Browser.
+
+---
+Task ID: 31
+Agent: main-orchestrator
+Task: Fix "has a cost" text wrapping to multiple lines in Cumulative Penalty section
+
+Work Log:
+- User reported the phrase "has a cost" was wrapping to two lines ("has a" + "cost") in the Cumulative Penalty section, especially on narrower viewports or when the main text was long.
+- Root cause in `src/components/avystra/CumulativePenalty.tsx` line 136: the suffix span (`{item.suffix}` = "has a cost") had no `whitespace-nowrap` class. When the flex container didn't have enough horizontal space, the browser broke "has a cost" mid-phrase across two lines.
+- Fix: added `whitespace-nowrap shrink-0` to the suffix span:
+  - `whitespace-nowrap` — prevents the browser from breaking "has a cost" mid-phrase, no matter how narrow the viewport
+  - `shrink-0` — prevents the suffix from being squeezed by the main text when space is tight; the main text wraps instead (which is the desired behavior)
+- VLM verification (mobile 375px): "All visible items display 'has a cost' on a single line (no wrapping). First item: 'Every delay → has a cost' (single line). Second: 'Every lost opportunity → has a cost' (single line). Third: 'Every escalation that routes back to you → has a cost' (single line)."
+- VLM verification (desktop 1280px): "All 5 items have 'has a cost' on a single line, no wrapping issues. Including the longest: 'Every approval that never needed your signature has a cost'."
+- Lint clean, no browser console/runtime errors.
+
+Stage Summary:
+- "has a cost" now stays on one line for all 5 penalty items on all viewports (mobile, tablet, desktop).
+- Fix was two CSS classes: `whitespace-nowrap` (prevents mid-phrase break) + `shrink-0` (prevents the suffix from being squeezed by long main text).
+- Lint clean, verified on mobile + desktop via Agent Browser + VLM.
