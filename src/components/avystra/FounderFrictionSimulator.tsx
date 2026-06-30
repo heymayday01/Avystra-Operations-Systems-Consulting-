@@ -356,7 +356,7 @@ export default function FounderFrictionSimulator() {
                 />
 
                 {/* Content — switches based on toggle state */}
-                <div className="relative min-h-[80px]">
+                <div className="relative min-h-[110px]">
                   {/* Bottlenecked state */}
                   <div
                     className="absolute inset-0 transition-opacity duration-300 space-y-1.5"
@@ -407,8 +407,8 @@ export default function FounderFrictionSimulator() {
             );
           })}
 
-          {/* ─── CENTER NODE — founder portrait crossfade, accent ring ─── */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+          {/* ─── CENTER NODE — founder portrait crossfade, accent ring, label ─── */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -432,6 +432,25 @@ export default function FounderFrictionSimulator() {
                 }}
               />
             </motion.div>
+
+            {/* Center node label — FOUNDER (bottlenecked) / AVYSTRA SYSTEM (resolved) */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-4 text-center"
+            >
+              <div
+                className="text-[13px] font-mono font-bold tracking-[0.18em] uppercase transition-colors duration-500"
+                style={{ color: accent }}
+              >
+                {isResolved ? "AVYSTRA SYSTEM" : "FOUNDER"}
+              </div>
+              <div className="text-[11px] font-sans text-white/45 mt-1 transition-colors duration-500">
+                {isResolved ? "The system that holds" : "Single point of failure"}
+              </div>
+            </motion.div>
           </div>
         </div>
 
@@ -443,7 +462,7 @@ export default function FounderFrictionSimulator() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-[120px] h-[120px] rounded-full overflow-hidden mb-10 transition-all duration-500"
+            className="relative w-[120px] h-[120px] rounded-full overflow-hidden transition-all duration-500"
             style={{
               border: `1px solid ${accentFaint}`,
               boxShadow: `0 0 0 6px ${accentSoft}19, 0 0 40px ${accentSoft}, inset 0 0 20px rgba(0,0,0,0.4)`,
@@ -458,6 +477,19 @@ export default function FounderFrictionSimulator() {
               }}
             />
           </motion.div>
+
+          {/* Center node label — FOUNDER / AVYSTRA SYSTEM */}
+          <div className="mt-4 mb-10 text-center">
+            <div
+              className="text-[12px] font-mono font-bold tracking-[0.18em] uppercase transition-colors duration-500"
+              style={{ color: accent }}
+            >
+              {isResolved ? "AVYSTRA SYSTEM" : "FOUNDER"}
+            </div>
+            <div className="text-[10.5px] font-sans text-white/45 mt-1 transition-colors duration-500">
+              {isResolved ? "The system that holds" : "Single point of failure"}
+            </div>
+          </div>
 
           {/* Stacked outcome cards */}
           <div className="w-full grid grid-cols-1 gap-4">
@@ -510,7 +542,7 @@ export default function FounderFrictionSimulator() {
                     }}
                   />
 
-                  <div className="relative min-h-[60px]">
+                  <div className="relative min-h-[80px]">
                     <div
                       className="transition-opacity duration-300 space-y-1.5"
                       style={{ display: isResolved ? "none" : "block" }}

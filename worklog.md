@@ -334,3 +334,35 @@ Stage Summary:
 - Failure isolation: if Excel generation fails (e.g. disk full), the DB save and emails still succeed — the response still returns `emailSent: true` and the submission is preserved.
 - Lint clean, no runtime errors, full flow verified end-to-end via Agent Browser.
 - Files changed: deleted `src/lib/sheets.ts`; created `src/lib/excel-export.ts` + `src/app/api/ogi/export/route.ts`; edited `src/app/api/ogi/submit/route.ts` (swapped sheet task → excel task); removed googleapis; added exceljs; cleaned .env.
+
+---
+Task ID: 10
+Agent: main-orchestrator
+Task: Add FOUNDER/AVYSTRA SYSTEM labels + sublines to center node; fix truncated sub-points in outcome cards
+
+Work Log:
+- Analyzed user's uploaded screenshot vs current live state via VLM. Found two issues:
+  1. The center founder circle had no text labels — user's screenshot showed "FOUNDER" (red) + "Single point of failure" (gray) below the circle, but the live site had nothing.
+  2. The last sub-point under "04 EXECUTION" ("No measurement or follow-through") was truncated to "No measurement or follow-" because the card's content area had `min-h-[80px]` with `overflow-hidden` on the parent card, clipping the absolutely-positioned text.
+- Edited `src/components/avystra/FounderFrictionSimulator.tsx`:
+  - **Desktop center node** (line ~410): changed the wrapper from a single `motion.div` to a `flex flex-col items-center` container holding the circle + a new label block. The label shows:
+    - Bottlenecked state: "FOUNDER" (red/accent color, mono bold uppercase) + "Single point of failure" (white/45 gray)
+    - AVYSTRA system state: "AVYSTRA SYSTEM" (green/accent color) + "The system that holds" (white/45 gray)
+    - Colors transition smoothly via `transition-colors duration-500` synced with the accent variable.
+  - **Mobile center node** (line ~458): same label block added below the circle, with slightly smaller text (`text-[12px]` / `text-[10.5px]`) to fit mobile. Replaced the `mb-10` on the circle with `mb-10` on the label block to maintain spacing.
+  - **Desktop outcome cards**: increased content area `min-h-[80px]` → `min-h-[110px]` so 2-line sub-points like "No measurement or follow-through" are fully visible without clipping.
+  - **Mobile outcome cards**: increased content area `min-h-[60px]` → `min-h-[80px]` for the same fix.
+- Ran `bun run lint` → clean.
+- VLM verification (desktop, bottlenecked state): "Yes, there is a 'FOUNDER' label below the center circle. Yes, there is a 'Single point of failure' subline below 'FOUNDER'. Under '04 EXECUTION', the second sub-point is fully visible as 'No measurement or follow-through' (not truncated). All sub-points in all 4 cards are fully visible."
+- VLM verification (desktop, AVYSTRA system state): "Yes, there is an 'AVYSTRA SYSTEM' label below the center circle. Yes, there is a 'The system that holds' subline below it. The label colors are green. All sub-points in all 4 cards are fully visible."
+- VLM verification (mobile, bottlenecked state): "Yes, below the circular image of the founder, there is a 'FOUNDER' label (in red text) and the subline 'Single point of failure' (in smaller gray text). Sub-points are fully visible without truncation."
+- Dev log clean, no browser console/runtime errors.
+
+Stage Summary:
+- Center node now displays the proper labels in both states:
+  - Bottlenecked: "FOUNDER" + "Single point of failure" (red accent)
+  - AVYSTRA system: "AVYSTRA SYSTEM" + "The system that holds" (green accent)
+- Labels appear on both desktop (centered below circle) and mobile (stacked below circle) with responsive font sizes.
+- All 4 outcome cards (LEADERSHIP, MANAGERS, TEAMS, EXECUTION) now show their full sub-points without truncation — "No measurement or follow-through" is fully visible.
+- Colors transition smoothly between states (red → green) via the existing `accent` CSS variable.
+- Lint clean, no runtime errors, verified on desktop + mobile via Agent Browser + VLM.
