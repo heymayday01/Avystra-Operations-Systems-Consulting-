@@ -600,3 +600,35 @@ Stage Summary:
 - Founder images replaced: the frustrated founder (hand on forehead) now shows in the bottlenecked state, the confident founder (arms crossed) shows in the AVYSTRA system state. The crossfade transition between them works smoothly.
 - No code changes needed for the image swap — the component already referenced the exact filenames.
 - Lint clean, no runtime errors, verified both states + footer via Agent Browser + VLM.
+
+---
+Task ID: 17
+Agent: main-orchestrator
+Task: Re-center and zoom out the founder images in the circle so hair isn't cut off
+
+Work Log:
+- Diagnosed the root cause via Python PIL: both founder images are portrait-oriented:
+  - `founder-frustrated.png`: 712 × 1007 px (aspect 0.707 — taller than wide)
+  - `founder-confident.png`: 727 × 995 px (aspect 0.731 — taller than wide)
+- The circle container is square (140×140 desktop, 120×120 mobile). The original code used `object-cover` with `objectPosition: "center 20%"` which scaled the image to fill the circle entirely, cropping the top (hair) and bottom.
+- First attempt: switched to `object-contain` with `objectPosition: "center center"` + `p-1`. This fit the image width to the circle, but since the image is portrait (taller than the square), the height still overflowed → hair still clipped by `overflow-hidden`.
+- Final fix in `src/components/avystra/FounderFrictionSimulator.tsx` `FounderImages` component:
+  - Changed image className from `w-full h-full object-cover` to `h-full w-auto max-w-none object-contain` — scales the image to fit the circle's HEIGHT, so the entire portrait is visible. The width is narrower than the circle (since portrait), leaving side gaps that blend with the navy background.
+  - Added `transform: "scale(0.85)"` + `left: "50%"` + `translateX: "-50%"` to center horizontally and add a 15% zoom-out margin so nothing touches the circle's edge.
+  - Added `bg-navy-deep` to the container so any side gaps blend with the circle's navy background (matches the accent ring color).
+  - Added `rounded-full` to the tint overlay divs so they don't bleed outside the circle.
+- Ran `bun run lint` → clean.
+- VLM verification (bottlenecked state, scale 0.92): "top of hair and shoulders fully visible, no part cut off, image centered." ✓
+- VLM verification (confident state, scale 0.92): still had slight clipping — the confident image is slightly wider, so 0.92 wasn't enough margin.
+- Bumped scale to 0.85 for both images. Re-verified:
+  - Bottlenecked: "The top of the hair and shoulders are fully contained within the circle. No part of the person is cut off by the circle's edge." ✓
+  - Confident: "The top of their hair and shoulders fully visible (no cropping). Nothing is cut off by the circle's edge. The person has crossed arms." ✓
+- Dev log clean, no browser console/runtime errors.
+
+Stage Summary:
+- Both founder images (frustrated + confident) now display the entire person — hair, face, shoulders, crossed arms — fully visible inside the circle with no clipping.
+- Images are centered horizontally and zoomed out to 85% scale, giving a comfortable margin between the portrait and the circle's edge.
+- The container has a navy background (`bg-navy-deep`) so the side gaps (from the portrait image being narrower than the square circle) blend naturally with the accent ring.
+- The crossfade transition between the two states still works smoothly.
+- Applies to both desktop (140px circle) and mobile (120px circle) since the scaling is relative.
+- Lint clean, no runtime errors, verified both states via Agent Browser + VLM.

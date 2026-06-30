@@ -18,42 +18,50 @@ import { smoothScrollTo } from "@/lib/scroll";
 // center node without re-creating the component each render. ═══
 function FounderImages({ isResolved }: { isResolved: boolean }) {
   return (
-    <div className="relative w-full h-full rounded-full overflow-hidden">
-      {/* Frustrated state — red tint overlay */}
+    <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-navy-deep">
+      {/* Frustrated state */}
       <img
         src="/founder-frustrated.png"
         alt="Founder — frustrated, bottlenecked"
         referrerPolicy="no-referrer"
         loading="lazy"
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+        // Portrait image in a square circle: scale to fit height so the
+        // entire person (hair → shoulders) is visible. Center horizontally.
+        // scale(0.85) gives enough zoom-out margin so nothing touches the
+        // circle's edge on either image.
+        className="absolute h-full w-auto max-w-none object-contain transition-opacity duration-500"
         style={{
           opacity: isResolved ? 0 : 1,
-          objectPosition: "center 20%",
+          transform: "scale(0.85)",
+          left: "50%",
+          translateX: "-50%",
         }}
       />
       {/* Red tint overlay for frustrated state */}
       <div
-        className="absolute inset-0 pointer-events-none transition-opacity duration-500"
+        className="absolute inset-0 pointer-events-none transition-opacity duration-500 rounded-full"
         style={{
           opacity: isResolved ? 0 : 1,
           background: "radial-gradient(circle, transparent 40%, rgba(239,68,68,0.25) 100%)",
         }}
       />
-      {/* Confident state — green tint overlay */}
+      {/* Confident state */}
       <img
         src="/founder-confident.png"
         alt="Founder — confident, system in place"
         referrerPolicy="no-referrer"
         loading="lazy"
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+        className="absolute h-full w-auto max-w-none object-contain transition-opacity duration-500"
         style={{
           opacity: isResolved ? 1 : 0,
-          objectPosition: "center 20%",
+          transform: "scale(0.85)",
+          left: "50%",
+          translateX: "-50%",
         }}
       />
       {/* Green tint overlay for confident state */}
       <div
-        className="absolute inset-0 pointer-events-none transition-opacity duration-500"
+        className="absolute inset-0 pointer-events-none transition-opacity duration-500 rounded-full"
         style={{
           opacity: isResolved ? 1 : 0,
           background: "radial-gradient(circle, transparent 40%, rgba(16,185,129,0.2) 100%)",
