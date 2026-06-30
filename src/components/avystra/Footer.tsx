@@ -1,6 +1,6 @@
 "use client";
 
-import { Linkedin, Instagram, MessageCircle, Facebook, Mail, Phone, ArrowUpRight, Download } from "lucide-react";
+import { Linkedin, Instagram, MessageCircle, Facebook, Mail, Phone, ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
 import AvystraLogo from "./AvystraLogo";
 import { smoothScrollTo } from "@/lib/scroll";
@@ -168,18 +168,6 @@ export default function Footer({ leadCount }: FooterProps) {
             <span className="cursor-pointer hover:text-gold transition-colors">
               Privacy
             </span>
-            {/* Owner-only: download the latest OGI submissions as an Excel file.
-                The file at /ogi-submissions.xlsx auto-regenerates on every new
-                submission, so this link always downloads the current data. */}
-            <a
-              href="/ogi-submissions.xlsx"
-              download
-              className="cursor-pointer text-gold hover:text-gold-light transition-colors inline-flex items-center gap-1"
-              title="Download all OGI submissions as Excel"
-            >
-              <Download className="w-3 h-3" />
-              Export Data
-            </a>
             {leadCount > 0 && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-gold/20 bg-gold/5 text-[11.5px] text-gold">
                 <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />

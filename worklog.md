@@ -565,3 +565,38 @@ Stage Summary:
 - The "Take Free" badge is slightly smaller on mobile (`text-[9px]`) to match the compact layout.
 - Desktop layout is unchanged — same full text, same header positioning.
 - Lint clean, verified on 320px, 375px, and 1280px via Agent Browser + VLM.
+
+---
+Task ID: 16
+Agent: main-orchestrator
+Task: Remove "Export Data" button from footer + replace the two founder images in the FounderFrictionSimulator
+
+Work Log:
+- Analyzed both uploaded images via VLM:
+  - `pasted_image_1782836173711.png` = frustrated founder (hand on forehead, furrowed brow, stressed expression, navy suit, white shirt)
+  - `pasted_image_1782836206133.png` = confident founder (arms crossed, calm smile, composed posture, navy suit, white shirt, maroon tie)
+
+**Task 1 — Removed "Export Data" button from Footer:**
+- Edited `src/components/avystra/Footer.tsx`:
+  - Removed the `Download` icon from the lucide-react import
+  - Removed the entire `<a href="/ogi-submissions.xlsx" download>...</a>` block (the "Export Data" link with download icon) from the footer meta row
+- The Excel file at `/public/ogi-submissions.xlsx` still exists and auto-regenerates on every submission — it's just no longer linked from the footer. The file is still accessible via the direct URL `/ogi-submissions.xlsx` and the API endpoint `/api/ogi/export` if ever needed.
+
+**Task 2 — Replaced founder images:**
+- Copied `pasted_image_1782836173711.png` → `/home/z/my-project/public/founder-frustrated.png` (frustrated founder — used in the bottlenecked state)
+- Copied `pasted_image_1782836206133.png` → `/home/z/my-project/public/founder-confident.png` (confident founder — used in the AVYSTRA system state)
+- No code changes needed — the `FounderFrictionSimulator.tsx` component already references these exact filenames via the `FounderImages` sub-component, so the new images are picked up automatically.
+
+**Verification (Agent Browser + VLM):**
+- Bottlenecked state (default): VLM confirmed "The person in the circular image (labeled 'FOUNDER') appears to be a frustrated/stressed person, as they have one hand on their forehead." ✓
+- AVYSTRA system state (toggled): VLM confirmed "The person appears confident: wearing a suit, calm demeanor, arms crossed. No indication of frustration." ✓
+- Footer: VLM confirmed "The links/buttons in the bottom meta row are: 'Begin Assessment' and 'Privacy'. There is no 'Export Data' link/button." ✓
+- Lint clean.
+- Restarted dev server to clear a stale Fast Refresh HMR warning (cosmetic only — page was rendering correctly throughout). Console now shows only `[HMR] connected` (normal).
+- No browser runtime errors, page renders correctly.
+
+Stage Summary:
+- "Export Data" button removed from the footer. The Excel file still auto-regenerates on every submission and is accessible via the direct URL, just not linked from the UI.
+- Founder images replaced: the frustrated founder (hand on forehead) now shows in the bottlenecked state, the confident founder (arms crossed) shows in the AVYSTRA system state. The crossfade transition between them works smoothly.
+- No code changes needed for the image swap — the component already referenced the exact filenames.
+- Lint clean, no runtime errors, verified both states + footer via Agent Browser + VLM.
