@@ -87,43 +87,52 @@ export default function OGIDiagnostic() {
   // Track whether this is the first render — we don't auto-scroll on mount
   const isFirstRender = useRef(true);
 
-  // ── Auto-scroll the OGI box into view on USER-INITIATED screen changes ──
-  // Skips the initial mount (INTRO) so the page loads normally without
-  // jumping to the OGI section. Only fires when the user actively navigates
-  // between screens (Begin Diagnostic → form → questions → results).
+  // ── Intelligent viewport auto-scroll on screen changes ──
+  // Skips the initial mount (INTRO) so the page loads normally.
+  // For each subsequent screen change, intelligently decides whether + how
+  // to scroll based on the current viewport position:
   //
-  // IMPORTANT: Only scrolls if the OGI box is NOT already visible in the
-  // viewport. This prevents the auto-scroll from fighting with the user's
-  // manual scroll (which was causing the "shaky" feeling when scrolling
-  // through the OGI section). If the user can already see the box, we
-  // leave their scroll position alone.
+  // - If the box TOP is already in the upper 40% of the viewport (between
+  //   120px and 40% of viewport height), the user can already see the
+  //   start of the content → don't scroll (prevents fighting with user scroll).
+  // - Otherwise, scroll the box TOP to 120px from viewport top (just below
+  //   the sticky header with breathing room).
+  //
+  // This is more lenient than checking if the WHOLE box is visible (which
+  // never passes for the tall RESULTS screen, causing it to always scroll).
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
     if (screen === "LOADING") return; // don't scroll during loading spinner
+
     const el = contentBoxRef.current;
     if (!el) return;
 
-    // Check if the OGI box is already visible in the viewport.
-    // If it is, don't auto-scroll — let the user keep their position.
-    const rect = el.getBoundingClientRect();
-    const viewportTop = 80; // account for sticky header
-    const viewportBottom = window.innerHeight;
-    const isVisible = rect.top >= viewportTop && rect.bottom <= viewportBottom;
-    if (isVisible) return;
-
-    // Slight delay to let the new screen's AnimatePresence render
+    // Slight delay to let the new screen's AnimatePresence render + layout settle
     const timer = setTimeout(() => {
+      const rect = el.getBoundingClientRect();
+      const headerOffset = 120; // clear sticky header + breathing room
+      const viewportHeight = window.innerHeight;
+      const upperViewportBound = viewportHeight * 0.4;
+
+      // If the box top is already in the upper viewport, don't scroll.
+      // The 20px tolerance prevents micro-scrolls when the box is right
+      // at the boundary.
+      const isTopVisible =
+        rect.top >= headerOffset - 20 && rect.top <= upperViewportBound;
+      if (isTopVisible) return;
+
+      // Scroll the box top to headerOffset (120px from viewport top).
       const lenis = getLenis();
       if (lenis) {
-        lenis.scrollTo(el, { offset: -100, duration: 0.8 });
+        lenis.scrollTo(el, { offset: -headerOffset, duration: 0.8 });
       } else {
-        const top = el.getBoundingClientRect().top + window.scrollY - 100;
+        const top = rect.top + window.scrollY - headerOffset;
         window.scrollTo({ top, behavior: "smooth" });
       }
-    }, 150);
+    }, 200);
     return () => clearTimeout(timer);
   }, [screen]);
 
