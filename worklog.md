@@ -57,3 +57,30 @@ Stage Summary:
 - Root cause: (a) Tailwind CSS source-ordering made `pointer-events-none` always win over `pointer-events-auto` on the Header's outer container, and (b) the `setTimeout(() => setIsOpen(false), 50)` closed the mobile menu mid-smooth-scroll, and on touch devices the AnimatePresence exit animation's layout mutation cancelled the in-flight `window.scrollTo({ behavior: 'smooth' })`.
 - Fix: close the menu first, defer the scroll two rAFs until layout settles, stopPropagation to avoid the double-handler, and replace the conflicting Tailwind pointer-events classes with a single inline style.
 - All 5 mobile menu links + the OGI CTA button now scroll to their correct sections on mobile. Desktop nav is unaffected. Lint clean, no console/runtime errors.
+
+---
+Task ID: 3
+Agent: main-orchestrator
+Task: Fix stat cards not following same length — make visually symmetric
+
+Work Log:
+- Analyzed the user's screenshot (1493×441 PNG) showing the "India is Bleeding Performance" section with 4 dark navy stat cards.
+- Initial VLM analysis said cards looked uniform, but the user disagreed. Measured actual DOM heights programmatically via Agent Browser `eval`.
+- Found the root cause at mobile width (375px, 2-column grid): Card 3 (LATENT OWNERSHIP, "Employees are ready. Systems aren't.") has shorter description text, so its `StatCard` inner content was only 224px while the CSS grid stretched its motion.div wrapper to 239px (to match card 2). Since `StatCard` lacked `h-full`, the navy background was 224px — leaving a **15px gap** where the cream page background showed through. This made the visible card backgrounds different heights (224px vs 239px) in the bottom row.
+- The same structural issue existed at all viewport widths but was masked at desktop (1493px) because all descriptions happened to wrap to the same number of lines at that width.
+- Edited `src/components/avystra/StatsFounder.tsx`:
+  1. Added `h-full` to the motion.div wrapper around each `<StatCard>` in the stats.map (explicit grid-cell fill).
+  2. Added `h-full` to the `StatCard` root motion.div so the navy background fills the entire grid cell regardless of content height.
+  3. Changed the description `<p>` to `flex-1 flex items-end justify-center` so the text is bottom-aligned and the empty space distributes evenly above it — all cards now have identical visible height with text bottom-aligned for visual symmetry.
+  4. Added `mt-auto` to the credentials cards' description `<p>` (same pattern) so the 4 gold credentials cards also have bottom-aligned descriptions and consistent visual balance.
+- Verified `bun run lint` → clean.
+- Re-measured at mobile (375px): all 4 stat cards now have gap: 0 (card 3 went from cardH=224 → cardH=239, filling the wrapper completely).
+- Re-measured at desktop (1493px): all 4 stat cards 204px gap 0; all 4 credentials cards 197px gap 0.
+- VLM cross-check on mobile screenshot: "both cards have exactly the same height... no gap or empty cream-colored space at the bottom of the right card."
+- VLM cross-check on desktop screenshot: "All 4 cards have the same height, their bottoms are perfectly aligned, and the layout is visually symmetric."
+- `agent-browser errors` and console → empty. `dev.log` clean.
+
+Stage Summary:
+- Root cause: `StatCard` component lacked `h-full`, so when CSS grid stretched its wrapper to match the tallest sibling, the card's navy background didn't fill the cell — creating a visible height gap on cards with shorter description text (especially card 3 "LATENT OWNERSHIP" at mobile width, where the 15px gap was most noticeable).
+- Fix: Added `h-full` to both the wrapper and the card root, and used `flex-1 flex items-end justify-center` on the description paragraph so text is bottom-aligned and all cards have identical visible height. Applied the same `mt-auto` pattern to the credentials cards for consistency.
+- All stat cards and credentials cards are now visually symmetric at all viewport widths. Lint clean, no runtime/console errors.

@@ -178,6 +178,7 @@ export default function StatsFounder() {
                   delay: idx * 0.08,
                   ease: [0.16, 1, 0.3, 1],
                 }}
+                className="h-full"
               >
                 <StatCard stat={stat} />
               </motion.div>
@@ -343,7 +344,7 @@ export default function StatsFounder() {
                   <span className="text-[9px] sm:text-[10px] font-mono text-gold uppercase tracking-widest font-black block mt-1 leading-none mb-2 sm:mb-3">
                     {cred.subtitle}
                   </span>
-                  <p className="text-slate-600 font-sans text-[11px] sm:text-[12.5px] leading-relaxed font-light">
+                  <p className="text-slate-600 font-sans text-[11px] sm:text-[12.5px] leading-relaxed font-light mt-auto">
                     {cred.desc}
                   </p>
                 </motion.div>
@@ -365,7 +366,7 @@ const StatCard = React.memo(function StatCard({
     <motion.div
       whileHover={{ y: -6, scale: 1.02 }}
       transition={{ type: "spring", stiffness: 300, damping: 25 }}
-      className="relative rounded-2xl p-5 bg-navy-deep border border-red-500/15 flex flex-col items-center text-center group transition-all duration-300 hover:border-red-500/35 hover:shadow-[0_20px_40px_-15px_rgba(239,68,68,0.22)] overflow-hidden"
+      className="relative rounded-2xl p-5 bg-navy-deep border border-red-500/15 flex flex-col items-center text-center group transition-all duration-300 hover:border-red-500/35 hover:shadow-[0_20px_40px_-15px_rgba(239,68,68,0.22)] overflow-hidden h-full"
     >
       {/* Red warning line at top */}
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-red-500/0 via-red-500 to-red-500/0" />
@@ -394,8 +395,11 @@ const StatCard = React.memo(function StatCard({
         {stat.label}
       </span>
 
-      <p className="text-slate-400 text-xs font-sans font-light leading-relaxed">
-        {stat.context}
+      {/* flex-1 pushes this paragraph to fill remaining vertical space,
+          so all cards have identical visible height even when description
+          text lengths differ. flex-end keeps the text bottom-aligned. */}
+      <p className="text-slate-400 text-xs font-sans font-light leading-relaxed flex-1 flex items-end justify-center">
+        <span>{stat.context}</span>
       </p>
     </motion.div>
   );
