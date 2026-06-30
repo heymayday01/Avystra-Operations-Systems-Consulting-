@@ -1258,3 +1258,65 @@ Stage Summary:
 - Codebase is clean: no dead code, no unused imports, no stale comments, no TODO markers, no duplicate definitions.
 - The 7 package removals reduce node_modules size + install time with zero functional impact (none were imported anywhere).
 - Lint clean, all APIs + pages verified working, no runtime errors.
+
+---
+Task ID: 33
+Agent: main-orchestrator
+Task: Production-ready optimizations + commit to git
+
+Work Log:
+
+**CRITICAL SECURITY FIX:**
+- Discovered `.env` (containing SMTP credentials + Gmail App Password) was **tracked by git** — would have been pushed to GitHub exposing all credentials.
+- Ran `git rm --cached .env` to untrack it. The file still exists locally but is no longer in git. Verified `git ls-files .env` returns empty.
+- The `.gitignore` already had `.env*` but the file was committed before that rule was added, so git kept tracking it.
+
+**PRODUCTION OPTIMIZATIONS:**
+
+1. **`next.config.ts` — hardened for production:**
+   - `reactStrictMode: true` (was false) — catches potential problems in development
+   - Removed `typescript.ignoreBuildErrors: true` — was hiding type errors, unsafe for production
+   - Added 5 security headers via `async headers()`:
+     - `X-Content-Type-Options: nosniff` — prevents MIME-type sniffing
+     - `X-Frame-Options: SAMEORIGIN` — prevents clickjacking
+     - `Referrer-Policy: strict-origin-when-cross-origin` — controls referrer leakage
+     - `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload` — forces HTTPS
+     - `Permissions-Policy: camera=(), microphone=(), geolocation=()` — disables unused APIs
+
+2. **`src/app/layout.tsx` — metadata + viewport:**
+   - Added `Viewport` export with `themeColor` (light: #F7F4ED, dark: #0B1B2E) — proper mobile browser theming
+   - Added `metadataBase: new URL("https://avystra.co.in")` — fixes OpenGraph URL resolution
+   - Added `locale: "en_IN"` to OpenGraph — proper regional targeting
+   - Added `robots` config (index: true, follow: true, max-image-preview: large) — SEO
+
+3. **`src/app/sitemap.ts` — new:**
+   - Dynamic sitemap.xml generation
+   - Single URL (avystra.co.in) with monthly change frequency, priority 1
+
+4. **`src/app/robots.ts` — new:**
+   - Dynamic robots.txt generation
+   - Allows all crawlers on `/`, disallows `/api/`
+   - Points to sitemap at `https://avystra.co.in/sitemap.xml`
+   - Removed conflicting static `public/robots.txt`
+
+**GIT COMMIT:**
+- Committed all changes: `c415279 Production-ready: security headers, sitemap, robots.txt, viewport, .env untracked`
+- 6 files changed, 77 insertions, 32 deletions
+- `.env` removed from tracking (deletion committed)
+- No GitHub remote configured yet — need user's repo URL to push
+
+**VERIFICATION:**
+- Page loads: hero heading renders ✓
+- Security headers: all 5 present (X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Strict-Transport-Security, Permissions-Policy) ✓
+- Sitemap: `https://avystra.co.in` in `<loc>` ✓
+- Robots: `Allow: /`, `Disallow: /api/`, sitemap reference ✓
+- .env NOT tracked by git ✓
+- Lint clean ✓
+- No browser console/runtime errors ✓
+- No dev log warnings ✓
+
+Stage Summary:
+- Production-ready: security headers, sitemap, robots.txt, viewport/themeColor, .env untracked.
+- Critical security fix: .env (with SMTP credentials) was tracked by git and would have been exposed on GitHub. Now untracked.
+- All changes committed to git (commit c415279).
+- No GitHub remote configured — need user's GitHub repo URL to push.
