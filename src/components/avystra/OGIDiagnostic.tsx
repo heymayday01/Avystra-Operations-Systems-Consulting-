@@ -25,19 +25,13 @@ import {
   questions as ogiQuestions,
   answerOptions as ogiAnswerOptions,
   computeOgiScore,
+  getResultBand,
   type DimensionCode,
+  type ResultBand,
 } from "@/lib/ogi-data";
 
 // Shared easing curve — premium expo-out for elegant reveals
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
-
-interface Question {
-  id: number;
-  text: string;
-  dimensionCode: DimensionCode;
-  dimensionName: string;
-  color: string;
-}
 
 // Questions + answer options + scoring now live in src/lib/ogi-data.ts
 // so the API route and this component share the exact same data source.
@@ -55,13 +49,6 @@ interface RecommendedProgram {
   pillar: DimensionCode;
   name: string;
   why: string;
-}
-
-interface ResultBand {
-  badge: string;
-  colour: string;
-  headline: string;
-  description: string;
 }
 
 interface PillarDatum {
@@ -812,39 +799,8 @@ export default function OGIDiagnostic() {
 
               const recommendedPrograms = getRecommendedProgramsList(weakPillar1.code, weakPillar2.code);
 
-              // Get band details
-              const getResultBand = (score: number): ResultBand => {
-                if (score >= 82) {
-                  return {
-                    badge: "High Growth Ready",
-                    colour: "#10B981",
-                    headline: "Strong Foundations. Specific Gaps To Close.",
-                    description: "Your organization runs on strong strategic clarity, empowered managers, high accountability, and robust execution systems. Ready for heavy structural scaling with minimal friction.",
-                  };
-                } else if (score >= 66) {
-                  return {
-                    badge: "Growth Ready",
-                    colour: "#3B82F6",
-                    headline: "Good Intent. Execution Consistency Is The Gap.",
-                    description: "Core systems and strategies are mostly aligned, but execution remains variable or dependent on specific key players. Scaling is feasible but will create strain without standardizing manager authority.",
-                  };
-                } else if (score >= 45) {
-                  return {
-                    badge: "Execution Gap",
-                    colour: "#F59E0B",
-                    headline: "Clear Gaps That Are Costing You Every Day.",
-                    description: "Communication blocks and department silos are slowing execution. Action depends heavily on crisis control, pressure, or key managers tracking things manually. Accountability is tribal rather than systematic.",
-                  };
-                } else {
-                  return {
-                    badge: "Immediate Attention",
-                    colour: "#EF4444",
-                    headline: "Significant Gaps Across Multiple Dimensions.",
-                    description: "Extreme key-person dependency. Decisions must route through the founder to stay active. Underperformance lags, accountability loops are weak, and long-term plans are lost under reactive fire-fighting.",
-                  };
-                }
-              };
-
+              // Band details come from the shared getResultBand in ogi-data.ts
+              // (same function used by the API route — single source of truth).
               const band = getResultBand(overallScorePct);
 
               const getPillarInsightAndBadge = (code: DimensionCode, avg: number): string => {

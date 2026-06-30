@@ -15,8 +15,7 @@ import path from "path";
 import fs from "fs/promises";
 import { db } from "@/lib/db";
 
-/** Path where the generated Excel file is served from. */
-export const EXCEL_PUBLIC_PATH = "/ogi-submissions.xlsx";
+/** Path where the generated Excel file is written to (and served from via /public). */
 const EXCEL_FILE_PATH = path.join(
   process.cwd(),
   "public",

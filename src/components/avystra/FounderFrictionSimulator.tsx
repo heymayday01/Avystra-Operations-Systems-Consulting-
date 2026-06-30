@@ -25,16 +25,17 @@ function FounderImages({ isResolved }: { isResolved: boolean }) {
         alt="Founder — frustrated, bottlenecked"
         referrerPolicy="no-referrer"
         loading="lazy"
-        // Portrait image in a square circle: scale to fit height so the
-        // entire person (hair → shoulders) is visible. Center horizontally
-        // using a combined transform (translate must come before scale so
-        // the -50% is relative to the image's own width, not the scaled
-        // width). scale(0.85) gives a comfortable zoom-out margin.
+        // Portrait image in a square circle. The image is scaled so its
+        // bounding box fits entirely INSIDE the circle's circumference
+        // (no corner clipping). For a portrait image with aspect ~0.71,
+        // scale 0.78 places the image corners just inside the circle radius
+        // with a small safety margin. translateX(-50%) centers horizontally;
+        // it must come before scale so -50% is relative to the unscaled width.
         className="absolute top-0 h-full w-auto max-w-none object-contain transition-opacity duration-500"
         style={{
           opacity: isResolved ? 0 : 1,
           left: "50%",
-          transform: "translateX(-50%) scale(0.85)",
+          transform: "translateX(-50%) scale(0.78)",
         }}
       />
       {/* Red tint overlay for frustrated state */}
@@ -55,7 +56,7 @@ function FounderImages({ isResolved }: { isResolved: boolean }) {
         style={{
           opacity: isResolved ? 1 : 0,
           left: "50%",
-          transform: "translateX(-50%) scale(0.85)",
+          transform: "translateX(-50%) scale(0.78)",
         }}
       />
       {/* Green tint overlay for confident state */}
