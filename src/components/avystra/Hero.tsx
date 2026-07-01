@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useCallback, useState, useSyncExternalStore } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, UserPlus, TrendingUp, Building2, Banknote, ClipboardList } from "lucide-react";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { CustomEase } from "gsap/CustomEase";
@@ -295,19 +295,60 @@ export default function Hero() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
-            className="text-slate-600 font-sans text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-light mb-8 sm:mb-10"
+            className="text-slate-600 font-sans text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-light mb-6 sm:mb-8"
           >
             Most organizations don&apos;t struggle with knowing what to do. They struggle with{" "}
             <span className="font-semibold text-navy-deep">consistently doing it.</span>{" "}
             That&apos;s the gap <span className="font-bold text-gold">AVYSTRA</span> closes.
           </motion.p>
 
+          {/* Feature cards — compact inline chips */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.05, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 max-w-3xl mx-auto"
+          >
+            {[
+              { label: "Hired experienced people", Icon: UserPlus },
+              { label: "Promoted managers", Icon: TrendingUp },
+              { label: "Created departments", Icon: Building2 },
+              { label: "Increased salaries", Icon: Banknote },
+              { label: "Held meetings & set targets", Icon: ClipboardList },
+            ].map(({ label, Icon }, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.1 + idx * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="flex items-center gap-2 px-3 py-2 rounded-full border border-slate-200/80 bg-white/70 shadow-sm hover:border-gold/40 hover:bg-white transition-all duration-300"
+              >
+                <Icon className="w-3.5 h-3.5 text-gold/70 shrink-0" />
+                <span className="text-navy-deep/80 font-sans text-[11px] sm:text-[12px] font-semibold whitespace-nowrap">
+                  You {label}
+                </span>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* Bridging question */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.3, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-8 sm:mb-10 max-w-2xl mx-auto"
+          >
+            <p className="text-navy-deep font-sans text-base sm:text-lg font-semibold leading-relaxed text-center">
+              So why does it still feel like the company slows down whenever you step away?
+            </p>
+          </motion.div>
+
           {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mb-12 sm:mb-16"
+            transition={{ duration: 0.8, delay: 1.4, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mb-10 sm:mb-14"
           >
             <button
               ref={ctaRef}
@@ -334,7 +375,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.3 }}
+            transition={{ duration: 0.8, delay: 1.5 }}
             className="flex flex-wrap justify-center gap-x-6 sm:gap-x-10 gap-y-3 pt-6 border-t border-slate-200/60 w-full max-w-2xl"
           >
             {[
