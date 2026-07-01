@@ -196,8 +196,10 @@ export default function Header() {
         }`}
       >
         <div className="flex items-center gap-4 lg:gap-6">
-          {/* Logo brand frame — flex-1 to keep nav centered */}
-          <div className="flex items-center min-w-0 flex-1">
+          {/* Logo brand frame — flex-1 to keep nav centered.
+              Added pl-1 on mobile for extra corner padding so the
+              "Consulting" subtitle text has breathing room from the edge. */}
+          <div className="flex items-center min-w-0 flex-1 pl-1 sm:pl-0">
             <a
               href="#"
               onClick={(e) => {

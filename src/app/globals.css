@@ -265,11 +265,16 @@
 .gsap-hero-fade,
 .gsap-stagger-card,
 .gsap-divider,
-.pillar-fade-up,
-.pillar-card {
+.pillar-fade-up {
   transform: translateZ(0);
   will-change: transform, opacity;
 }
+
+/* NOTE: .pillar-card intentionally does NOT have will-change or translateZ.
+   These create a new stacking context that breaks Tailwind's group-hover
+   cascade — the group-hover targets are inside TiltCard which has its own
+   will-change, creating a second stacking context that isolates the hover
+   state. Removing the GPU promotion from the group container fixes hover. */
 
 /* ─── ENHANCED MICRO-INTERACTIONS ──────────────────────────── */
 .glass-card {
@@ -598,11 +603,13 @@ h1, h2, h3, h4, p {
    layer promotions below provide enough scroll perf without content-visibility. */
 
 /* GPU-promote elements that animate during scroll to their own layer.
-   This prevents repaint from propagating to parent layers. */
+   This prevents repaint from propagating to parent layers.
+   NOTE: .pillar-card is excluded — will-change: transform on the group
+   container breaks Tailwind's group-hover cascade. TiltCard (the child)
+   handles its own GPU promotion. */
 .friction-card,
 .glass-card,
 .glass-nav,
-.pillar-card,
 .program-carousel-card {
   will-change: transform;
   backface-visibility: hidden;

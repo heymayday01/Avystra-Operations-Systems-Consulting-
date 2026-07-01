@@ -47,7 +47,7 @@ export default function TestimonialsSection() {
   return (
     <section
       id="testimonials"
-      className="relative py-6 bg-transparent border-none overflow-hidden md:py-10 scroll-mt-24"
+      className="relative py-6 bg-transparent border-none overflow-x-hidden md:py-10 scroll-mt-24"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 select-none">
         {/* Section Heading Container */}

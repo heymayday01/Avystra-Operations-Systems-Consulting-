@@ -59,7 +59,7 @@ export default function FourPillars() {
   return (
     <section
       id="pillars"
-      className="relative py-6 md:py-10 bg-transparent overflow-hidden select-none scroll-mt-24"
+      className="relative py-6 md:py-10 bg-transparent overflow-x-hidden select-none scroll-mt-24"
     >
       <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 z-10">
         {/* Header Section */}
@@ -105,6 +105,7 @@ export default function FourPillars() {
               key={pillar.id}
               initial={{ opacity: 0, y: 30, rotateX: -10 }}
               whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              whileHover={{ y: -6 }}
               viewport={{ once: true }}
               transition={{
                 duration: 0.8,
@@ -117,9 +118,9 @@ export default function FourPillars() {
               <TiltCard
                 maxTilt={6}
                 scale={1.02}
-                className="relative h-full will-change-transform"
+                className="group relative h-full will-change-transform"
               >
-                <div className="relative h-full bg-gradient-to-br from-white to-slate-50 border border-slate-100 transition-all duration-700 rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:p-10 group-hover:shadow-[0_40px_80px_-20px_rgba(11,27,46,0.15)] group-hover:border-gold/40 flex flex-col justify-between overflow-hidden">
+                <div className="relative h-full bg-gradient-to-br from-white to-slate-50 border border-slate-100 transition-all duration-700 rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:p-10 hover:shadow-[0_40px_80px_-20px_rgba(11,27,46,0.15)] hover:border-gold/40 group-hover:shadow-[0_40px_80px_-20px_rgba(11,27,46,0.15)] group-hover:border-gold/40 flex flex-col justify-between overflow-hidden">
                   {/* Background Number Accent */}
                   <span className="absolute top-6 right-8 text-7xl font-serif font-black text-slate-200/30 group-hover:text-gold/20 transition-colors duration-700 select-none z-0">
                     {pillar.num}
