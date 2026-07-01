@@ -279,11 +279,11 @@ export default function Hero() {
           </motion.div>
 
           <div
-            className="mb-4 md:mb-6 transform-gpu relative z-20 max-w-[95vw] lg:max-w-none"
+            className="mb-4 md:mb-6 relative z-20 max-w-[95vw] lg:max-w-none"
           >
             <h1
               className="font-display font-bold text-[clamp(1.85rem,6.2vw,5rem)] tracking-[-0.035em] text-navy-deep select-none text-center heading-balance py-2"
-              style={{ lineHeight: 1.35 }}
+              style={{ lineHeight: 1.4 }}
             >
               <span className="inline-flex flex-wrap justify-center gap-x-[0.22em] mr-[0.22em] align-baseline">
                 {["You", "Built", "A", "Team."].map((word, i) => (
@@ -343,31 +343,21 @@ export default function Hero() {
                   </motion.span>
                 ))}
               </span>
+              {/* Gold "Depend On You?" — redesigned for iOS compatibility.
+                  NO transform-gpu, NO will-change, NO inline-block on the text
+                  itself (these create GPU layers that clip the ? tail on iOS).
+                  Instead: simple inline span with opacity-only animation.
+                  The text is display:inline so it inherits the parent's line
+                  box — no separate stacking context, no clipping. */}
               <span
-                className="relative inline-flex overflow-visible items-baseline text-gold whitespace-nowrap pl-[0.1em]"
-                style={{ lineHeight: 2, paddingBottom: "0.3em", paddingTop: "0.1em" }}
+                className="relative text-gold font-serif italic font-semibold whitespace-nowrap pl-[0.1em] align-baseline"
+                style={{ lineHeight: 1.8 }}
               >
                 <motion.span
-                  initial={{
-                    opacity: 0,
-                    y: 30,
-                    rotateX: 20,
-                    z: -50,
-                    filter: "blur(8px)",
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                    rotateX: 0,
-                    z: 0,
-                    filter: "blur(0px)",
-                  }}
-                  transition={{
-                    duration: 1.0,
-                    delay: 0.8,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
-                  className="inline-block transform-gpu will-change-[transform,opacity,filter] origin-bottom-right font-serif italic font-semibold"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 1.0, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ display: "inline" }}
                 >
                   Depend On You?
                 </motion.span>
