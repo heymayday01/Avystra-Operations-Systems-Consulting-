@@ -60,7 +60,6 @@ server.log
 worklog.md
 tool-results/
 upload/
-.zscripts/dev.pid
 .zscripts/dev.logpublic/ogi-submissions.xlsx
 
 # Runtime database (each deployment creates its own)
@@ -72,5 +71,8 @@ public/ogi-submissions.xlsx
 /examples/
 /mini-services/
 /download/
-.zscripts/
-Caddyfile
+
+# z.ai deployment artifacts (scripts are tracked, logs/pids are not)
+.zscripts/dev.pid
+.zscripts/dev.log
+.zscripts/mini-service-dev-server.log
