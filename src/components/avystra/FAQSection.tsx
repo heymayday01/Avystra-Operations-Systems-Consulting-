@@ -3,7 +3,6 @@
 import { useState, useCallback } from "react";
 import { HelpCircle, ChevronDown } from "lucide-react";
 import { getLenis } from "@/lib/scroll";
-import { useScrollReveal } from "@/lib/useScrollReveal";
 
 interface FAQItem {
   question: string;
@@ -41,8 +40,6 @@ const faqData: FAQItem[] = [
 
 export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const headerRef = useScrollReveal<HTMLDivElement>();
-  const accordionsRef = useScrollReveal<HTMLDivElement>();
 
   const toggleIndex = useCallback((index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index));
@@ -70,7 +67,6 @@ export default function FAQSection() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 select-none">
         {/* Section Header */}
         <div
-          ref={headerRef}
           className="flex flex-col items-center text-center max-w-3xl mx-auto mb-6 md:mb-8"
         >
           {/* Aesthetic Badge */}
@@ -98,7 +94,6 @@ export default function FAQSection() {
 
         {/* Accordions Containment Block */}
         <div
-          ref={accordionsRef}
           className="bg-gradient-to-br from-white to-slate-50 border border-slate-100 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-8 lg:p-10 divide-y divide-slate-300/20"
         >
           {faqData.map((faq, index) => {

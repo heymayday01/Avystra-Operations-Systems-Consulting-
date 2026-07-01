@@ -14,7 +14,6 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useScrollReveal } from "@/lib/useScrollReveal";
 import { DoodleSparkle, UnderlineSquiggle } from "./DoodleWidgets";
 
 interface StepData {
@@ -37,15 +36,6 @@ export default function Flowchart() {
   // Three reveal groups: header (badge/h2/p), steps grid (4 cards), bottom banner.
   // The flowing pulses and pulse ring/dot remain as motion.div since they
   // are decorative infinite loops, not scroll reveals.
-  const headerRef = useScrollReveal<HTMLDivElement>({
-    stagger: 0.09,
-    child: "[data-reveal]",
-  });
-  const stepsRef = useScrollReveal<HTMLDivElement>({
-    stagger: 0.09,
-    child: "[data-reveal]",
-  });
-  const bannerRef = useScrollReveal<HTMLDivElement>();
 
   const steps: StepData[] = [
     {
@@ -156,11 +146,9 @@ export default function Flowchart() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         {/* Section Header */}
         <div
-          ref={headerRef}
           className="text-center max-w-2xl mx-auto mb-8 sm:mb-10"
         >
           <div
-            data-reveal
             className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/60 border border-slate-200/50 rounded-full mb-3.5 relative shadow-sm"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
@@ -171,7 +159,6 @@ export default function Flowchart() {
           </div>
 
           <h2
-            data-reveal
             className="font-display font-bold text-3xl sm:text-5xl text-navy-deep tracking-tight leading-tight uppercase"
           >
             Our Four-Step{" "}
@@ -185,7 +172,6 @@ export default function Flowchart() {
             </span>
           </h2>
           <p
-            data-reveal
             className="text-slate-500 text-xs sm:text-sm font-sans font-light mt-4"
           >
             We don&apos;t run isolated motivational sessions. We design, deliver,
@@ -196,7 +182,6 @@ export default function Flowchart() {
 
         {/* The Steps Grid */}
         <div
-          ref={stepsRef}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 lg:gap-8 relative items-stretch"
         >
           {/* Connecting Arrows / Flowing Pulses for Desktop */}
@@ -227,7 +212,6 @@ export default function Flowchart() {
             return (
               <div
                 key={step.step}
-                data-reveal
                 onMouseEnter={() => setHoveredCard(idx)}
                 onMouseLeave={() => setHoveredCard(null)}
                 className="group relative flex flex-col justify-between bg-gradient-to-br from-white to-slate-50 border border-slate-100 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-6 hover:shadow-[0_30px_60px_rgba(11,27,46,0.08)] hover:border-gold/40 hover:scale-[1.02] transition-all duration-500 z-10 overflow-hidden"
@@ -349,7 +333,6 @@ export default function Flowchart() {
 
         {/* Double Banner Message */}
         <div
-          ref={bannerRef}
           className="mt-6 bg-navy-deep border border-gold/30 rounded-[2rem] overflow-hidden shadow-2xl relative"
         >
           <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />

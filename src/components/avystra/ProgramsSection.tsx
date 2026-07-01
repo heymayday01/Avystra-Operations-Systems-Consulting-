@@ -3,7 +3,6 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import { BookOpen, Calendar, Users, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { useScrollReveal } from "@/lib/useScrollReveal";
 import TextReveal from "./TextReveal";
 
 interface Program {
@@ -104,14 +103,6 @@ export default function ProgramsSection() {
   const [activeCarouselIndex, setActiveCarouselIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
-
-  // Two entrance-reveal groups: the section heading and the bottom banner.
-  // The desktop grid cards keep their motion.div wrappers because they need
-  // AnimatePresence + initial/animate/exit for tab-change transitions (a
-  // functional pattern, not a scroll reveal). The carousel logic and CSS
-  // classes are untouched per task constraints.
-  const headingRef = useScrollReveal<HTMLDivElement>();
-  const bannerRef = useScrollReveal<HTMLDivElement>();
 
   // Track viewport for mobile carousel behavior
   useEffect(() => {
@@ -304,7 +295,6 @@ export default function ProgramsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 select-none">
         {/* Section Heading */}
         <div
-          ref={headingRef}
           className="flex flex-col items-center text-center max-w-3xl mx-auto mb-6 md:mb-8"
         >
           <div className="border border-gold/20 bg-gradient-to-br from-white to-slate-50 border border-slate-100 px-4 py-1.5 rounded-full inline-flex items-center gap-2 mb-3 shadow-sm">
@@ -526,7 +516,6 @@ export default function ProgramsSection() {
 
         {/* Bottom Banner */}
         <div
-          ref={bannerRef}
           className="mt-14 p-5 bg-navy-deep border border-slate-800 rounded-3xl text-center max-w-4xl mx-auto shadow-lg relative overflow-hidden"
         >
           <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />

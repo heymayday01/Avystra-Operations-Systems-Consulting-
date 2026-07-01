@@ -2,7 +2,6 @@
 
 import { Quote, Star, MessageSquare } from "lucide-react";
 import TextReveal from "./TextReveal";
-import { useScrollReveal } from "@/lib/useScrollReveal";
 
 interface Testimonial {
   id: string;
@@ -14,12 +13,6 @@ interface Testimonial {
 }
 
 export default function TestimonialsSection() {
-  const headerRef = useScrollReveal<HTMLDivElement>();
-  const gridRef = useScrollReveal<HTMLDivElement>({
-    stagger: 0.09,
-    child: "[data-reveal]",
-  });
-
   const testimonials: Testimonial[] = [
     {
       id: "testimonial-1",
@@ -58,7 +51,6 @@ export default function TestimonialsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 select-none">
         {/* Section Heading Container */}
         <div
-          ref={headerRef}
           className="flex flex-col items-center text-center max-w-3xl mx-auto mb-6 md:mb-8"
         >
           {/* Aesthetic Capsule Badge */}
@@ -94,13 +86,11 @@ export default function TestimonialsSection() {
 
         {/* Testimonials Grid Row */}
         <div
-          ref={gridRef}
           className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 gsap-stagger-container"
         >
           {testimonials.map((testimonial) => (
             <div
               key={testimonial.id}
-              data-reveal
               className="group relative bg-gradient-to-br from-white to-slate-50 border border-slate-100 rounded-2xl p-6 sm:p-8 lg:p-10 transition-all duration-700 hover:border-gold/40 hover:shadow-[0_40px_80px_-20px_rgba(11,27,46,0.15)] hover:-translate-y-2 hover:scale-[1.02] flex flex-col justify-between will-change-transform overflow-hidden"
             >
               {/* Shimmer sweep on hover */}

@@ -5,7 +5,6 @@ import { Compass, Target, Users, Landmark, Award, ChevronRight } from "lucide-re
 import { DoodleSparkle, UnderlineSquiggle } from "./DoodleWidgets";
 import TextReveal from "./TextReveal";
 import TiltCard from "./TiltCard";
-import { useScrollReveal } from "@/lib/useScrollReveal";
 
 interface Pillar {
   id: string;
@@ -17,9 +16,6 @@ interface Pillar {
 }
 
 export default function FourPillars() {
-  const headerRef = useScrollReveal<HTMLDivElement>();
-  const gridRef = useScrollReveal<HTMLDivElement>({ stagger: 0.09, child: "[data-reveal]" });
-
   const pillars: Pillar[] = [
     {
       id: "pillar-direction",
@@ -67,7 +63,6 @@ export default function FourPillars() {
       <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 z-10">
         {/* Header Section */}
         <div
-          ref={headerRef}
           className="max-w-4xl mb-6 md:mb-8"
         >
           <div className="inline-flex items-center gap-2 bg-gradient-to-br from-white to-slate-50 border border-slate-100 px-4 py-2 rounded-full mb-3 shadow-sm">
@@ -99,11 +94,10 @@ export default function FourPillars() {
         </div>
 
         {/* Pillars Grid */}
-        <div ref={gridRef} className="pillar-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 lg:gap-8">
+        <div className="pillar-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 lg:gap-8">
           {pillars.map((pillar, idx) => (
             <div
               key={pillar.id}
-              data-reveal
               className="pillar-card group relative h-full flex flex-col"
               style={{ perspective: 1000 }}
             >

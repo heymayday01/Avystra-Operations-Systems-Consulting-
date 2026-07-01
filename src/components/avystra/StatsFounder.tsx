@@ -12,7 +12,6 @@ import {
   Award,
   Building2,
 } from "lucide-react";
-import { useScrollReveal } from "@/lib/useScrollReveal";
 import { UnderlineSquiggle } from "./DoodleWidgets";
 import CountUp from "./CountUp";
 import CumulativePenalty from "./CumulativePenalty";
@@ -36,17 +35,6 @@ export default function StatsFounder() {
   // Five reveal groups — each fires once via GSAP ScrollTrigger.
   // CountUp (inside StatCard) keeps its own motion/react useInView trigger,
   // which is a counter trigger, not a reveal animation — left untouched.
-  const headerRef = useScrollReveal<HTMLDivElement>();
-  const statsRef = useScrollReveal<HTMLDivElement>({
-    stagger: 0.09,
-    child: "[data-reveal]",
-  });
-  const portraitRef = useScrollReveal<HTMLDivElement>();
-  const philosophyRef = useScrollReveal<HTMLDivElement>();
-  const credentialsRef = useScrollReveal<HTMLDivElement>({
-    stagger: 0.09,
-    child: "[data-reveal]",
-  });
 
   const stats: StatItemProps[] = [
     {
@@ -152,7 +140,7 @@ export default function StatsFounder() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* SECTION 1: STATS */}
         <div className="mb-8 text-center">
-          <div ref={headerRef} className="mb-8">
+          <div className="mb-8">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/60 border border-slate-200/50 rounded-full mb-3 shadow-sm">
               <AlertTriangle className="w-3.5 h-3.5 text-red-500" />
               <span className="text-[10.5px] text-red-500 font-mono tracking-widest font-bold uppercase">
@@ -177,11 +165,10 @@ export default function StatsFounder() {
 
           {/* Metrics Grid */}
           <div
-            ref={statsRef}
             className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-10"
           >
             {stats.map((stat) => (
-              <div key={stat.id} data-reveal className="h-full">
+              <div key={stat.id} className="h-full">
                 <StatCard stat={stat} />
               </div>
             ))}
@@ -200,7 +187,6 @@ export default function StatsFounder() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
             {/* Founder Portrait Column — premium framed card */}
             <div
-              ref={portraitRef}
               className="lg:col-span-5 flex justify-center"
             >
               <div className="relative w-full max-w-[280px] sm:max-w-[320px]">
@@ -252,7 +238,7 @@ export default function StatsFounder() {
             </div>
 
             {/* Founder Philosophy Column — refined typography + premium quote */}
-            <div ref={philosophyRef} className="lg:col-span-7">
+            <div className="lg:col-span-7">
               <div className="space-y-5 text-left">
                 {/* Eyebrow with decorative line */}
                 <div className="flex items-center gap-3">
@@ -316,13 +302,11 @@ export default function StatsFounder() {
               — A DECADE OF BUILDING WHAT WORKS —
             </h4>
             <div
-              ref={credentialsRef}
               className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6"
             >
               {credentials.map((cred, i) => (
                 <div
                   key={i}
-                  data-reveal
                   className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-white to-slate-50 border border-slate-100 hover:border-gold/30 hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 shadow-sm flex flex-col"
                 >
                   {/* Icon */}
