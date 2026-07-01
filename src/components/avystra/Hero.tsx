@@ -222,7 +222,7 @@ export default function Hero() {
         }}
       />
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full select-none">
+      <div className="relative max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full select-none">
         <div className="flex flex-col items-center text-center w-full">
 
           {/* Eyebrow badge */}
@@ -250,7 +250,7 @@ export default function Hero() {
             className="font-display font-bold text-[clamp(2rem,7vw,5.5rem)] tracking-[-0.035em] text-navy-deep select-none heading-balance mb-6 sm:mb-8"
             style={{ lineHeight: 1.3 }}
           >
-            <span className="inline-flex flex-wrap justify-center gap-x-[0.25em] align-baseline">
+            <span className="block">
               {["You", "Built", "A", "Team."].map((word, i) => (
                 <motion.span
                   key={`w1-${i}`}
@@ -259,31 +259,32 @@ export default function Hero() {
                   transition={{ duration: 1.0, delay: 0.15 + i * 0.04, ease: [0.16, 1, 0.3, 1] }}
                   className="inline-block"
                 >
-                  {word}
+                  {word}{" "}
                 </motion.span>
               ))}
             </span>
-            <br />
-            {/* On large screens (lg+), line 2 and 3 sit on the same line
-                to use horizontal white space. On mobile, they wrap naturally. */}
-            <span className="inline-flex flex-wrap justify-center gap-x-[0.25em] align-baseline lg:flex-nowrap lg:whitespace-nowrap">
+            {/* Line 2: "So Why Does Everything Still Depend On You?" —
+                On lg+ screens this is ONE line (whitespace-nowrap).
+                On mobile it wraps naturally. No flex — pure inline flow
+                so the gold text sits on the same baseline as the navy text. */}
+            <span className="block lg:whitespace-nowrap text-center">
               {["So", "Why", "Does", "Everything", "Still"].map((word, i) => (
                 <motion.span
                   key={`w2-${i}`}
                   initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
                   animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                   transition={{ duration: 1.0, delay: 0.4 + i * 0.04, ease: [0.16, 1, 0.3, 1] }}
-                  className="inline-block"
+                  className="inline"
                 >
-                  {word}
+                  {word}{" "}
                 </motion.span>
               ))}
               <motion.span
                 initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 transition={{ duration: 1.0, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="relative inline-block text-gold font-serif italic font-semibold whitespace-nowrap pl-[0.1em]"
-                style={{ lineHeight: 1.4, overflow: "visible" }}
+                className="relative inline text-gold font-serif italic font-semibold"
+                style={{ overflow: "visible" }}
               >
                 Depend On You?
                 <UnderlineSquiggle className="absolute -bottom-2 left-0 w-full h-[6px] text-gold/60" delay={1.1} duration={1.0} />
