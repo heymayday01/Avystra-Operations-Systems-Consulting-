@@ -59,18 +59,19 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-[100dvh] text-navy-deep selection:bg-gold/20 selection:text-gold font-sans antialiased flex flex-col">
+    <div className="relative min-h-[100dvh] text-navy-deep selection:bg-gold/20 selection:text-gold font-sans antialiased flex flex-col overflow-x-hidden">
       <AnimatePresence>
         {isLoading && <LoadingScreen />}
       </AnimatePresence>
 
-      {!isLoading && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-col flex-1"
-        >
+      {/* Page content is always mounted (behind the loading screen).
+          This prevents the ghost scrollbar that appeared when content
+          was conditionally rendered after loading — the layout would
+          shift from 0px to full page height, briefly showing a scrollbar. */}
+      <div
+        className={isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}
+        style={{ transition: "opacity 0.5s ease" }}
+      >
           {/* ═══ LIVELY AMBIENT BACKGROUND — ENHANCED + GPU-SAFE ═══
               4 drifting orbs with GPU-only animations (transform/opacity).
               Each orb is on its own compositor layer (will-change: transform)
@@ -272,8 +273,7 @@ export default function Home() {
               <span className="relative inline-flex rounded-full h-3 w-3 bg-gold border-2 border-navy-deep" />
             </span>
           </motion.a>
-        </motion.div>
-      )}
+      </div>
     </div>
   );
 }
