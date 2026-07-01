@@ -62,3 +62,14 @@ tool-results/
 upload/
 .zscripts/dev.pid
 .zscripts/dev.logpublic/ogi-submissions.xlsx
+
+# Runtime database (each deployment creates its own)
+db/custom.db
+
+# Generated Excel file
+public/ogi-submissions.xlsx
+
+# Unused directories (not part of the app)
+/examples/
+/mini-services/
+/download/
