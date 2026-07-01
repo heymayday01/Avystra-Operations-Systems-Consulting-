@@ -292,23 +292,11 @@ export default function Hero() {
             </span>
           </h1>
 
-          {/* Subheading */}
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
-            className="text-slate-600 font-sans text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-light mb-6 sm:mb-8"
-          >
-            Most organizations don&apos;t struggle with knowing what to do. They struggle with{" "}
-            <span className="font-semibold text-navy-deep">consistently doing it.</span>{" "}
-            That&apos;s the gap <span className="font-bold text-gold">AVYSTRA</span> closes.
-          </motion.p>
-
           {/* Feature cards — compact inline chips */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.05, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, delay: 0.95, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 max-w-3xl mx-auto"
           >
             {[
@@ -322,7 +310,7 @@ export default function Hero() {
                 key={idx}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.1 + idx * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ delay: 1.0 + idx * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="flex items-center gap-2 px-3 py-2 rounded-full border border-slate-200/80 bg-white/70 shadow-sm hover:border-gold/40 hover:bg-white transition-all duration-300"
               >
                 <Icon className="w-3.5 h-3.5 text-gold/70 shrink-0" />
@@ -333,15 +321,27 @@ export default function Hero() {
             ))}
           </motion.div>
 
-          {/* Bridging question */}
+          {/* Bridging content block — the "gap" section from the screenshot */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.3, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-8 sm:mb-10 max-w-2xl mx-auto"
+            className="mb-8 sm:mb-10 max-w-2xl mx-auto bg-white/60 border border-gold/15 rounded-2xl px-6 py-7 sm:px-10 sm:py-9 shadow-[0_8px_32px_rgba(11,27,46,0.04)] text-center"
           >
-            <p className="text-navy-deep font-sans text-base sm:text-lg font-semibold leading-relaxed text-center">
+            <p className="text-navy-deep font-sans text-base sm:text-lg font-bold leading-relaxed mb-4">
               So why does it still feel like the company slows down whenever you step away?
+            </p>
+            <div className="w-12 h-px bg-gold/30 mx-auto mb-4" />
+            <p className="text-navy-deep/90 font-sans text-sm sm:text-base leading-relaxed mb-1">
+              Most organizations don&apos;t struggle because people don&apos;t know what to do.
+            </p>
+            <p className="text-slate-500 font-sans text-sm sm:text-base leading-relaxed font-light mb-5">
+              They struggle because knowing and doing are two very different things.
+            </p>
+            <p className="text-navy-deep font-sans text-xs sm:text-sm font-bold tracking-wide uppercase">
+              That&apos;s the gap{" "}
+              <span className="text-gold font-black">AVYSTRA</span>{" "}
+              helps organizations close.
             </p>
           </motion.div>
 
