@@ -235,7 +235,7 @@ export default function Hero() {
       ref={sectionRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full pt-24 sm:pt-24 lg:pt-28 pb-2 sm:pb-4 overflow-hidden bg-transparent"
+      className="relative w-full pt-24 sm:pt-24 lg:pt-28 pb-2 sm:pb-4 overflow-x-hidden bg-transparent"
     >
       {/* Buttery smooth Spring Cursor Spotlight — follows mouse.
           Removed the giant 900px blur-3xl ambient glow that was causing
@@ -345,7 +345,7 @@ export default function Hero() {
               </span>
               <span
                 className="relative inline-flex overflow-visible items-baseline text-gold whitespace-nowrap pl-[0.1em]"
-                style={{ lineHeight: 1.5, paddingBottom: "0.15em" }}
+                style={{ lineHeight: 2, paddingBottom: "0.3em", paddingTop: "0.1em" }}
               >
                 <motion.span
                   initial={{
