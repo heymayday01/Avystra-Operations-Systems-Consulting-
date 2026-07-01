@@ -516,23 +516,32 @@
 /* ═══ iOS / CROSS-DEVICE TEXT CLIPPING FIXES ═══
    Problem: On iOS Safari and some Android devices, serif italic fonts
    (Cormorant Garamond) and tight line-heights cause descenders (y, p, g, j, ?)
-   and ascenders to be clipped. The fixes below add protective bottom padding
-   to italic text, ensure the question mark glyph has room, and improve
-   overall text rendering on mobile devices. */
+   and ascenders to be clipped. iOS also forces bold text rendering in some
+   cases which makes glyphs taller than expected. The fixes below add
+   aggressive protective padding to italic text, ensure the question mark
+   glyph has room, and improve overall text rendering on mobile devices. */
 
-/* 1. Serif italic text — add bottom padding so descenders (?, y, p, g) are not clipped.
-   This targets every element using the Cormorant Garamond italic font. */
+/* 1. Serif italic text — add generous bottom padding so descenders (?, y, p, g)
+   are not clipped on iOS. The padding is compensated with negative margin so
+   layout isn't affected. Extra padding (0.15em) on iOS to account for the
+   bold-text forcing that iOS Safari does. */
 .font-serif.italic {
-  padding-bottom: 0.08em;
-  margin-bottom: -0.08em; /* compensate so layout isn't affected */
+  padding-bottom: 0.15em;
+  margin-bottom: -0.15em;
+  /* iOS sometimes clips the TOP of italic ascenders too */
+  padding-top: 0.05em;
+  margin-top: -0.05em;
 }
 
-/* 2. Hero h1 specifically — ensure the question mark has full vertical room.
-   The clamp() font size + serif italic + tight leading was the root cause. */
+/* 2. Hero h1 specifically — ensure the question mark has FULL vertical room.
+   The clamp() font size + serif italic + iOS bold forcing was the root cause.
+   Use extra-generous padding (0.2em) on h1/h2 serif italics. */
 h1 .font-serif.italic,
 h2 .font-serif.italic {
-  padding-bottom: 0.12em;
-  margin-bottom: -0.12em;
+  padding-bottom: 0.2em;
+  margin-bottom: -0.2em;
+  padding-top: 0.08em;
+  margin-top: -0.08em;
 }
 
 /* 3. iOS Safari text size adjustment — prevent text from being scaled
@@ -549,12 +558,24 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* 4a. Prevent iOS from forcing bold text on headings (which makes glyphs
+   taller and causes clipping). This is the #1 cause of question mark
+   clipping on iOS — the bold rendering makes the '?' tail extend below
+   the line box. */
+h1, h2, h3, h4, h5, h6 {
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
 /* 5. Safe area insets for iOS devices with notches / home indicators.
    Ensures content isn't hidden behind the notch or home bar. */
 @supports (padding: max(0px)) {
   body {
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
+  }
+  /* Also pad the floating buttons so they don't overlap the home indicator */
+  .fixed.bottom-4, .fixed.bottom-6 {
+    bottom: calc(env(safe-area-inset-bottom) + 1rem) !important;
   }
 }
 
@@ -592,6 +613,32 @@ section[class*="overflow-hidden"] h3 {
 h1, h2, h3, h4, p {
   overflow-wrap: break-word;
   word-break: break-word;
+}
+
+/* 10. iOS SVG rendering — ensure SVG doodles (UnderlineSquiggle, DoodleSparkle)
+   are visible. iOS Safari sometimes doesn't render SVG <path> elements that
+   use motion/pathLength animation if the SVG has no explicit width/height.
+   Force the SVGs to be visible with explicit dimensions. */
+svg[viewBox] {
+  overflow: visible;
+}
+
+/* 11. iOS touch optimization — prevent double-tap zoom on buttons/links.
+   touch-action: manipulation removes the 300ms tap delay. */
+button, a, [role="button"], input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* 12. iOS overscroll — prevent the whole page from bouncing (rubber-band
+   effect) which can cause layout shifts. */
+html, body {
+  overscroll-behavior: none;
+}
+
+/* 13. iOS momentum scrolling — ensure smooth scrolling on overflow containers. */
+.overflow-y-auto, .overflow-auto, [class*="overflow-y"] {
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ═══ SCROLL PERFORMANCE OPTIMIZATIONS ═══
