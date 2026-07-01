@@ -343,7 +343,7 @@ export default function Hero() {
                   </motion.span>
                 ))}
               </span>
-              <LiquidHeading className="relative inline-flex overflow-visible pb-3 -mb-1 items-baseline text-gold font-serif italic font-semibold whitespace-nowrap pl-[0.1em] align-baseline">
+              <LiquidHeading className="relative inline-flex overflow-visible pb-4 -mb-1 items-baseline text-gold font-serif italic font-semibold whitespace-nowrap pl-[0.1em] align-baseline">
                 <motion.span
                   initial={{
                     opacity: 0,

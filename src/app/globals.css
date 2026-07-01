@@ -535,13 +535,13 @@
 
 /* 2. Hero h1 specifically — ensure the question mark has FULL vertical room.
    The clamp() font size + serif italic + iOS bold forcing was the root cause.
-   Use extra-generous padding (0.2em) on h1/h2 serif italics. */
+   Use extra-generous padding (0.25em) on h1/h2 serif italics. */
 h1 .font-serif.italic,
 h2 .font-serif.italic {
-  padding-bottom: 0.2em;
-  margin-bottom: -0.2em;
-  padding-top: 0.08em;
-  margin-top: -0.08em;
+  padding-bottom: 0.25em;
+  margin-bottom: -0.25em;
+  padding-top: 0.1em;
+  margin-top: -0.1em;
 }
 
 /* 3. iOS Safari text size adjustment — prevent text from being scaled
