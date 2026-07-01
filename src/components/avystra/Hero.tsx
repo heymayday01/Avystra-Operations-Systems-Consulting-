@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useCallback, useState, useSyncExternalStore } from "react";
-import { ArrowRight, UserPlus, TrendingUp, Building2, Banknote, ClipboardList } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { CustomEase } from "gsap/CustomEase";
@@ -54,30 +54,7 @@ export default function Hero() {
   }, []);
 
   useEffect(() => {
-    // ScrollTrigger is registered globally via @/lib/gsap.
-    // CustomEase needs registration here since it's Hero-specific.
-    gsap.registerPlugin(CustomEase);
-
-    if (reducedMotion) {
-      const validTargets = [
-        ".gsap-badge-pop",
-        ".gsap-headline-word",
-        ".gsap-subheadline-fade",
-        ".gsap-cta-fade",
-        ".gsap-hero-fade",
-      ].filter((selector) => document.querySelector(selector) !== null);
-
-      if (validTargets.length > 0) {
-        gsap.set(validTargets, {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          filter: "none",
-          rotateX: 0,
-        });
-      }
-      return;
-    }
+    if (reducedMotion) return;
 
     try {
       CustomEase.create("customExpo", "0.22, 1, 0.36, 1");
@@ -85,27 +62,19 @@ export default function Hero() {
       // Already created
     }
 
+    // GSAP entrance for the marquee bar (only remaining gsap-hero-fade element)
     const ctx = gsap.context(() => {
-      gsap.from(".gsap-hero-fade", {
-        opacity: 0,
-        y: 40,
-        duration: 1.2,
-        stagger: 0.2,
-        ease: "expo.out",
-        delay: 0.6,
-        clearProps: "all",
-      });
-
-      gsap.from(".gsap-trust-item", {
-        opacity: 0,
-        scale: 0.9,
-        y: 20,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "back.out(1.7)",
-        delay: 1.2,
-        clearProps: "all",
-      });
+      const marqueeBar = sectionRef.current?.querySelector(".gsap-hero-fade");
+      if (marqueeBar) {
+        gsap.from(marqueeBar, {
+          opacity: 0,
+          y: 20,
+          duration: 0.8,
+          ease: "expo.out",
+          delay: 1.4,
+          clearProps: "all",
+        });
+      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -253,276 +222,135 @@ export default function Hero() {
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full select-none transform-gpu">
-        <div className="flex flex-col items-center justify-center max-w-6xl mx-auto text-center w-full relative z-20 origin-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-4 md:mb-6 flex flex-col items-center relative z-20"
-          >
-            <motion.div
-              whileHover={{ scale: 1.05, y: -1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-white/60 backdrop-blur-md px-4 py-1.5 shadow-[0_8px_24px_rgba(184,146,78,0.08)] ring-1 ring-white/30 hover:bg-white/80 hover:shadow-[0_12px_32px_rgba(184,146,78,0.15)] transition-all duration-500 cursor-default"
-            >
-              <span className="relative flex h-1.5 w-1.5">
-                {!reducedMotion && (
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75"></span>
-                )}
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-gold"></span>
-              </span>
-              <span className="text-[10px] sm:text-[11px] text-navy-deep font-mono tracking-[0.22em] font-bold uppercase whitespace-nowrap">
-                LEADERSHIP &amp; PERFORMANCE CONSULTING
-              </span>
-            </motion.div>
-          </motion.div>
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full select-none">
+        <div className="flex flex-col items-center text-center w-full">
 
-          <div
-            className="mb-4 md:mb-6 relative z-20 max-w-[95vw] lg:max-w-none"
-          >
-            <h1
-              className="font-display font-bold text-[clamp(1.85rem,6.2vw,5rem)] tracking-[-0.035em] text-navy-deep select-none text-center heading-balance py-3"
-              style={{ lineHeight: 1.5 }}
-            >
-              <span className="inline-flex flex-wrap justify-center gap-x-[0.22em] mr-[0.22em] align-baseline">
-                {["You", "Built", "A", "Team."].map((word, i) => (
-                  <motion.span
-                    key={`w1-${i}`}
-                    initial={{
-                      opacity: 0,
-                      y: 30,
-                      rotateX: 20,
-                      z: -50,
-                      filter: "blur(8px)",
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                      rotateX: 0,
-                      z: 0,
-                      filter: "blur(0px)",
-                    }}
-                    transition={{
-                      duration: 1.0,
-                      delay: 0.15 + i * 0.04,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    className="inline-block transform-gpu will-change-[transform,opacity,filter] origin-bottom-left"
-                  >
-                    {word}
-                  </motion.span>
-                ))}
-              </span>
-              <span className="inline-flex flex-wrap justify-center gap-x-[0.22em] mr-[0.22em] align-baseline">
-                {["So", "Why", "Does", "Everything", "Still"].map((word, i) => (
-                  <motion.span
-                    key={`w2-${i}`}
-                    initial={{
-                      opacity: 0,
-                      y: 30,
-                      rotateX: 20,
-                      z: -50,
-                      filter: "blur(8px)",
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                      rotateX: 0,
-                      z: 0,
-                      filter: "blur(0px)",
-                    }}
-                    transition={{
-                      duration: 1.0,
-                      delay: 0.4 + i * 0.04,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    className="inline-block transform-gpu will-change-[transform,opacity,filter] origin-bottom-left"
-                  >
-                    {word}
-                  </motion.span>
-                ))}
-              </span>
-              {/* Gold "Depend On You?" — full Framer Motion animation restored.
-                  The key to fixing iOS clipping: generous line-height (1.5 on
-                  the h1) + Playfair Display font (standard descender depth) +
-                  the span has its OWN line-height of 1.6 so the ? tail has room.
-                  No overflow-hidden anywhere in the ancestor chain. */}
-              <motion.span
-                initial={{ opacity: 0, y: 30, rotateX: 20, z: -50, filter: "blur(8px)" }}
-                animate={{ opacity: 1, y: 0, rotateX: 0, z: 0, filter: "blur(0px)" }}
-                transition={{ duration: 1.0, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="relative inline-block transform-gpu will-change-[transform,opacity,filter] origin-bottom-right text-gold font-serif italic font-semibold whitespace-nowrap pl-[0.1em] align-baseline"
-                style={{ lineHeight: 1.6, overflow: "visible" }}
-              >
-                Depend On You?
-                <UnderlineSquiggle
-                  className="absolute -bottom-1 left-0 w-full h-[6px] text-gold/60"
-                  delay={1.1}
-                  duration={1.0}
-                />
-              </motion.span>
-            </h1>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.0, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-6 md:mb-8 relative z-20 w-full max-w-4xl mx-auto animate-fade-in"
-          >
-            {/* Removed the blur-3xl overlay (expensive composite during scroll).
-                The bullets section sits on the cream background which is clean enough. */}
-
-            {/* The 5 bullets straight from PDF Page 1 */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 text-left mb-6 max-w-4xl mx-auto px-4 select-none">
-              {[
-                { bullet: "You hired experienced people", Icon: UserPlus },
-                { bullet: "You promoted managers", Icon: TrendingUp },
-                { bullet: "You created departments", Icon: Building2 },
-                { bullet: "You increased salaries", Icon: Banknote },
-                { bullet: "You held meetings and set targets", Icon: ClipboardList },
-              ].map(({ bullet, Icon }, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 16, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{
-                    delay: 0.9 + idx * 0.08,
-                    duration: 0.6,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
-                  whileHover={{
-                    y: -3,
-                    scale: 1.03,
-                    transition: { type: "spring", stiffness: 400, damping: 25 },
-                  }}
-                  className="group/bullet flex items-start gap-2 p-2.5 sm:p-3 rounded-xl border border-slate-200/70 bg-white/60 backdrop-blur-md shadow-[0_4px_12px_rgba(11,27,46,0.03)] hover:border-gold/40 hover:bg-white/90 hover:shadow-[0_8px_24px_rgba(184,146,78,0.08)] transition-all duration-300 cursor-default"
-                >
-                  <Icon className="w-3.5 h-3.5 text-gold/60 group-hover/bullet:text-gold group-hover/bullet:scale-110 transition-all duration-300 shrink-0 mt-0.5" />
-                  <span className="text-slate-700 group-hover/bullet:text-navy-deep font-sans text-[13px] sm:text-sm font-semibold leading-snug transition-colors duration-300">
-                    {bullet}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Powerful bridging text block */}
-            <div className="group/bridge relative text-center max-w-3xl mx-auto bg-white/50 border border-gold/20 rounded-[1.5rem] p-5 sm:p-7 backdrop-blur-lg shadow-[0_8px_32px_rgba(11,27,46,0.05)] hover:shadow-[0_16px_48px_rgba(184,146,78,0.12)] hover:border-gold/40 transition-all duration-500 overflow-hidden">
-              {/* Shimmer sweep on hover */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/5 to-transparent -translate-x-full group-hover/bridge:translate-x-full transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-none" />
-              <p className="text-navy-deep font-sans text-sm sm:text-base font-semibold leading-relaxed mb-4">
-                So why does it still feel like the company slows down whenever
-                you step away?
-              </p>
-
-              <div className="space-y-2.5 border-t border-slate-200/60 pt-4 text-left sm:text-center">
-                <p className="text-slate-600 font-sans text-[14px] sm:text-[15px] leading-relaxed font-normal">
-                  <span className="font-semibold text-navy-deep">
-                    Most organizations don&apos;t struggle because people
-                    don&apos;t know what to do.
-                  </span>{" "}
-                  <br />
-                  They struggle because knowing and doing are two very different
-                  things.
-                </p>
-
-                <p className="text-navy-deep font-sans text-[12.5px] sm:text-sm font-bold tracking-wide uppercase pt-1">
-                  That&apos;s the gap{" "}
-                  <span className="text-gold font-black">AVYSTRA</span>{" "}
-                  helps organizations close.
-                </p>
-              </div>
-            </div>
-          </motion.div>
-
+          {/* Eyebrow badge */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col items-center w-full relative z-30 mt-2"
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-6 sm:mb-8"
           >
-            {/* Double CTAs with premium magnetic tracking */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6 relative z-40">
-              {/* Talk To Us (CTA 1) */}
-              <button
-                ref={ctaRef}
-                onClick={handleScrollToForm}
-                className="group relative cursor-pointer overflow-visible p-[1px] rounded-full bg-navy-deep transition-all duration-500 hover:scale-[1.03] block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-cream-bg"
-              >
-                {/* Backglow element expands and brightens smoothly on hover */}
-                <div className="absolute inset-[-4px] rounded-full bg-gradient-to-r from-gold via-amber-300 to-gold opacity-30 group-hover:opacity-75 blur-[10px] group-hover:blur-[16px] transition-all duration-700 pointer-events-none" />
-
-                {/* Inner button container */}
-                <div className="relative rounded-full bg-navy-deep hover:bg-navy-soft px-7 sm:px-8 py-3 sm:py-3.5 flex items-center justify-center gap-2.5 transition-all duration-300">
-                  <span className="text-white font-mono text-[11.5px] sm:text-[12.5px] font-bold tracking-[0.2em] uppercase">
-                    Talk To Us
-                  </span>
-                  <ArrowRight className="w-4 h-4 text-gold transform group-hover:translate-x-1 transition-transform duration-300" />
-                </div>
-              </button>
-
-              {/* See The Problem (CTA 2) */}
-              <button
-                onClick={handleScrollToBento}
-                className="group relative cursor-pointer overflow-hidden rounded-full border border-slate-300 bg-white/70 px-7 sm:px-8 py-3 sm:py-3.5 backdrop-blur-md transition-all duration-500 hover:bg-white hover:border-gold/50 hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold shadow-sm flex items-center justify-center gap-2"
-              >
-                <span className="text-navy-deep font-mono text-[11.5px] sm:text-[12.5px] font-bold tracking-[0.2em] uppercase">
-                  See The Problem
-                </span>
-              </button>
-            </div>
-
-            {/* Scroll Indicator — hidden on mobile to eliminate blank space */}
-            <motion.button
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
-              transition={{ delay: 1.5, duration: 0.8 }}
-              className="hidden sm:flex mt-4 flex-col items-center gap-2 hover:opacity-100 transition-opacity cursor-ns-resize focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xl p-1.5 outline-none"
-              onClick={handleScrollToBento}
-              aria-label="Scroll to discover bottlenecks"
-            >
-              <span
-                className="text-[10.5px] font-mono text-slate-600 font-bold uppercase tracking-[0.3em]"
-                style={{ writingMode: "vertical-rl" }}
-              >
-                Scroll to Explore
+            <span className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-white/60 backdrop-blur-sm px-4 py-1.5 shadow-sm">
+              <span className="relative flex h-1.5 w-1.5">
+                {!reducedMotion && (
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75" />
+                )}
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-gold" />
               </span>
-              <div className="w-[1px] h-8 bg-gradient-to-b from-slate-400 to-transparent relative overflow-hidden">
-                <motion.div
-                  className="w-full h-1/2 bg-navy-deep absolute top-0"
-                  animate={
-                    reducedMotion ? { y: 0 } : { y: ["-100%", "200%"] }
-                  }
-                  transition={
-                    reducedMotion
-                      ? { duration: 0 }
-                      : { duration: 1.5, repeat: Infinity, ease: "linear" }
-                  }
-                />
-              </div>
-            </motion.button>
+              <span className="text-[10px] sm:text-[11px] text-navy-deep font-mono tracking-[0.22em] font-bold uppercase whitespace-nowrap">
+                Leadership &amp; Performance Consulting
+              </span>
+            </span>
           </motion.div>
-        </div>
 
-        {/* Bottom Trust Indicators */}
-        <div className="mt-6 sm:mt-8 pt-5 border-t border-navy-deep/8 flex flex-wrap justify-center gap-x-8 gap-y-3 sm:gap-12 gsap-hero-fade">
-          {[
-            "Leadership Development",
-            "Manager Effectiveness",
-            "Team Accountability",
-            "Execution Systems",
-          ].map((label, i) => (
-            <div
-              key={i}
-              className="flex items-center gap-2 sm:gap-3 group mix-blend-multiply gsap-trust-item"
+          {/* Main heading */}
+          <h1
+            className="font-display font-bold text-[clamp(2rem,7vw,5.5rem)] tracking-[-0.035em] text-navy-deep select-none heading-balance mb-2 sm:mb-3"
+            style={{ lineHeight: 1.3 }}
+          >
+            <span className="inline-flex flex-wrap justify-center gap-x-[0.25em] align-baseline">
+              {["You", "Built", "A", "Team."].map((word, i) => (
+                <motion.span
+                  key={`w1-${i}`}
+                  initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  transition={{ duration: 1.0, delay: 0.15 + i * 0.04, ease: [0.16, 1, 0.3, 1] }}
+                  className="inline-block"
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </span>
+            <br />
+            <span className="inline-flex flex-wrap justify-center gap-x-[0.25em] align-baseline">
+              {["So", "Why", "Does", "Everything", "Still"].map((word, i) => (
+                <motion.span
+                  key={`w2-${i}`}
+                  initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  transition={{ duration: 1.0, delay: 0.4 + i * 0.04, ease: [0.16, 1, 0.3, 1] }}
+                  className="inline-block"
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </span>
+            <br />
+            <motion.span
+              initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ duration: 1.0, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="relative inline-block text-gold font-serif italic font-semibold whitespace-nowrap pl-[0.1em]"
+              style={{ lineHeight: 1.4, overflow: "visible" }}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-gold group-hover:scale-150 transition-transform duration-500" />
-              <span className="font-mono text-[10.5px] sm:text-[11.5px] font-black text-navy-deep/50 uppercase tracking-[0.2em] group-hover:text-navy-deep transition-colors duration-500">
-                {label}
+              Depend On You?
+              <UnderlineSquiggle className="absolute -bottom-1 left-0 w-full h-[6px] text-gold/60" delay={1.1} duration={1.0} />
+            </motion.span>
+          </h1>
+
+          {/* Subheading */}
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
+            className="text-slate-600 font-sans text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-light mb-8 sm:mb-10"
+          >
+            Most organizations don&apos;t struggle with knowing what to do. They struggle with{" "}
+            <span className="font-semibold text-navy-deep">consistently doing it.</span>{" "}
+            That&apos;s the gap <span className="font-bold text-gold">AVYSTRA</span> closes.
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mb-12 sm:mb-16"
+          >
+            <button
+              ref={ctaRef}
+              onClick={handleScrollToForm}
+              className="group relative cursor-pointer rounded-full bg-navy-deep hover:bg-navy-soft px-8 py-3.5 flex items-center gap-2.5 transition-all duration-300 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 shadow-lg"
+            >
+              <span className="text-white font-mono text-[12px] font-bold tracking-[0.2em] uppercase">
+                Talk To Us
               </span>
-            </div>
-          ))}
+              <ArrowRight className="w-4 h-4 text-gold group-hover:translate-x-1 transition-transform" />
+            </button>
+
+            <button
+              onClick={handleScrollToBento}
+              className="cursor-pointer rounded-full border border-slate-300 bg-white/70 backdrop-blur-sm px-8 py-3.5 transition-all duration-300 hover:bg-white hover:border-gold/50 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold shadow-sm"
+            >
+              <span className="text-navy-deep font-mono text-[12px] font-bold tracking-[0.2em] uppercase">
+                See The Problem
+              </span>
+            </button>
+          </motion.div>
+
+          {/* Trust indicators */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.3 }}
+            className="flex flex-wrap justify-center gap-x-6 sm:gap-x-10 gap-y-3 pt-6 border-t border-slate-200/60 w-full max-w-2xl"
+          >
+            {[
+              "Leadership Development",
+              "Manager Effectiveness",
+              "Team Accountability",
+              "Execution Systems",
+            ].map((label, i) => (
+              <div key={i} className="flex items-center gap-2 group">
+                <span className="w-1.5 h-1.5 rounded-full bg-gold group-hover:scale-150 transition-transform duration-500" />
+                <span className="font-mono text-[10px] sm:text-[11px] font-bold text-navy-deep/50 uppercase tracking-[0.15em] group-hover:text-navy-deep transition-colors duration-500">
+                  {label}
+                </span>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </div>
 
