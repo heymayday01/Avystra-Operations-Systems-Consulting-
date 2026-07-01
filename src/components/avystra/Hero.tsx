@@ -225,13 +225,8 @@ export default function Hero() {
       <div className="relative max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full select-none">
         <div className="flex flex-col items-center text-center w-full">
 
-          {/* Eyebrow badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-6 sm:mb-8"
-          >
+          {/* Eyebrow badge — CSS fade-in */}
+          <div className="mb-6 sm:mb-8 hero-fade-in" style={{ animationDelay: "0.1s" }}>
             <span className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-white/60 backdrop-blur-sm px-4 py-1.5 shadow-sm">
               <span className="relative flex h-1.5 w-1.5">
                 {!reducedMotion && (
@@ -243,62 +238,32 @@ export default function Hero() {
                 Leadership &amp; Performance Consulting
               </span>
             </span>
-          </motion.div>
+          </div>
 
-          {/* Main heading */}
+          {/* Main heading — CSS-only animations (no Framer Motion per-word).
+              Previous version used 15+ motion.span with filter:blur() which
+              caused GPU layer thrashing + iOS ? clipping. Now uses CSS
+              keyframe animations (opacity + translateY only, no blur). */}
           <h1
             className="font-display font-bold text-[clamp(2rem,7vw,5.5rem)] tracking-[-0.035em] text-navy-deep select-none heading-balance mb-6 sm:mb-8"
             style={{ lineHeight: 1.3 }}
           >
-            <span className="block">
-              {["You", "Built", "A", "Team."].map((word, i) => (
-                <motion.span
-                  key={`w1-${i}`}
-                  initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  transition={{ duration: 1.0, delay: 0.15 + i * 0.04, ease: [0.16, 1, 0.3, 1] }}
-                  className="inline-block"
-                >
-                  {word}{" "}
-                </motion.span>
-              ))}
+            <span className="block hero-line-1">
+              You Built A Team.
             </span>
-            {/* Line 2: "So Why Does Everything Still" */}
-            <span className="block text-center">
-              {["So", "Why", "Does", "Everything", "Still"].map((word, i) => (
-                <motion.span
-                  key={`w2-${i}`}
-                  initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  transition={{ duration: 1.0, delay: 0.4 + i * 0.04, ease: [0.16, 1, 0.3, 1] }}
-                  className="inline"
-                >
-                  {word}{" "}
-                </motion.span>
-              ))}
+            <span className="block text-center hero-line-2">
+              So Why Does Everything Still
             </span>
-            {/* Line 3: "Depend On You?" (gold, own line) */}
-            <span className="block text-center">
-              <motion.span
-                initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                transition={{ duration: 1.0, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="relative inline text-gold font-serif italic font-semibold whitespace-nowrap"
-                style={{ overflow: "visible" }}
-              >
+            <span className="block text-center hero-line-3">
+              <span className="relative inline text-gold font-serif italic font-semibold whitespace-nowrap">
                 Depend On You?
                 <UnderlineSquiggle className="absolute -bottom-2 left-0 w-full h-[6px] text-gold/60" delay={1.1} duration={1.0} />
-              </motion.span>
+              </span>
             </span>
           </h1>
 
-          {/* Feature cards — compact inline chips */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.95, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 max-w-3xl mx-auto"
-          >
+          {/* Feature cards — CSS fade-in (no Framer Motion) */}
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 max-w-3xl mx-auto hero-fade-in" style={{ animationDelay: "0.6s" }}>
             {[
               { label: "Hired experienced people", Icon: UserPlus },
               { label: "Promoted managers", Icon: TrendingUp },
@@ -306,27 +271,22 @@ export default function Hero() {
               { label: "Increased salaries", Icon: Banknote },
               { label: "Held meetings & set targets", Icon: ClipboardList },
             ].map(({ label, Icon }, idx) => (
-              <motion.div
+              <div
                 key={idx}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.0 + idx * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="flex items-center gap-2 px-3 py-2 rounded-full border border-slate-200/80 bg-white/70 shadow-sm hover:border-gold/40 hover:bg-white transition-all duration-300"
               >
                 <Icon className="w-3.5 h-3.5 text-gold/70 shrink-0" />
                 <span className="text-navy-deep/80 font-sans text-[11px] sm:text-[12px] font-semibold whitespace-nowrap">
                   You {label}
                 </span>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
 
-          {/* Bridging content block — the "gap" section from the screenshot */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.3, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-8 sm:mb-10 max-w-2xl mx-auto bg-white/60 border border-gold/15 rounded-2xl px-6 py-7 sm:px-10 sm:py-9 shadow-[0_8px_32px_rgba(11,27,46,0.04)] text-center"
+          {/* Bridging content block */}
+          <div
+            className="mb-8 sm:mb-10 max-w-2xl mx-auto bg-white/60 border border-gold/15 rounded-2xl px-6 py-7 sm:px-10 sm:py-9 shadow-[0_8px_32px_rgba(11,27,46,0.04)] text-center hero-fade-in"
+            style={{ animationDelay: "0.8s" }}
           >
             <p className="text-navy-deep font-sans text-base sm:text-lg font-bold leading-relaxed mb-4">
               So why does it still feel like the company slows down whenever you step away?
@@ -343,14 +303,12 @@ export default function Hero() {
               <span className="text-gold font-black">AVYSTRA</span>{" "}
               helps organizations close.
             </p>
-          </motion.div>
+          </div>
 
           {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.4, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mb-10 sm:mb-14"
+          <div
+            className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mb-10 sm:mb-14 hero-fade-in"
+            style={{ animationDelay: "1.0s" }}
           >
             <button
               ref={ctaRef}
@@ -371,14 +329,12 @@ export default function Hero() {
                 See The Problem
               </span>
             </button>
-          </motion.div>
+          </div>
 
           {/* Trust indicators */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.5 }}
-            className="flex flex-wrap justify-center gap-x-6 sm:gap-x-10 gap-y-3 pt-6 border-t border-slate-200/60 w-full max-w-2xl"
+          <div
+            className="flex flex-wrap justify-center gap-x-6 sm:gap-x-10 gap-y-3 pt-6 border-t border-slate-200/60 w-full max-w-2xl hero-fade-in"
+            style={{ animationDelay: "1.2s" }}
           >
             {[
               "Leadership Development",
@@ -393,7 +349,7 @@ export default function Hero() {
                 </span>
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
 
