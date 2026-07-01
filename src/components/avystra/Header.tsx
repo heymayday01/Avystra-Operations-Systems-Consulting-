@@ -107,13 +107,13 @@ export default function Header() {
       },
       {
         name: "About",
-        href: "#team",
+        href: "#about",
         number: "04",
         desc: "The founder's background",
       },
       {
         name: "Contact",
-        href: "#consult",
+        href: "#contact-wa",
         number: "05",
         desc: "Tell us about your organization",
       },
@@ -124,19 +124,17 @@ export default function Header() {
   const handleScrollTo = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
       e.preventDefault();
-      // Stop propagation so the document-level hash-link handler in
-      // useSmoothScroll doesn't double-fire and compete with this scroll.
       e.stopPropagation();
-      // Close the mobile menu FIRST. On touch devices, calling
-      // window.scrollTo({ behavior: 'smooth' }) while the menu's
-      // AnimatePresence exit animation mutates the layout can cancel
-      // or jitter the smooth scroll, which is why taps appeared to do
-      // nothing. Closing first lets the layout settle, then we scroll.
       setIsOpen(false);
+
+      // "Contact" opens WhatsApp directly — most direct contact method
+      if (targetId === "contact-wa") {
+        const message = "Hi AVYSTRA, I visited your website and would like to know more. Can we connect?";
+        window.open(`https://wa.me/918596059607?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+        return;
+      }
+
       setActiveSection(targetId);
-      // Defer the scroll two animation frames so React has flushed the
-      // menu-close re-render and the browser has laid out the new state
-      // before we measure the target's position and start scrolling.
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           smoothScrollTo(targetId);

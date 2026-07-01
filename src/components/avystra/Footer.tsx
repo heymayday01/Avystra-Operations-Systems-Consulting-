@@ -41,7 +41,7 @@ export default function Footer({ leadCount }: FooterProps) {
   const links = [
     { label: "Frameworks", href: "#bottlenecks" },
     { label: "Process", href: "#process" },
-    { label: "Team", href: "#team" },
+    { label: "Team", href: "#about" },
     { label: "Clients", href: "#testimonials" },
     { label: "FAQ", href: "#faq" },
     { label: "OGI Score", href: "#consult" },

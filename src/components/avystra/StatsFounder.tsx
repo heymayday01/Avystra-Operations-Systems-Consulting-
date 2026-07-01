@@ -195,7 +195,7 @@ export default function StatsFounder() {
         </div>
 
         {/* SECTION 2: ABOUT THE FOUNDER */}
-        <div className="border-t border-slate-100 pt-12 sm:pt-16">
+        <div id="about" className="border-t border-slate-100 pt-12 sm:pt-16 scroll-mt-24">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
             {/* Founder Portrait Column — premium framed card */}
             <motion.div
