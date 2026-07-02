@@ -319,3 +319,64 @@ https://nextjs.org/telemetry
  GET / 200 in 114ms (compile: 8ms, render: 106ms)
  GET / 200 in 97ms (compile: 3ms, render: 94ms)
  GET / 200 in 95ms (compile: 3ms, render: 91ms)
+ GET / 200 in 176ms (compile: 3ms, render: 173ms)
+ GET / 200 in 96ms (compile: 3ms, render: 93ms)
+ GET / 200 in 94ms (compile: 3ms, render: 91ms)
+ GET / 200 in 95ms (compile: 3ms, render: 92ms)
+ GET / 200 in 102ms (compile: 4ms, render: 98ms)
+ GET / 200 in 95ms (compile: 3ms, render: 92ms)
+✓ Compiled in 319ms
+✓ Compiled in 206ms
+✓ Compiled in 185ms
+✓ Compiled in 222ms
+✓ Compiled in 362ms
+✓ Compiled in 195ms
+✓ Compiled in 200ms
+✓ Compiled in 208ms
+✓ Compiled in 194ms
+✓ Compiled in 236ms
+✓ Compiled in 870ms
+✓ Compiled in 734ms
+✓ Compiled in 699ms
+✓ Compiled in 672ms
+✓ Compiled in 216ms
+✓ Compiled in 118ms
+✓ Compiled in 757ms
+✓ Compiled in 619ms
+⨯ ./src/lib/pageReady.tsx:24:70
+Parsing ecmascript source code failed
+[0m [90m 22 |[39m [90m * Usage in hooks:[39m
+ [90m 23 |[39m [90m *   const pageReady = usePageReady();[39m
+[31m[1m>[22m[39m[90m 24 |[39m [90m *   useEffect(() => { if (!pageReady) return; /* start observing */[39m }[33m,[39m [pageReady])[33m;[39m
+ [90m    |[39m                                                                      [31m[1m^[22m[39m
+ [90m 25 |[39m  [33m*[39m[33m/[39m
+ [90m 26 |[39m
+ [90m 27 |[39m [36mconst[39m [33mPageReadyContext[39m [33m=[39m createContext[33m<[39m[33mboolean[39m[33m>[39m([36mfalse[39m)[33m;[39m[0m
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./src/lib/pageReady.tsx [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/lib/pageReady.tsx [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component]
+
+
+ GET / 500 in 1319ms (compile: 1224ms, render: 95ms)
+✓ Compiled in 223ms
+ GET / 200 in 145ms (compile: 85ms, render: 60ms)
+ GET / 200 in 350ms (compile: 8ms, render: 342ms)
+ GET / 200 in 102ms (compile: 5ms, render: 98ms)
+ GET / 200 in 60ms (compile: 5ms, render: 55ms)
+ GET / 200 in 50ms (compile: 3ms, render: 47ms)
+ GET / 200 in 94ms (compile: 4ms, render: 90ms)
+ GET / 200 in 105ms (compile: 3ms, render: 102ms)
+ GET / 200 in 84ms (compile: 5ms, render: 79ms)
+ GET / 200 in 130ms (compile: 4ms, render: 126ms)
+ GET / 200 in 110ms (compile: 4ms, render: 106ms)
+ GET / 200 in 99ms (compile: 3ms, render: 95ms)

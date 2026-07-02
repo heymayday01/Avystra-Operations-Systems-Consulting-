@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type RefObject } from "react";
+import { usePageReady } from "@/lib/pageReady";
 
 /**
  * useReveal — the site-wide scroll-reveal primitive.
@@ -56,8 +57,13 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
   options: RevealOptions = {}
 ): RefObject<T> {
   const ref = useRef<T>(null);
+  const pageReady = usePageReady();
 
   useEffect(() => {
+    // Wait for pageReady (loading screen done) before observing.
+    // This prevents above-the-fold reveals from firing behind the loading screen.
+    if (!pageReady) return;
+
     const el = ref.current;
     if (!el) return;
 
@@ -115,7 +121,7 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
     targets.forEach((t) => observer.observe(t));
 
     return () => observer.disconnect();
-  }, []);
+  }, [pageReady]);
 
   return ref;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type RefObject } from "react";
+import { usePageReady } from "@/lib/pageReady";
 
 /**
  * useWordReveal — splits text content into word spans for staggered reveal.
@@ -35,8 +36,13 @@ export function useWordReveal<T extends HTMLElement = HTMLElement>(
   options: { threshold?: number; rootMargin?: string } = {}
 ): RefObject<T> {
   const ref = useRef<T>(null);
+  const pageReady = usePageReady();
 
   useEffect(() => {
+    // Wait for pageReady (loading screen done) before splitting + observing.
+    // This prevents above-the-fold word reveals from firing behind the loading screen.
+    if (!pageReady) return;
+
     const el = ref.current;
     if (!el) return;
 
@@ -120,7 +126,7 @@ export function useWordReveal<T extends HTMLElement = HTMLElement>(
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [pageReady]);
 
   return ref;
 }

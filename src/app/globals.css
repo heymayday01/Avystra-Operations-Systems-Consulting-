@@ -302,11 +302,13 @@ body::-webkit-scrollbar {
 
 /* ═══ SCROLL REVEAL SYSTEM (Premium, IntersectionObserver-driven) ═══
    Progressive enhancement: hidden initial state ONLY applies when
-   <html> has `.js` class. No JS = no hiding = content always visible.
+   <html> has `.js` class AND `.page-ready` (loading screen done).
+   No JS = no hiding = content always visible.
+   Before page-ready = no hiding (loading screen is covering content).
    3s CSS safety fallback guarantees visibility even if observer fails.
    Spec: 600ms expo-out, 24px translateY, 80ms stagger, threshold 0.15. */
 
-.js .reveal {
+.js.page-ready .reveal {
   opacity: 0;
   transform: translateY(24px);
   transition: opacity var(--dur-entrance) var(--ease-out),
@@ -315,25 +317,25 @@ body::-webkit-scrollbar {
   will-change: opacity, transform;
 }
 
-.js .reveal.is-revealed {
+.js.page-ready .reveal.is-revealed {
   opacity: 1;
   transform: none;
 }
 
-/* Safety fallback: force visible after 3s */
+/* Safety fallback: force visible after 30s (only if observer truly fails) */
 @keyframes reveal-safety {
   to { opacity: 1; transform: none; }
 }
-.js .reveal {
-  animation: reveal-safety 0.01s 3s forwards;
+.js.page-ready .reveal {
+  animation: reveal-safety 0.01s 30s forwards;
 }
-.js .reveal.is-revealed {
+.js.page-ready .reveal.is-revealed {
   animation: none;
 }
 
 /* Reduced motion: skip transforms, keep opacity only */
 @media (prefers-reduced-motion: reduce) {
-  .js .reveal {
+  .js.page-ready .reveal {
     opacity: 0;
     transform: none;
     transition: opacity var(--dur-entrance) var(--ease-out);
@@ -342,12 +344,10 @@ body::-webkit-scrollbar {
 
 /* ═══ WORD-BY-WORD TEXT REVEAL ═══
    Splits text into word spans that stagger in on scroll.
-   Uses --word-index CSS var (set per-word by useWordReveal hook or TextReveal).
+   Gated behind .page-ready — animations start AFTER loading screen fades.
    600ms expo-out per word, 80ms stagger (var(--stagger)).
-   Safety: 30s fallback — long enough that users will have scrolled to any
-   content before it fires. Previous 4s/8s was too short — fired before
-   users reached below-the-fold headings, ruining the animation. */
-.js .reveal-words .word {
+   Safety: 30s fallback — only fires if IntersectionObserver truly fails. */
+.js.page-ready .reveal-words .word {
   display: inline-block;
   opacity: 0;
   transform: translateY(20px);
@@ -356,7 +356,7 @@ body::-webkit-scrollbar {
   transition-delay: calc(var(--word-index, 0) * var(--stagger));
   will-change: opacity, transform;
 }
-.js .reveal-words.is-revealed .word {
+.js.page-ready .reveal-words.is-revealed .word {
   opacity: 1;
   transform: none;
 }
@@ -364,15 +364,15 @@ body::-webkit-scrollbar {
 @keyframes word-safety {
   to { opacity: 1; transform: none; }
 }
-.js .reveal-words .word {
+.js.page-ready .reveal-words .word {
   animation: word-safety 0.01s 30s forwards;
 }
-.js .reveal-words.is-revealed .word {
+.js.page-ready .reveal-words.is-revealed .word {
   animation: none;
 }
 /* Reduced motion: always visible */
 @media (prefers-reduced-motion: reduce) {
-  .js .reveal-words .word {
+  .js.page-ready .reveal-words .word {
     opacity: 1;
     transform: none;
     transition: none;
@@ -469,25 +469,29 @@ body::-webkit-scrollbar {
 
 /* Hero heading line reveal — CSS only (no Framer Motion, no blur).
    opacity + translateY only = GPU-cheap, no compositing layer, no iOS clipping.
-   Delays account for 800ms loading screen (add 800ms to spec delays). */
+   GATED behind .page-ready class — animations start AFTER loading screen fades
+   (pageReady flips at T=1.3s). Previous version animated behind the loading
+   screen, so users never saw the entrance. */
 @keyframes hero-line-reveal {
   from { opacity: 0; transform: translateY(28px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.hero-line-1 { animation: hero-line-reveal var(--dur-entrance) var(--ease-out) 1.4s both; }
-.hero-line-2 { animation: hero-line-reveal var(--dur-entrance) var(--ease-out) 1.6s both; }
-.hero-line-3 { animation: hero-line-reveal var(--dur-entrance) var(--ease-out) 1.8s both; }
+/* Before page-ready: elements are hidden (opacity:0) but no animation runs */
+.hero-line-1, .hero-line-2, .hero-line-3 { opacity: 0; }
+.hero-fade-in { opacity: 0; }
 
-/* Generic fade-in for hero sub-elements (chips, card, CTAs, trust indicators).
-   Uses animationDelay inline style for stagger. */
+/* After page-ready: animations start (delays are now relative to page-ready) */
+.page-ready .hero-line-1 { animation: hero-line-reveal var(--dur-entrance) var(--ease-out) 0.1s both; }
+.page-ready .hero-line-2 { animation: hero-line-reveal var(--dur-entrance) var(--ease-out) 0.3s both; }
+.page-ready .hero-line-3 { animation: hero-line-reveal var(--dur-entrance) var(--ease-out) 0.5s both; }
+
 @keyframes hero-fade-in {
   from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.hero-fade-in {
-  opacity: 0;
+.page-ready .hero-fade-in {
   animation: hero-fade-in 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
 }
 
@@ -506,27 +510,30 @@ body::-webkit-scrollbar {
   box-shadow: 0 0 24px 6px rgba(var(--gold-rgb), 0.12);
 }
 
-/* 3. Feature chips — staggered pop-in (scale + opacity) */
+/* 3. Feature chips — staggered pop-in (scale + opacity). Gated behind .page-ready. */
 @keyframes chip-pop {
   from { opacity: 0; transform: scale(0.92) translateY(8px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-.hero-chip {
-  opacity: 0;
+.hero-chip { opacity: 0; }
+.page-ready .hero-chip {
   animation: chip-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* 4. Premium card — clean, refined. No backdrop-filter (perf). Uses tokens. */
+/* 4. Premium card — clean, refined. No backdrop-filter (perf). Uses tokens.
+   Gated behind .page-ready. */
 .hero-card-premium {
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(var(--gold-rgb), 0.12);
   box-shadow: 0 4px 24px -8px rgba(var(--navy-rgb), 0.06), 0 0 0 1px rgba(var(--gold-rgb), 0.08);
-  animation: hero-fade-in 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
   opacity: 0;
   transition: transform var(--dur-standard) var(--ease-out),
               box-shadow var(--dur-standard) var(--ease-out),
               border-color var(--dur-standard) var(--ease-sine);
+}
+.page-ready .hero-card-premium {
+  animation: hero-fade-in 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
 }
 
 .hero-card-premium:hover {
@@ -535,14 +542,16 @@ body::-webkit-scrollbar {
   box-shadow: 0 12px 36px -10px rgba(var(--navy-rgb), 0.08), 0 0 0 1px rgba(var(--gold-rgb), 0.12);
 }
 
-/* 5. Gold divider — draws in with scaleX (transform-only, no width animation) */
+/* 5. Gold divider — draws in with scaleX. Gated behind .page-ready. */
 .hero-divider {
   background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
   width: 3rem;
   transform: scaleX(0);
   transform-origin: center;
   opacity: 0;
-  animation: divider-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.9s forwards;
+}
+.page-ready .hero-divider {
+  animation: divider-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
 }
 
 @keyframes divider-reveal {

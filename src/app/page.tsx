@@ -8,6 +8,7 @@ import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { motion, AnimatePresence } from "motion/react";
 import { smoothScrollTo } from "@/lib/scroll";
 import LoadingScreen from "@/components/avystra/LoadingScreen";
+import { PageReadyProvider } from "@/lib/pageReady";
 
 // Eager: only Header, Hero, ScrollProgress, LoadingScreen (above the fold)
 // Everything below the fold is lazy-loaded for faster initial paint.
@@ -42,6 +43,10 @@ const WhatsAppGlyph = ({ size = 22 }: { size?: number }) => (
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  // pageReady flips AFTER the loading screen fades (800ms load + 500ms fade).
+  // All reveal observers + hero CSS animations wait for this — so animations
+  // play AFTER the user sees the page, not behind the loading screen.
+  const [pageReady, setPageReady] = useState(false);
 
   useEffect(() => {
     // Disable browser scroll restoration — on reload the browser remembers
@@ -53,8 +58,19 @@ export default function Home() {
     }
     window.scrollTo(0, 0);
 
-    const timer = setTimeout(() => setIsLoading(false), 800);
-    return () => clearTimeout(timer);
+    // Hide loading screen at 800ms, then mark page ready at 1300ms
+    // (after the 500ms fade transition completes).
+    const loadTimer = setTimeout(() => setIsLoading(false), 800);
+    const readyTimer = setTimeout(() => {
+      setPageReady(true);
+      // Add .page-ready class to <html> so Hero CSS animations can start
+      // (they're gated behind .page-ready in globals.css)
+      document.documentElement.classList.add("page-ready");
+    }, 1300);
+    return () => {
+      clearTimeout(loadTimer);
+      clearTimeout(readyTimer);
+    };
   }, []);
 
   const [leadCount] = useState(0);
@@ -67,6 +83,7 @@ export default function Home() {
   };
 
   return (
+    <PageReadyProvider value={pageReady}>
     <div className="relative min-h-[100dvh] text-navy-deep selection:bg-gold/20 selection:text-gold font-sans antialiased flex flex-col overflow-x-hidden">
       <AnimatePresence>
         {isLoading && <LoadingScreen />}
@@ -279,5 +296,6 @@ export default function Home() {
           </motion.a>
       </div>
     </div>
+    </PageReadyProvider>
   );
 }

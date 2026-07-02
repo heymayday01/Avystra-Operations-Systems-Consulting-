@@ -78,7 +78,7 @@ export default function Hero() {
         <div className="flex flex-col items-center text-center w-full">
 
           {/* Eyebrow badge — refined, subtle */}
-          <div className="mb-10 sm:mb-12 hero-fade-in" style={{ animationDelay: "1.2s" }}>
+          <div className="mb-10 sm:mb-12 hero-fade-in" style={{ animationDelay: "0s" }}>
             <span className="hero-badge-premium inline-flex items-center gap-2.5 rounded-full border border-gold/25 bg-white/50 backdrop-blur-sm px-5 py-2">
               <span className="relative flex h-1.5 w-1.5">
                 {!reducedMotion && (
@@ -125,7 +125,7 @@ export default function Hero() {
               <div
                 key={idx}
                 className="hero-chip flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200/70 bg-white/50 hover:border-gold/35 hover:bg-white/80 transition-[border-color,background-color] duration-500 ease-out-expo"
-                style={{ animationDelay: `${1.7 + idx * 0.08}s` }}
+                style={{ animationDelay: `${0.5 + idx * 0.08}s` }}
               >
                 <Icon className="w-3.5 h-3.5 text-gold/60 shrink-0" />
                 <span className="text-navy-deep/70 font-sans text-[11px] sm:text-[12px] font-medium whitespace-nowrap">
@@ -138,7 +138,7 @@ export default function Hero() {
           {/* Bridging content block — cleaner, less dense, better line-height */}
           <div
             className="hero-card-premium mb-12 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-8 py-8 sm:px-12 sm:py-10 text-center"
-            style={{ animationDelay: "1.7s" }}
+            style={{ animationDelay: "0.5s" }}
           >
             <p className="text-navy-deep font-sans text-lg sm:text-xl font-semibold leading-relaxed mb-5" style={{ lineHeight: 1.5 }}>
               So why does it still feel like the company slows down whenever you step away?
@@ -160,7 +160,7 @@ export default function Hero() {
           {/* CTAs — smooth premium hover */}
           <div
             className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 mb-14 sm:mb-16 hero-fade-in"
-            style={{ animationDelay: "1.9s" }}
+            style={{ animationDelay: "0.7s" }}
           >
             <button
               onClick={handleScrollToForm}
@@ -185,7 +185,7 @@ export default function Hero() {
           {/* Trust indicators — refined, subtle */}
           <div
             className="flex flex-wrap justify-center gap-x-10 sm:gap-x-14 gap-y-3 pt-8 border-t border-slate-200/50 w-full max-w-2xl hero-fade-in"
-            style={{ animationDelay: "2.1s" }}
+            style={{ animationDelay: "0.9s" }}
           >
             {[
               "Leadership Development",
@@ -205,7 +205,7 @@ export default function Hero() {
       </div>
 
       {/* Marquee Ticker */}
-      <div className="mt-12 w-full border-y border-navy-deep/10 bg-navy-deep py-4 flex items-center relative z-10 overflow-hidden hero-fade-in" style={{ animationDelay: "2.2s" }}>
+      <div className="mt-12 w-full border-y border-navy-deep/10 bg-navy-deep py-4 flex items-center relative z-10 overflow-hidden hero-fade-in" style={{ animationDelay: "1.0s" }}>
         <div
           className="animate-marquee-slow flex whitespace-nowrap gap-x-24 select-none"
           style={{

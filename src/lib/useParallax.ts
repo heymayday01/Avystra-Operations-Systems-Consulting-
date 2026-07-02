@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type RefObject } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { usePageReady } from "@/lib/pageReady";
 
 /**
  * useParallax — subtle scroll-linked parallax using GSAP ScrollTrigger.
@@ -43,8 +44,12 @@ export function useParallax<T extends HTMLElement = HTMLDivElement>(
   options: ParallaxOptions = {}
 ): RefObject<T> {
   const ref = useRef<T>(null);
+  const pageReady = usePageReady();
 
   useEffect(() => {
+    // Wait for pageReady (loading screen done) before starting parallax.
+    if (!pageReady) return;
+
     const el = ref.current;
     if (!el) return;
 
@@ -72,7 +77,7 @@ export function useParallax<T extends HTMLElement = HTMLDivElement>(
     }, el);
 
     return () => ctx.revert();
-  }, []);
+  }, [pageReady]);
 
   return ref;
 }
