@@ -1,0 +1,19 @@
+[dev-server] Installing dependencies...
+bun install v1.3.14 (0d9b296a)
+No packages! Deleted empty lockfile
+
+[2.00ms] done
+[dev-server] Running bun run dev...
+$ node ../../node_modules/.bin/next dev -p 3000
+⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use :::3000
+    at <unknown> (Error: listen EADDRINUSE: address already in use :::3000)
+    at new Promise (<anonymous>) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+[?25h
+error: script "dev" exited with code 1
