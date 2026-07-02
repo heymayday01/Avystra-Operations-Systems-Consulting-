@@ -224,3 +224,80 @@ https://nextjs.org/telemetry
  GET / 200 in 93ms (compile: 3ms, render: 90ms)
  GET / 200 in 97ms (compile: 3ms, render: 93ms)
  GET / 200 in 102ms (compile: 4ms, render: 98ms)
+ GET / 200 in 96ms (compile: 3ms, render: 93ms)
+✓ Compiled in 1057ms
+ GET / 200 in 108ms (compile: 4ms, render: 103ms)
+✓ Compiled in 223ms
+ GET / 200 in 303ms (compile: 57ms, render: 246ms)
+ GET / 200 in 99ms (compile: 4ms, render: 95ms)
+✓ Compiled in 216ms
+✓ Compiled in 199ms
+✓ Compiled in 186ms
+ GET / 200 in 291ms (compile: 58ms, render: 232ms)
+✓ Compiled in 183ms
+✓ Compiled in 240ms
+✓ Compiled in 0ms
+ GET / 200 in 107ms (compile: 3ms, render: 104ms)
+ GET / 200 in 210ms (compile: 6ms, render: 204ms)
+ GET / 200 in 107ms (compile: 6ms, render: 100ms)
+✓ Compiled in 197ms
+✓ Compiled in 170ms
+✓ Compiled in 199ms
+✓ Compiled in 200ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+✓ Compiled in 165ms
+⨯ ReferenceError: cardParallax is not defined
+    at Hero (src/components/avystra/Hero.tsx:140:18)
+  138 |           {/* Bridging content block — cleaner, less dense, better line-height */}
+  139 |           <div
+> 140 |             ref={cardParallax}
+      |                  ^
+  141 |             className="hero-card-premium mb-12 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-8 py-8 sm:px-12 sm:py-10 text-center"
+  142 |             style={{ animationDelay: "1.7s" }}
+  143 |           > {
+  digest: '858654173'
+}
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ ReferenceError: cardParallax is not defined
+    at Hero (src/components/avystra/Hero.tsx:140:18)
+  138 |           {/* Bridging content block — cleaner, less dense, better line-height */}
+  139 |           <div
+> 140 |             ref={cardParallax}
+      |                  ^
+  141 |             className="hero-card-premium mb-12 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-8 py-8 sm:px-12 sm:py-10 text-center"
+  142 |             style={{ animationDelay: "1.7s" }}
+  143 |           > {
+  digest: '858654173'
+}
+⨯ ReferenceError: cardParallax is not defined
+    at Hero (src/components/avystra/Hero.tsx:140:18)
+  138 |           {/* Bridging content block — cleaner, less dense, better line-height */}
+  139 |           <div
+> 140 |             ref={cardParallax}
+      |                  ^
+  141 |             className="hero-card-premium mb-12 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-8 py-8 sm:px-12 sm:py-10 text-center"
+  142 |             style={{ animationDelay: "1.7s" }}
+  143 |           > {
+  digest: '858654173'
+}
+ GET / 500 in 395ms (compile: 59ms, render: 335ms)
+ GET / 500 in 160ms (compile: 3ms, render: 157ms)
+ GET / 500 in 89ms (compile: 5ms, render: 85ms)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+✓ Compiled in 195ms
+ GET / 200 in 317ms (compile: 49ms, render: 267ms)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET / 200 in 223ms (compile: 8ms, render: 215ms)
+ GET / 200 in 108ms (compile: 10ms, render: 98ms)
+✓ Compiled in 219ms
+ GET / 200 in 335ms (compile: 56ms, render: 279ms)
+✓ Compiled in 197ms
+ GET / 200 in 309ms (compile: 49ms, render: 260ms)
+ GET / 200 in 132ms (compile: 6ms, render: 126ms)
+ GET / 200 in 111ms (compile: 4ms, render: 107ms)
+ GET / 200 in 103ms (compile: 3ms, render: 100ms)
+ GET / 200 in 104ms (compile: 5ms, render: 98ms)
+ GET / 200 in 98ms (compile: 3ms, render: 95ms)
+ GET / 200 in 105ms (compile: 3ms, render: 102ms)

@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useCallback, useState, useSyncExternalStore }
 import { ArrowRight, UserPlus, TrendingUp, Building2, Banknote, ClipboardList } from "lucide-react";
 import { UnderlineSquiggle } from "./DoodleWidgets";
 import { smoothScrollTo } from "@/lib/scroll";
+import { useParallax } from "@/lib/useParallax";
 
 // Subscribe to prefers-reduced-motion without setState-in-effect
 const reducedMotionSubscribe = (callback: () => void) => {
@@ -17,6 +18,13 @@ const reducedMotionGetServerSnapshot = () => false;
 
 export default function Hero() {
   const sectionRef = useRef<HTMLDivElement>(null);
+
+  // Subtle scroll-linked parallax for layered depth (Apple/Stripe-style).
+  // Applied ONLY to the h1 heading — it has no CSS animation on itself
+  // (only on child spans), so GSAP's transform composes with the children's
+  // CSS animations. Elements with CSS animations (hero-fade-in) on themselves
+  // can't use GSAP parallax (CSS animation overrides inline transform).
+  const headingParallax = useParallax<HTMLHeadingElement>({ distance: 40 });
 
   const reducedMotion = useSyncExternalStore(
     reducedMotionSubscribe,
@@ -87,6 +95,7 @@ export default function Hero() {
           {/* Main heading — refined typography with generous breathing room.
               Solid gold color (no background-clip) prevents iOS question mark clipping. */}
           <h1
+            ref={headingParallax}
             className="font-display font-bold text-[clamp(2.25rem,7vw,5rem)] tracking-[-0.04em] text-navy-deep select-none heading-balance mb-12 sm:mb-14"
             style={{ lineHeight: 1.15 }}
           >

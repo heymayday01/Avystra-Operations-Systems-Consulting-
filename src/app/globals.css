@@ -340,6 +340,38 @@ body::-webkit-scrollbar {
   }
 }
 
+/* ═══ WORD-BY-WORD TEXT REVEAL ═══
+   Splits text into word spans that stagger in on scroll.
+   Uses --word-index CSS var (set per-word by TextReveal component).
+   Works with the .is-revealed class from the useReveal system.
+   600ms expo-out per word, 80ms stagger (var(--stagger)). */
+.js .reveal-words .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity var(--dur-entrance) var(--ease-out),
+              transform var(--dur-entrance) var(--ease-out);
+  transition-delay: calc(var(--word-index, 0) * var(--stagger));
+  will-change: opacity, transform;
+}
+.js .reveal-words.is-revealed .word {
+  opacity: 1;
+  transform: none;
+}
+/* Safety fallback: force visible after 4s */
+.js .reveal-words .word {
+  animation: reveal-safety 0.01s 4s forwards;
+}
+.js .reveal-words.is-revealed .word {
+  animation: none;
+}
+/* Reduced motion: skip transforms, keep opacity only */
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal-words .word {
+    transform: none;
+  }
+}
+
 /* ═══ PREMIUM HOVER UTILITIES ═══
    Consistent hover language across the entire site.
    Cards: 200ms, border → gold, shadow upgrade.

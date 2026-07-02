@@ -156,8 +156,9 @@ export function useSmoothScroll() {
     // ═══ DESKTOP ONLY: Full Lenis + scrollerProxy setup ═══
 
     const lenis = new Lenis({
-      // lerp 0.09 = smooth but responsive. Lower = smoother but laggier.
-      lerp: 0.09,
+      // lerp 0.08 = smoother, premium feel. Lower = smoother but laggier.
+      // 0.09 was slightly too responsive; 0.08 adds a touch more glide.
+      lerp: 0.08,
       smoothWheel: true,
       syncTouch: false,
       infinite: false,

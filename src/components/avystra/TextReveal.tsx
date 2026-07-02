@@ -1,105 +1,76 @@
 "use client";
 
 import React, { useRef } from "react";
-import { useInView } from "motion/react";
+import { useReveal } from "@/lib/useReveal";
 
 interface TextRevealProps {
   text: string;
   as?: React.ElementType;
   className?: string;
-  wordClassName?: string;
+  /** Enable word-by-word stagger reveal (default: true for headings, false for paragraphs).
+   *  When true, text is split into word spans that stagger in with 80ms delay. */
+  words?: boolean;
+  /** Base delay before the first word/element starts (seconds). */
   delay?: number;
-  duration?: number;
-  /** Blur effect on reveal. Default: false (blur causes GPU layer thrashing
-   *  and iOS text clipping — disabled by default for performance). */
-  blur?: boolean;
-  /** Stagger words individually. Default: false (animates the whole block
-   *  as one unit — much better performance than per-word animation). */
-  stagger?: boolean;
 }
 
 /**
  * Unified text reveal component — used across the entire site.
  *
- * PERFORMANCE DESIGN:
- * - Uses CSS transitions (not Framer Motion per-word animation) for zero
- *   JS animation overhead. A single IntersectionObserver triggers the reveal.
- * - Blur is DISABLED by default. `filter: blur()` creates a GPU compositing
- *   layer per element, which causes: (1) scroll jank when 10+ elements
- *   each have their own blur layer, (2) iOS text clipping (the GPU layer
- *   clips glyph descenders like the '?' tail), (3) longer paint times.
- *   Enable blur only for hero-level headings where the effect is worth the cost.
- * - Stagger is DISABLED by default. Per-word stagger creates N motion.span
- *   elements each with their own animation, which is expensive. The whole-
- *   block reveal is visually similar but 10x cheaper.
+ * Uses the site-wide `.reveal` / `.reveal-words` CSS system (driven by
+ * `useReveal` + IntersectionObserver). No Framer Motion dependency.
+ *
+ * MODES:
+ * - words={true} (default for headings): splits text into word spans,
+ *   each staggers in with 80ms delay. Premium editorial feel.
+ * - words={false}: whole-block fade-up reveal (cheaper, for paragraphs).
+ *
+ * SAFETY: Progressive enhancement — hidden state only applies when
+ * <html> has `.js` class. 4s CSS safety fallback guarantees visibility.
  */
 export default function TextReveal({
   text,
   as: Component = "p",
   className = "",
-  wordClassName = "",
+  words = false,
   delay = 0,
-  duration = 0.8,
-  blur = false,
-  stagger = false,
 }: TextRevealProps) {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
-
+  const ref = useReveal<HTMLElement>();
   const DynamicComponent = Component as any;
 
-  // Base CSS transition — opacity + transform only (GPU-cheap, no filter)
-  const transition = `opacity ${duration}s cubic-bezier(0.16,1,0.3,1) ${delay}s, transform ${duration}s cubic-bezier(0.16,1,0.3,1) ${delay}s${blur ? `, filter ${duration}s cubic-bezier(0.16,1,0.3,1) ${delay}s` : ""}`;
-
-  const baseStyle: React.CSSProperties = {
-    opacity: isInView ? 1 : 0,
-    transform: isInView ? "translateY(0)" : "translateY(20px)",
-    transition,
-  };
-
-  if (blur) {
-    baseStyle.filter = isInView ? "none" : "blur(8px)";
-  }
-
-  if (stagger) {
-    // Per-word stagger using CSS animation-delay (still CSS, not JS)
-    const words = text.split(" ");
+  if (words) {
+    // Word-by-word stagger reveal using the .reveal-words CSS system.
+    // Each word gets --word-index for the CSS calc() stagger delay.
+    const wordList = text.split(" ");
     return (
       <DynamicComponent
         ref={ref}
-        className={`${className} m-0 p-0`}
-        style={baseStyle}
+        className={`reveal reveal-words ${className} m-0 p-0`}
       >
-        <span className="flex flex-wrap gap-x-[0.25em]">
-          {words.map((word, i) => (
-            <span
-              key={i}
-              className={wordClassName}
-              style={{
-                opacity: isInView ? 1 : 0,
-                transform: isInView ? "translateY(0)" : "translateY(15px)",
-                transition: `opacity ${duration}s cubic-bezier(0.16,1,0.3,1) ${delay + i * 0.04}s, transform ${duration}s cubic-bezier(0.16,1,0.3,1) ${delay + i * 0.04}s`,
-                display: "inline-block",
-              }}
-            >
-              {word}
-            </span>
-          ))}
-        </span>
+        {wordList.map((word, i) => (
+          <span
+            key={i}
+            className="word"
+            style={
+              {
+                "--word-index": i + delay * 12.5, // delay in seconds → word-index offset
+              } as React.CSSProperties
+            }
+          >
+            {word}{" "}
+          </span>
+        ))}
       </DynamicComponent>
     );
   }
 
-  // Default: whole-block reveal (cheapest, no per-word overhead)
+  // Default: whole-block reveal (uses .reveal CSS system)
   return (
     <DynamicComponent
       ref={ref}
-      className={`${className} m-0 p-0`}
-      style={baseStyle}
+      className={`reveal ${className} m-0 p-0`}
     >
-      <span className={wordClassName ? `inline ${wordClassName}` : "inline"}>
-        {text}
-      </span>
+      <span className="inline">{text}</span>
     </DynamicComponent>
   );
 }

@@ -325,15 +325,13 @@ export default function ProgramsSection() {
             <TextReveal
               text="Where Most "
               delay={0.2}
-              blur={false}
-              wordClassName="inline-block"
+              words
             />
             <span className="font-serif italic font-light text-gold relative inline-block">
               <TextReveal
                 text="Organizations Start"
                 delay={0.4}
-                blur={false}
-                wordClassName="inline-block"
+                words
               />
               {/* Static underline — previously an animated width draw, which
                   violated the "no width animation" rule. Now always visible. */}
@@ -345,7 +343,6 @@ export default function ProgramsSection() {
             as="p"
             className="text-slate-500 font-sans text-base sm:text-lg font-light leading-relaxed max-w-2xl"
             delay={0.6}
-            blur={false}
           />
         </div>
 
