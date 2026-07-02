@@ -16,6 +16,7 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import { DoodleSparkle, UnderlineSquiggle } from "./DoodleWidgets";
 import { useReveal } from "@/lib/useReveal";
+import { EASE } from "@/lib/motion";
 
 interface StepData {
   step: number;
@@ -222,7 +223,7 @@ export default function Flowchart() {
                 onMouseEnter={() => setHoveredCard(idx)}
                 onMouseLeave={() => setHoveredCard(null)}
                 data-reveal
-                className="reveal card-premium group relative flex flex-col justify-between bg-gradient-to-br from-white to-slate-50 border border-slate-100 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-6 transition-[box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-10 overflow-hidden"
+                className="reveal card-premium group relative flex flex-col justify-between bg-gradient-to-br from-white to-slate-50 border border-slate-100 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-6 transition-[box-shadow,border-color] duration-500 ease-out-expo z-10 overflow-hidden"
               >
                 {/* Gold gradient sweep on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/0 via-gold/5 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -282,7 +283,7 @@ export default function Flowchart() {
                       onClick={() => toggleExpand(idx)}
                       aria-label={`Toggle key activities for ${step.title} step`}
                       aria-expanded={isExpanded}
-                      className="w-full flex items-center justify-between py-1 px-1.5 rounded-lg hover:bg-slate-50 text-[11.5px] font-mono font-bold uppercase tracking-wider text-slate-500 hover:text-navy-deep transition-all duration-300 focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none"
+                      className="w-full flex items-center justify-between py-1 px-1.5 rounded-lg hover:bg-slate-50 text-[11.5px] font-mono font-bold uppercase tracking-wider text-slate-500 hover:text-navy-deep transition-all duration-300 focus-ring"
                     >
                       <span>Key Activities</span>
                       <ChevronDown
@@ -298,7 +299,7 @@ export default function Flowchart() {
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                          transition={{ duration: 0.3, ease: EASE }}
                           className="overflow-hidden mt-2"
                         >
                           <ul className="space-y-2 py-1 pl-1">

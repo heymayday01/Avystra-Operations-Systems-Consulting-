@@ -3,6 +3,7 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import { BookOpen, Calendar, Users, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { EASE } from "@/lib/motion";
 import TextReveal from "./TextReveal";
 import { useReveal } from "@/lib/useReveal";
 
@@ -27,7 +28,7 @@ interface Program {
 function ProgramCard({ prog }: { prog: Program }) {
   return (
     <article
-      className="program-card card-premium group relative bg-gradient-to-br from-white to-slate-50/80 border border-slate-100 rounded-3xl p-5 sm:p-8 lg:p-10 flex flex-col justify-between transition-[box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] h-full overflow-hidden"
+      className="program-card card-premium group relative bg-gradient-to-br from-white to-slate-50/80 border border-slate-100 rounded-3xl p-5 sm:p-8 lg:p-10 flex flex-col justify-between transition-[box-shadow,border-color] duration-500 ease-out-expo h-full overflow-hidden"
     >
       {/* Subtle Glow Reflection Layer */}
       <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
@@ -88,7 +89,7 @@ function ProgramCard({ prog }: { prog: Program }) {
           )}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn-premium flex items-center justify-center gap-2 w-full min-h-[44px] py-3 sm:py-3.5 px-4 rounded-xl bg-navy-deep text-gold hover:bg-gold hover:text-navy-deep transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer text-[10px] sm:text-[10.5px] font-mono font-black uppercase tracking-[0.18em] sm:tracking-[0.2em] group/btn focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="btn-premium flex items-center justify-center gap-2 w-full min-h-[44px] py-3 sm:py-3.5 px-4 rounded-xl bg-navy-deep text-gold hover:bg-gold hover:text-navy-deep transition-colors duration-500 ease-out-expo cursor-pointer text-[10px] sm:text-[10.5px] font-mono font-black uppercase tracking-[0.18em] sm:tracking-[0.2em] group/btn focus-ring"
           aria-label={`Enquire about ${prog.title} program`}
         >
           <span>Enquire Now</span>
@@ -356,7 +357,7 @@ export default function ProgramsSection() {
               <button
                 key={cat.key}
                 onClick={() => setActiveTab(cat.key)}
-                className={`min-h-[44px] px-4 sm:px-6 py-3 rounded-2xl font-mono text-[10px] sm:text-[12.5px] font-black uppercase tracking-[0.14em] sm:tracking-[0.2em] border transition-all duration-500 cursor-pointer relative group shrink-0 focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none ${
+                className={`min-h-[44px] px-4 sm:px-6 py-3 rounded-2xl font-mono text-[10px] sm:text-[12.5px] font-black uppercase tracking-[0.14em] sm:tracking-[0.2em] border transition-all duration-500 cursor-pointer relative group shrink-0 focus-ring ${
                   isActive
                     ? "bg-navy-deep text-gold border-navy-deep shadow-xl"
                     : "bg-gradient-to-br from-white to-slate-50 border border-slate-100 text-slate-500 hover:text-navy-deep hover:border-slate-300 shadow-sm"
@@ -406,7 +407,7 @@ export default function ProgramsSection() {
                 exit={{ opacity: 0 }}
                 transition={{
                   duration: 0.5,
-                  ease: [0.16, 1, 0.3, 1],
+                  ease: EASE,
                   delay: index * 0.05,
                 }}
                 data-reveal
@@ -486,13 +487,13 @@ export default function ProgramsSection() {
                   <button
                     key={prog.id}
                     onClick={() => scrollToCard(index)}
-                    className="min-w-[36px] min-h-[36px] flex items-center justify-center p-1.5 group/dot focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none"
+                    className="min-w-[36px] min-h-[36px] flex items-center justify-center p-1.5 group/dot focus-ring"
                     role="tab"
                     aria-selected={isActive}
                     aria-label={`Go to program ${index + 1}: ${prog.title}`}
                   >
                     <span
-                      className={`block rounded-full transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                      className={`block rounded-full transition-all duration-400 ease-out-expo ${
                         isActive
                           ? "w-5 h-1.5 bg-gold shadow-[0_0_6px_rgba(var(--gold-rgb),0.5)]"
                           : "w-1.5 h-1.5 bg-navy-deep/20 group-hover/dot:bg-navy-deep/40"

@@ -117,7 +117,7 @@ export default function FAQSection() {
                 {/* Accordion Toggle Header */}
                 <button
                   onClick={() => toggleIndex(index)}
-                  className="w-full flex items-center justify-between text-left gap-4 sm:gap-6 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+                  className="w-full flex items-center justify-between text-left gap-4 sm:gap-6 group cursor-pointer focus-ring"
                   aria-expanded={isOpen}
                   aria-label={`Question ${index + 1}: ${faq.question}`}
                 >
@@ -162,7 +162,7 @@ export default function FAQSection() {
                     layout recalculation per-frame, and eliminates jank.
                     The inner div has overflow:hidden + opacity transition. */}
                 <div
-                  className="grid transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                  className="grid transition-all duration-400 ease-out-expo"
                   style={{
                     gridTemplateRows: isOpen ? "1fr" : "0fr",
                   }}

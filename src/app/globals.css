@@ -414,6 +414,19 @@ body::-webkit-scrollbar {
   width: 100%;
 }
 
+/* ═══ FOCUS RING UTILITY ═══
+   Single source of truth for keyboard focus visibility.
+   Previously: 31 inline repetitions of `focus-visible:ring-2 focus-visible:ring-gold
+   focus-visible:ring-offset-2 focus-visible:outline-none` across all components.
+   Now: one utility class. 2px gold ring, 2px offset, outline removed. */
+.focus-ring {
+  outline: none;
+}
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-gold), 0 0 0 4px var(--color-cream-bg);
+}
+
 /* Hero heading line reveal — CSS only (no Framer Motion, no blur).
    opacity + translateY only = GPU-cheap, no compositing layer, no iOS clipping.
    Delays account for 800ms loading screen (add 800ms to spec delays). */

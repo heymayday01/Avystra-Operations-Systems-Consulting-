@@ -66,7 +66,7 @@ export default function AvystraLogo({
         <img
           src={logoSrc}
           alt="AVYSTRA"
-          className="shrink-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+          className="shrink-0 transition-transform duration-500 ease-out-expo group-hover:scale-105"
           style={{ height: `${h}px`, width: `${w}px` }}
         />
       </div>
@@ -86,7 +86,7 @@ export default function AvystraLogo({
         <img
           src={logoSrc}
           alt="AVYSTRA Consulting Pvt. Ltd."
-          className="shrink-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+          className="shrink-0 transition-transform duration-500 ease-out-expo group-hover:scale-[1.03]"
           style={{ height: `${imgHeight}px`, width: "auto" }}
         />
         {showSubtitle && (

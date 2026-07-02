@@ -25,7 +25,7 @@ function FounderImages({ isResolved }: { isResolved: boolean }) {
         alt="Founder — frustrated, bottlenecked"
         referrerPolicy="no-referrer"
         loading="lazy"
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-out-expo"
         style={{
           opacity: isResolved ? 0 : 1,
           objectPosition: "center 25%",
@@ -45,7 +45,7 @@ function FounderImages({ isResolved }: { isResolved: boolean }) {
         alt="Founder — confident, system in place"
         referrerPolicy="no-referrer"
         loading="lazy"
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-out-expo"
         style={{
           opacity: isResolved ? 1 : 0,
           objectPosition: "center center",
@@ -228,7 +228,7 @@ export default function FounderFrictionSimulator() {
           <button
             onClick={() => setIsResolved(false)}
             aria-label="Show bottlenecked state"
-            className={`toggle-pill-btn relative z-10 w-1/2 text-center text-[12px] font-mono tracking-[0.14em] font-bold h-full transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none ${
+            className={`toggle-pill-btn relative z-10 w-1/2 text-center text-[12px] font-mono tracking-[0.14em] font-bold h-full transition-colors duration-500 ease-out-expo focus-ring ${
               !isResolved
                 ? "text-white"
                 : "text-white/45 hover:text-white/75"
@@ -239,7 +239,7 @@ export default function FounderFrictionSimulator() {
           <button
             onClick={() => setIsResolved(true)}
             aria-label="Show AVYSTRA system state"
-            className={`toggle-pill-btn relative z-10 w-1/2 text-center text-[12px] font-mono tracking-[0.14em] font-bold h-full transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none ${
+            className={`toggle-pill-btn relative z-10 w-1/2 text-center text-[12px] font-mono tracking-[0.14em] font-bold h-full transition-colors duration-500 ease-out-expo focus-ring ${
               isResolved
                 ? "text-white"
                 : "text-white/45 hover:text-white/75"
@@ -364,7 +364,7 @@ export default function FounderFrictionSimulator() {
                 <div className="relative min-h-[110px]">
                   {/* Bottlenecked state */}
                   <div
-                    className="absolute inset-0 transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] space-y-2"
+                    className="absolute inset-0 transition-opacity duration-500 ease-out-expo space-y-2"
                     style={{
                       opacity: isResolved ? 0 : 1,
                       pointerEvents: isResolved ? "none" : "auto",
@@ -390,7 +390,7 @@ export default function FounderFrictionSimulator() {
 
                   {/* AVYSTRA system state */}
                   <div
-                    className="absolute inset-0 transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    className="absolute inset-0 transition-opacity duration-500 ease-out-expo"
                     style={{
                       opacity: isResolved ? 1 : 0,
                       pointerEvents: isResolved ? "auto" : "none",
@@ -415,7 +415,7 @@ export default function FounderFrictionSimulator() {
           {/* ─── CENTER NODE — founder portrait crossfade, accent ring, label ─── */}
           <div ref={desktopCenterNodeRef} className="reveal absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center">
             <div
-              className="relative w-[150px] h-[150px] rounded-full overflow-hidden flex flex-col items-center justify-center text-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              className="relative w-[150px] h-[150px] rounded-full overflow-hidden flex flex-col items-center justify-center text-center transition-all duration-700 ease-out-expo"
               style={{
                 border: `1px solid ${accentFaint}`,
                 boxShadow: `0 0 0 6px ${accentSoft}19, 0 0 48px ${accentSoft}, inset 0 0 20px rgba(0,0,0,0.4)`,
@@ -455,7 +455,7 @@ export default function FounderFrictionSimulator() {
           <div ref={mobileCenterNodeRef} className="reveal flex flex-col items-center">
             {/* Center node circle */}
             <div
-              className="relative w-[130px] h-[130px] rounded-full overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              className="relative w-[130px] h-[130px] rounded-full overflow-hidden transition-all duration-700 ease-out-expo"
               style={{
                 border: `1px solid ${accentFaint}`,
                 boxShadow: `0 0 0 6px ${accentSoft}19, 0 0 44px ${accentSoft}, inset 0 0 20px rgba(0,0,0,0.4)`,
@@ -532,7 +532,7 @@ export default function FounderFrictionSimulator() {
 
                   <div className="relative min-h-[80px]">
                     <div
-                      className="transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] space-y-2"
+                      className="transition-opacity duration-500 ease-out-expo space-y-2"
                       style={{ display: isResolved ? "none" : "block" }}
                     >
                       {outcome.issues.map((issue, idx) => (
@@ -554,7 +554,7 @@ export default function FounderFrictionSimulator() {
                     </div>
 
                     <div
-                      className="transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                      className="transition-opacity duration-500 ease-out-expo"
                       style={{ display: isResolved ? "block" : "none" }}
                     >
                       <div className="flex items-start gap-2 text-left">
@@ -590,11 +590,11 @@ export default function FounderFrictionSimulator() {
           <button
             onClick={handleBookCall}
             aria-label="Book an assessment call"
-            className="btn-premium group inline-flex items-center gap-2 bg-gold text-navy-deep font-sans font-bold text-xs uppercase tracking-[0.12em] px-7 py-3.5 rounded-full hover:bg-gold-light transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer w-full sm:w-auto shrink-0 focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="btn-premium group inline-flex items-center gap-2 bg-gold text-navy-deep font-sans font-bold text-xs uppercase tracking-[0.12em] px-7 py-3.5 rounded-full hover:bg-gold-light transition-colors duration-500 ease-out-expo cursor-pointer w-full sm:w-auto shrink-0 focus-ring"
           >
             Book an assessment call
             <ArrowRight
-              className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-500 ease-out-expo"
               strokeWidth={2.5}
             />
           </button>

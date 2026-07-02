@@ -115,7 +115,7 @@ export default function Hero() {
             ].map(({ label, Icon }, idx) => (
               <div
                 key={idx}
-                className="hero-chip flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200/70 bg-white/50 hover:border-gold/35 hover:bg-white/80 transition-[border-color,background-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                className="hero-chip flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200/70 bg-white/50 hover:border-gold/35 hover:bg-white/80 transition-[border-color,background-color] duration-500 ease-out-expo"
                 style={{ animationDelay: `${1.7 + idx * 0.08}s` }}
               >
                 <Icon className="w-3.5 h-3.5 text-gold/60 shrink-0" />
@@ -155,17 +155,17 @@ export default function Hero() {
           >
             <button
               onClick={handleScrollToForm}
-              className="hero-btn-primary btn-premium group relative cursor-pointer rounded-full px-9 py-4 flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 shadow-lg overflow-hidden"
+              className="hero-btn-primary btn-premium group relative cursor-pointer rounded-full px-9 py-4 flex items-center gap-3 focus-ring shadow-lg overflow-hidden"
             >
               <span className="relative z-10 text-white font-mono text-[12px] font-bold tracking-[0.2em] uppercase">
                 Talk To Us
               </span>
-              <ArrowRight className="relative z-10 w-4 h-4 text-gold group-hover:translate-x-1 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
+              <ArrowRight className="relative z-10 w-4 h-4 text-gold group-hover:translate-x-1 transition-transform duration-500 ease-out-expo" />
             </button>
 
             <button
               onClick={handleScrollToBento}
-              className="hero-btn-secondary btn-premium group relative cursor-pointer rounded-full px-9 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 shadow-sm overflow-hidden"
+              className="hero-btn-secondary btn-premium group relative cursor-pointer rounded-full px-9 py-4 focus-ring shadow-sm overflow-hidden"
             >
               <span className="relative z-10 text-navy-deep font-mono text-[12px] font-bold tracking-[0.2em] uppercase">
                 See The Problem

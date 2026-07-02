@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { EASE } from "@/lib/motion";
 
 /**
  * Professional loading screen — clean, minimal, enterprise-grade.
@@ -33,14 +34,14 @@ export default function LoadingScreen() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.4, ease: EASE }}
       className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-navy-deep"
     >
       {/* Logo — opacity fade-in only (no blur) */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+        transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
         className="mb-8"
       >
         <img

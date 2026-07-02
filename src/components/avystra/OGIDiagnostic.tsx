@@ -30,9 +30,7 @@ import {
   type DimensionCode,
   type ResultBand,
 } from "@/lib/ogi-data";
-
-// Shared easing curve — premium expo-out for elegant reveals
-const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
+import { EASE } from "@/lib/motion";
 
 // Questions + answer options + scoring now live in src/lib/ogi-data.ts
 // so the API route and this component share the exact same data source.
@@ -397,7 +395,7 @@ export default function OGIDiagnostic() {
                   <button
                     onClick={() => setScreen("INFO_CAPTURE")}
                     aria-label="Begin OGI assessment"
-                    className="group inline-flex items-center gap-3 bg-navy-soft hover:bg-gold text-white font-display text-sm font-semibold tracking-wider uppercase px-10 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none cursor-pointer"
+                    className="group inline-flex items-center gap-3 bg-navy-soft hover:bg-gold text-white font-display text-sm font-semibold tracking-wider uppercase px-10 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 focus-ring cursor-pointer"
                     id="ogi-btn-start"
                   >
                     <span>Begin Assessment</span>
@@ -422,7 +420,7 @@ export default function OGIDiagnostic() {
                   <button
                     onClick={() => setScreen("INTRO")}
                     aria-label="Back to intro"
-                    className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-gold font-mono tracking-wide mb-5 group focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none cursor-pointer"
+                    className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-gold font-mono tracking-wide mb-5 group focus-ring cursor-pointer"
                   >
                     <ChevronLeft className="w-4 h-4 transform group-hover:-translate-x-0.5 transition-transform" />
                     Back to intro
@@ -543,7 +541,7 @@ export default function OGIDiagnostic() {
                   <button
                     onClick={() => validateAndNextInfo()}
                     aria-label="Continue to questions"
-                    className="group inline-flex items-center gap-2.5 bg-navy-deep hover:bg-gold text-white font-display text-xs font-bold tracking-wider uppercase px-7 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none cursor-pointer"
+                    className="group inline-flex items-center gap-2.5 bg-navy-deep hover:bg-gold text-white font-display text-xs font-bold tracking-wider uppercase px-7 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 focus-ring cursor-pointer"
                     id="ogi-btn-info-continue"
                   >
                     <span>Continue to Questions</span>
@@ -580,7 +578,7 @@ export default function OGIDiagnostic() {
                     <button
                       onClick={handleBack}
                       aria-label="Go back to previous question"
-                      className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-gold font-mono transition-colors group focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none cursor-pointer"
+                      className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-gold font-mono transition-colors group focus-ring cursor-pointer"
                     >
                       <ChevronLeft className="w-3.5 h-3.5 transform group-hover:-translate-x-0.5 transition-transform" />
                       Back
@@ -625,7 +623,7 @@ export default function OGIDiagnostic() {
                           aria-pressed={isSelected}
                           whileTap={{ scale: 0.95 }}
                           transition={{ duration: 0.15, ease: EASE }}
-                          className={`relative py-4 px-3 text-xs sm:text-sm text-center rounded-xl font-display font-semibold transition-all duration-300 border cursor-pointer select-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none ${
+                          className={`relative py-4 px-3 text-xs sm:text-sm text-center rounded-xl font-display font-semibold transition-all duration-300 border cursor-pointer select-none focus-ring ${
                             isSelected
                               ? "bg-navy-deep border-navy-deep text-white shadow-md shadow-slate-900/10"
                               : "bg-slate-50 border-slate-200/80 hover:border-gold hover:bg-white text-slate-600 hover:text-navy-deep hover:shadow-sm"
@@ -668,7 +666,7 @@ export default function OGIDiagnostic() {
                     setCurrentQuestionIndex(8);
                   }
                 }}
-                className="p-8 sm:p-10 md:p-12 flex flex-col items-center justify-center h-full flex-grow text-center bg-slate-50 relative cursor-pointer group focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none"
+                className="p-8 sm:p-10 md:p-12 flex flex-col items-center justify-center h-full flex-grow text-center bg-slate-50 relative cursor-pointer group focus-ring"
                 id="ogi-screen-nudge"
               >
                 <div className="absolute top-4 right-4 text-[10.5px] font-mono text-slate-300 uppercase tracking-widest">
@@ -1411,7 +1409,7 @@ export default function OGIDiagnostic() {
                             onClick={handleSubmitResults}
                             disabled={isSubmitting}
                             aria-label="Get my full OGI report"
-                            className="w-full inline-flex items-center justify-center gap-2.5 py-3.5 bg-gold hover:bg-gold-light disabled:opacity-60 disabled:cursor-not-allowed text-navy-deep font-display font-bold text-xs uppercase tracking-[0.16em] rounded-xl focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none cursor-pointer transition-all active:scale-[0.98] shadow-md"
+                            className="w-full inline-flex items-center justify-center gap-2.5 py-3.5 bg-gold hover:bg-gold-light disabled:opacity-60 disabled:cursor-not-allowed text-navy-deep font-display font-bold text-xs uppercase tracking-[0.16em] rounded-xl focus-ring cursor-pointer transition-all active:scale-[0.98] shadow-md"
                           >
                             {isSubmitting ? (
                               <>
@@ -1476,7 +1474,7 @@ export default function OGIDiagnostic() {
                           window.open(`https://wa.me/918596059607?text=${encodeURIComponent(msg)}`);
                         }}
                         aria-label="Discuss on WhatsApp"
-                        className="w-full inline-flex items-center justify-center gap-2 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-display font-semibold text-xs uppercase tracking-wider rounded-xl focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none cursor-pointer transition-all active:scale-[0.98] shadow-sm"
+                        className="w-full inline-flex items-center justify-center gap-2 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-display font-semibold text-xs uppercase tracking-wider rounded-xl focus-ring cursor-pointer transition-all active:scale-[0.98] shadow-sm"
                       >
                         <MessageSquare className="w-4 h-4" />
                         <span>Discuss on WhatsApp</span>
@@ -1496,7 +1494,7 @@ export default function OGIDiagnostic() {
                     <button
                       onClick={handleRestart}
                       aria-label="Restart assessment"
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-xs font-mono font-bold text-slate-400 hover:text-gold uppercase tracking-wider bg-slate-50 hover:bg-slate-100 border border-slate-200 px-6 py-3.5 rounded-xl focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:outline-none cursor-pointer transition-all active:scale-95"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-xs font-mono font-bold text-slate-400 hover:text-gold uppercase tracking-wider bg-slate-50 hover:bg-slate-100 border border-slate-200 px-6 py-3.5 rounded-xl focus-ring cursor-pointer transition-all active:scale-95"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
                       Restart assessment

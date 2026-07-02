@@ -9,8 +9,7 @@ import {
   PenLine,
   Calendar,
 } from "lucide-react";
-
-const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
+import { EASE } from "@/lib/motion";
 
 const penalties = [
   {

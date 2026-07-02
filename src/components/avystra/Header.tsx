@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { ScrollTrigger } from "@/lib/gsap";
 import AvystraLogo from "./AvystraLogo";
 import { smoothScrollTo, scrollToTop } from "@/lib/scroll";
+import { EASE } from "@/lib/motion";
 
 interface NavItem {
   name: string;
@@ -132,12 +133,12 @@ export default function Header() {
         : {
             opacity: {
               duration: 1.2,
-              ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+              ease: EASE,
               delay: 0.1,
             },
             y: {
               duration: 1.2,
-              ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+              ease: EASE,
               delay: 0.1,
             },
           },
@@ -155,7 +156,7 @@ export default function Header() {
 
   return (
     <div
-      className={`fixed left-0 right-0 z-[60] flex justify-center px-4 sm:px-6 lg:px-8 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+      className={`fixed left-0 right-0 z-[60] flex justify-center px-4 sm:px-6 lg:px-8 transition-all duration-500 ease-out-expo ${
         scrolled || isOpen ? "top-2 md:top-3" : "top-[36px] sm:top-[48px]"
       }`}
       style={{ pointerEvents: "none" }}
@@ -168,7 +169,7 @@ export default function Header() {
           borderRadius: isOpen ? "24px" : "100px",
         }}
         transition={headerTransition}
-        className={`w-full max-w-6xl pointer-events-auto transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`w-full max-w-6xl pointer-events-auto transition-all duration-500 ease-out-expo ${
           scrolled || isOpen
             ? "py-2 px-4 sm:px-5 lg:py-1.5 lg:px-5 border border-white/50 bg-white/75 shadow-[0_8px_32px_-8px_rgba(var(--navy-rgb),0.18)] backdrop-blur-xl backdrop-saturate-150"
             : "py-2.5 px-4 sm:py-3 sm:px-6 lg:px-8 bg-white/55 backdrop-blur-lg border border-white/30 shadow-sm"
@@ -186,14 +187,14 @@ export default function Header() {
               transition={{
                 delay: 0.8,
                 duration: 0.4,
-                ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+                ease: EASE,
               }}
               onClick={(e) => {
                 e.preventDefault();
                 setIsOpen(false);
                 scrollToTop(1.2);
               }}
-              className="flex items-center gap-2 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 rounded-xl shrink-0"
+              className="flex items-center gap-2 group cursor-pointer focus-ring rounded-xl shrink-0"
               aria-label="AVYSTRA home"
             >
               <AvystraLogo size="sm" showSubtitle={true} className="scale-110 sm:scale-100" />
@@ -217,7 +218,7 @@ export default function Header() {
                   transition={{
                     delay: 1.0 + i * 0.1,
                     duration: 0.4,
-                    ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+                    ease: EASE,
                   }}
                   aria-current={isActive ? "true" : undefined}
                   onMouseEnter={() => setHoveredIndex(i)}
@@ -225,7 +226,7 @@ export default function Header() {
                     setActiveSection(item.href.substring(1));
                     handleScrollTo(e, item.href.substring(1));
                   }}
-                  className={`nav-premium group relative px-4 xl:px-5 py-2 font-display text-[11px] xl:text-[11.5px] uppercase tracking-[0.14em] font-bold rounded-full z-10 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 ${
+                  className={`nav-premium group relative px-4 xl:px-5 py-2 font-display text-[11px] xl:text-[11.5px] uppercase tracking-[0.14em] font-bold rounded-full z-10 whitespace-nowrap focus-ring ${
                     isActive
                       ? "text-navy-deep"
                       : "text-navy-deep/55"
@@ -258,7 +259,7 @@ export default function Header() {
             <a
               href="#consult"
               onClick={(e) => handleScrollTo(e, "consult")}
-              className="relative inline-flex items-center gap-2 bg-navy-deep text-white font-display text-[10.5px] uppercase tracking-[0.18em] font-bold px-4 sm:px-5 xl:px-6 py-2.5 rounded-full hover:bg-navy-soft transition-all duration-500 group overflow-hidden shine-on-hover whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+              className="relative inline-flex items-center gap-2 bg-navy-deep text-white font-display text-[10.5px] uppercase tracking-[0.18em] font-bold px-4 sm:px-5 xl:px-6 py-2.5 rounded-full hover:bg-navy-soft transition-all duration-500 group overflow-hidden shine-on-hover whitespace-nowrap focus-ring"
             >
               <span className="relative z-10 whitespace-nowrap">Check Your OGI Score</span>
               <ArrowUpRight className="w-3 h-3 text-gold group-hover:rotate-45 transition-transform duration-500 relative z-10" />
@@ -269,7 +270,7 @@ export default function Header() {
           <div className="lg:hidden flex items-center shrink-0">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="relative w-11 h-11 flex items-center justify-center text-navy-deep focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 rounded-full bg-white/80 border border-white/40 shadow-sm transition-all hover:bg-white/90 active:bg-white/95"
+              className="relative w-11 h-11 flex items-center justify-center text-navy-deep focus-ring rounded-full bg-white/80 border border-white/40 shadow-sm transition-all hover:bg-white/90 active:bg-white/95"
               style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
               aria-label="Toggle Menu"
               aria-expanded={isOpen}
@@ -306,7 +307,7 @@ export default function Header() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.35, ease: EASE }}
               className="lg:hidden overflow-hidden"
             >
               <div className="pt-3 pb-1.5 space-y-1">
@@ -320,7 +321,7 @@ export default function Header() {
                     <a
                       href={item.href}
                       onClick={(e) => handleScrollTo(e, item.href.substring(1))}
-                      className="flex items-center gap-3 px-3.5 py-3 min-h-[48px] rounded-xl bg-white/50 hover:bg-white/70 active:bg-white/80 border border-white/30 hover:border-gold/20 transition-all font-sans group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+                      className="flex items-center gap-3 px-3.5 py-3 min-h-[48px] rounded-xl bg-white/50 hover:bg-white/70 active:bg-white/80 border border-white/30 hover:border-gold/20 transition-all font-sans group cursor-pointer focus-ring"
                       style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", pointerEvents: "auto" }}
                     >
                       <span className="font-mono text-[10.5px] font-bold text-gold tracking-widest opacity-90 shrink-0">
@@ -342,7 +343,7 @@ export default function Header() {
                   <a
                     href="#consult"
                     onClick={(e) => handleScrollTo(e, "consult")}
-                    className="w-full mt-2 py-3.5 min-h-[48px] bg-navy-deep text-white font-bold font-display text-[11.5px] uppercase tracking-[0.16em] flex items-center justify-center gap-2 rounded-xl shadow-lg active:scale-[0.98] transition-transform whitespace-nowrap cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+                    className="w-full mt-2 py-3.5 min-h-[48px] bg-navy-deep text-white font-bold font-display text-[11.5px] uppercase tracking-[0.16em] flex items-center justify-center gap-2 rounded-xl shadow-lg active:scale-[0.98] transition-transform whitespace-nowrap cursor-pointer focus-ring"
                     style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", pointerEvents: "auto" }}
                   >
                     Check Your OGI Score
