@@ -7,10 +7,11 @@ interface TextRevealProps {
   text: string;
   as?: React.ElementType;
   className?: string;
-  /** Enable word-by-word stagger reveal (default: true for headings, false for paragraphs).
-   *  When true, text is split into word spans that stagger in with 80ms delay. */
+  /** Enable word-by-word stagger reveal (default: false for paragraphs).
+   *  When true, text is split into word spans that stagger in with 60ms delay. */
   words?: boolean;
-  /** Base delay before the first word/element starts (seconds). */
+  /** Base delay before the first word starts, in number of stagger intervals.
+   *  E.g., delay={4} with default 60ms stagger = 240ms before first word. */
   delay?: number;
 }
 
@@ -18,15 +19,21 @@ interface TextRevealProps {
  * Unified text reveal component — used across the entire site.
  *
  * Uses the site-wide `.reveal` / `.reveal-words` CSS system (driven by
- * `useReveal` + IntersectionObserver). No Framer Motion dependency.
+ * `useReveal` + shared IntersectionObserver pool). No Framer Motion dependency.
  *
  * MODES:
- * - words={true} (default for headings): splits text into word spans,
- *   each staggers in with 80ms delay. Premium editorial feel.
- * - words={false}: whole-block fade-up reveal (cheaper, for paragraphs).
+ * - words={true}: splits text into word spans, each staggers in with 60ms delay.
+ *   Premium editorial feel for headings.
+ * - words={false} (default): whole-block fade-up reveal (cheaper, for paragraphs).
+ *
+ * STAGGER MATH:
+ * The `delay` prop is in "stagger intervals" (not seconds). Each interval is
+ * 60ms (var(--stagger)). So delay={4} = 240ms before the first word.
+ * This maps cleanly to the CSS calc(): transition-delay = word-index * stagger.
+ * The first word's --word-index = delay, so it starts at delay * 60ms.
  *
  * SAFETY: Progressive enhancement — hidden state only applies when
- * <html> has `.js` class. 4s CSS safety fallback guarantees visibility.
+ * <html> has `.js` class. 10s CSS safety fallback guarantees visibility.
  */
 export default function TextReveal({
   text,
@@ -41,6 +48,7 @@ export default function TextReveal({
   if (words) {
     // Word-by-word stagger reveal using the .reveal-words CSS system.
     // Each word gets --word-index for the CSS calc() stagger delay.
+    // delay prop offsets the starting word-index (in stagger intervals).
     const wordList = text.split(" ");
     return (
       <DynamicComponent
@@ -53,7 +61,7 @@ export default function TextReveal({
             className="word"
             style={
               {
-                "--word-index": i + delay * 12.5, // delay in seconds → word-index offset
+                "--word-index": i + delay,
               } as React.CSSProperties
             }
           >

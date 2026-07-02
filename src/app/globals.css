@@ -303,13 +303,12 @@ body::-webkit-scrollbar {
 
 /* ─── ANIMATIONS ───────────────────────────────────────────── */
 
-/* ═══ SCROLL REVEAL SYSTEM (Premium, IntersectionObserver-driven) ═══
+/* ═══ SCROLL REVEAL SYSTEM (shared IntersectionObserver pool) ═══
    Progressive enhancement: hidden initial state ONLY applies when
-   <html> has `.js` class AND `.page-ready` (loading screen done).
-   No JS = no hiding = content always visible.
-   Before page-ready = no hiding (loading screen is covering content).
-   3s CSS safety fallback guarantees visibility even if observer fails.
-   Spec: 600ms expo-out, 24px translateY, 80ms stagger, threshold 0.15. */
+   <html> has `.js` + `.page-ready` classes. No JS = always visible.
+   Uses ONE shared IntersectionObserver for all reveal elements (revealPool.ts).
+   Spec: 480ms expo-out, 16px translateY, 60ms stagger, threshold 0.15.
+   Safety: 10s fallback (only fires if observer truly fails). */
 
 .js.page-ready .reveal {
   opacity: 0;
@@ -318,41 +317,30 @@ body::-webkit-scrollbar {
               transform var(--dur-entrance) var(--ease-out);
   transition-delay: var(--reveal-delay, 0ms);
   will-change: opacity, transform;
+  /* Safety fallback: force visible after 10s if observer never fires */
+  animation: reveal-safety 0.01s 10s forwards;
 }
-
 .js.page-ready .reveal.is-revealed {
   opacity: 1;
   transform: none;
-  /* Remove will-change after animation completes to free GPU layers.
-     1s delay = enough for transition (480ms) + stagger to finish. */
   transition-delay: 0ms;
+  animation: none;
 }
-
-/* Safety fallback: force visible after 30s (only if observer truly fails) */
 @keyframes reveal-safety {
   to { opacity: 1; transform: none; }
 }
-.js.page-ready .reveal {
-  animation: reveal-safety 0.01s 30s forwards;
-}
-.js.page-ready .reveal.is-revealed {
-  animation: none;
-}
-
-/* Reduced motion: skip transforms, keep opacity only */
 @media (prefers-reduced-motion: reduce) {
   .js.page-ready .reveal {
     opacity: 0;
     transform: none;
     transition: opacity var(--dur-entrance) var(--ease-out);
+    animation: none;
   }
 }
 
 /* ═══ WORD-BY-WORD TEXT REVEAL ═══
-   Splits text into word spans that stagger in on scroll.
-   Gated behind .page-ready — animations start AFTER loading screen fades.
-   600ms expo-out per word, 80ms stagger (var(--stagger)).
-   Safety: 30s fallback — only fires if IntersectionObserver truly fails. */
+   Uses the same shared observer pool. Each word gets --word-index for
+   60ms stagger via CSS calc(). 10s safety fallback. */
 .js.page-ready .reveal-words .word {
   display: inline-block;
   opacity: 0;
@@ -361,22 +349,16 @@ body::-webkit-scrollbar {
               transform var(--dur-entrance) var(--ease-out);
   transition-delay: calc(var(--word-index, 0) * var(--stagger));
   will-change: opacity, transform;
+  animation: word-safety 0.01s 10s forwards;
 }
 .js.page-ready .reveal-words.is-revealed .word {
   opacity: 1;
   transform: none;
+  animation: none;
 }
-/* Safety fallback: 30s — only fires if IntersectionObserver truly fails */
 @keyframes word-safety {
   to { opacity: 1; transform: none; }
 }
-.js.page-ready .reveal-words .word {
-  animation: word-safety 0.01s 30s forwards;
-}
-.js.page-ready .reveal-words.is-revealed .word {
-  animation: none;
-}
-/* Reduced motion: always visible */
 @media (prefers-reduced-motion: reduce) {
   .js.page-ready .reveal-words .word {
     opacity: 1;

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type RefObject } from "react";
 import { usePageReady } from "@/lib/pageReady";
+import { register } from "@/lib/revealPool";
 
 /**
  * useWordReveal — splits text content into word spans for staggered reveal.
@@ -11,20 +12,14 @@ import { usePageReady } from "@/lib/pageReady";
  * It walks the DOM tree, finds text nodes, and wraps each word in a
  * <span class="word"> with a --word-index CSS variable for stagger.
  *
+ * PERFORMANCE:
+ * Uses the SHARED IntersectionObserver pool (revealPool.ts) — one observer
+ * for all reveal elements, not one per heading.
+ *
  * SAFETY DESIGN:
- * - Never hides content in JS. The hidden state is CSS-only (.js .reveal-words .word).
+ * - Never hides content in JS. The hidden state is CSS-only.
  * - Progressive enhancement: only splits when <html> has .js class.
- * - Uses IntersectionObserver to add .is-revealed (same as useReveal).
  * - No-JS: text renders normally (no splitting, always visible).
- *
- * Usage:
- *   const ref = useWordReveal<HTMLHeadingElement>();
- *   <h2 ref={ref} className="reveal-words ...">
- *     The Four Pillars of <span className="text-gold">Organizational Excellence</span>
- *   </h2>
- *
- * The hook splits "The", "Four", "Pillars", "of", "Organizational", "Excellence"
- * into individual word spans, preserving the gold color on "Organizational Excellence".
  */
 
 function prefersReducedMotion(): boolean {
@@ -32,15 +27,12 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-export function useWordReveal<T extends HTMLElement = HTMLElement>(
-  options: { threshold?: number; rootMargin?: string } = {}
-): RefObject<T> {
+export function useWordReveal<T extends HTMLElement = HTMLElement>(): RefObject<T> {
   const ref = useRef<T>(null);
   const pageReady = usePageReady();
 
   useEffect(() => {
     // Wait for pageReady (loading screen done) before splitting + observing.
-    // This prevents above-the-fold word reveals from firing behind the loading screen.
     if (!pageReady) return;
 
     const el = ref.current;
@@ -48,8 +40,6 @@ export function useWordReveal<T extends HTMLElement = HTMLElement>(
 
     // Only split when JS is enabled (progressive enhancement)
     if (!document.documentElement.classList.contains("js")) return;
-
-    const { threshold = 0.15, rootMargin = "0px 0px -10% 0px" } = options;
 
     // Walk the DOM tree and split text nodes into word spans.
     // Preserves nested elements (spans, etc.) — only splits text content.
@@ -106,26 +96,14 @@ export function useWordReveal<T extends HTMLElement = HTMLElement>(
       return;
     }
 
-    // IntersectionObserver to add .is-revealed when in view
+    // Fallback: if IntersectionObserver isn't supported, reveal immediately.
     if (typeof IntersectionObserver === "undefined") {
       el.classList.add("is-revealed");
       return;
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-revealed");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold, rootMargin }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
+    // Register with the shared observer pool (1 observer for all).
+    return register(el, () => el.classList.add("is-revealed"));
   }, [pageReady]);
 
   return ref;

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type RefObject } from "react";
 import { usePageReady } from "@/lib/pageReady";
+import { register } from "@/lib/revealPool";
 
 /**
  * useReveal — the site-wide scroll-reveal primitive.
@@ -10,42 +11,26 @@ import { usePageReady } from "@/lib/pageReady";
  * This hook NEVER sets opacity:0 or any hidden state in JavaScript.
  * It only ADDS the `.is-revealed` class when an element enters the viewport.
  * The initial hidden state is controlled purely by CSS (`.reveal` class),
- * which is gated behind a `.js` class on <html> (added before paint by an
- * inline script in layout.tsx). This means:
- *   - No JS = no `.js` class = `.reveal` has no hidden state = always visible
- *   - JS runs but IntersectionObserver unavailable = CSS 3s safety fallback
- *   - JS runs + IntersectionObserver works = smooth reveal on scroll
- *   - prefers-reduced-motion = CSS skips transforms, keeps opacity only
+ * which is gated behind a `.js` + `.page-ready` class on <html>.
+ *
+ * PERFORMANCE:
+ * Uses a SHARED IntersectionObserver (revealPool.ts) — one observer for
+ * ALL reveal elements on the page, not one per element. Previously each
+ * useReveal call created its own observer (50+ instances).
  *
  * SPEC:
- * - opacity 0→1 + translateY(24px→0)
- * - Duration: 600ms cubic-bezier(0.16, 1, 0.3, 1) [var(--dur-entrance) var(--ease-out)]
- * - Stagger: 80ms between child elements [var(--stagger)]
+ * - opacity 0→1 + translateY(16px→0) [var(--reveal-distance)]
+ * - Duration: 480ms cubic-bezier(0.16, 1, 0.3, 1) [var(--dur-entrance)]
+ * - Stagger: 60ms between child elements [var(--stagger)]
  * - IntersectionObserver threshold: 0.15
  * - prefers-reduced-motion: skip transforms, keep opacity only
- *
- * Usage (single element):
- *   const ref = useReveal<HTMLDivElement>();
- *   <div ref={ref} className="reveal">…</div>
- *
- * Usage (staggered children):
- *   const ref = useReveal<HTMLDivElement>({ stagger: true });
- *   <div ref={ref}>
- *     <div className="reveal" data-reveal>…</div>
- *     <div className="reveal" data-reveal>…</div>
- *   </div>
- *   (hook sets --reveal-delay CSS var on each [data-reveal] child automatically)
  */
 
 export interface RevealOptions {
-  /** Enable per-child stagger (80ms). Children must have `data-reveal` attribute. */
+  /** Enable per-child stagger (60ms). Children must have `data-reveal` attribute. */
   stagger?: boolean;
-  /** Custom stagger interval in ms (default 80). */
+  /** Custom stagger interval in ms (default 60). */
   staggerInterval?: number;
-  /** Viewport threshold for triggering (default 0.15 = 15% visible). */
-  threshold?: number;
-  /** Root margin (default "0px 0px -10% 0px" = trigger slightly before fully in view). */
-  rootMargin?: string;
 }
 
 function prefersReducedMotion(): boolean {
@@ -58,23 +43,16 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
 ): RefObject<T> {
   const ref = useRef<T>(null);
   const pageReady = usePageReady();
+  const { stagger = false, staggerInterval = 60 } = options;
 
   useEffect(() => {
     // Wait for pageReady (loading screen done) before observing.
-    // This prevents above-the-fold reveals from firing behind the loading screen.
     if (!pageReady) return;
 
     const el = ref.current;
     if (!el) return;
 
-    const {
-      stagger = false,
-      staggerInterval = 80,
-      threshold = 0.15,
-      rootMargin = "0px 0px -10% 0px",
-    } = options;
-
-    // Reduced motion: reveal everything immediately, no observer.
+    // Reduced motion: reveal everything immediately.
     if (prefersReducedMotion()) {
       el.classList.add("is-revealed");
       if (stagger) {
@@ -106,22 +84,14 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
       return;
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-revealed");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold, rootMargin }
-    );
+    // Register all targets with the shared observer pool (1 observer for all).
+    const cleanups: (() => void)[] = [];
+    targets.forEach((t) => {
+      cleanups.push(register(t, () => t.classList.add("is-revealed")));
+    });
 
-    targets.forEach((t) => observer.observe(t));
-
-    return () => observer.disconnect();
-  }, [pageReady]);
+    return () => cleanups.forEach((cleanup) => cleanup());
+  }, [pageReady, stagger, staggerInterval]);
 
   return ref;
 }
