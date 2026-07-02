@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
-import { useReveal } from "@/lib/useReveal";
+import { useGsapReveal } from "@/lib/useGsapReveal";
+import { useGsapCards } from "@/lib/useGsapCards";
 import {
   Compass,
   Briefcase,
@@ -68,14 +69,16 @@ export default function FounderFrictionSimulator() {
   const sectionRef = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(false);
 
-  // ── Scroll-reveal refs (one useReveal call per reveal group) ──
-  const subtextRef = useReveal<HTMLParagraphElement>();
-  const toggleRef = useReveal<HTMLDivElement>();
-  const desktopCardsRef = useReveal<HTMLDivElement>({ stagger: true });
-  const desktopCenterNodeRef = useReveal<HTMLDivElement>();
-  const mobileCenterNodeRef = useReveal<HTMLDivElement>();
-  const mobileCardsRef = useReveal<HTMLDivElement>({ stagger: true });
-  const ctaRef = useReveal<HTMLDivElement>();
+  // ── GSAP ScrollTrigger reveals ──
+  const subtextRef = useGsapReveal<HTMLParagraphElement>("fade", { duration: 0.6 });
+  const toggleRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.15, duration: 0.6 });
+  // Desktop outcome cards are absolutely positioned (corners) — use
+  // cardSelector to target only the cards (skip SVG + center node).
+  const desktopCardsRef = useGsapCards<HTMLDivElement>({ cardSelector: ".card-premium-dark" });
+  const desktopCenterNodeRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.2, duration: 0.8 });
+  const mobileCenterNodeRef = useGsapReveal<HTMLDivElement>("fade", { duration: 0.6 });
+  const mobileCardsRef = useGsapCards<HTMLDivElement>();
+  const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.3, duration: 0.6 });
 
   // Pause SVG animateMotion + CSS animations when section is off-screen
   useEffect(() => {
@@ -196,7 +199,7 @@ export default function FounderFrictionSimulator() {
           {/* Subtext */}
           <p
             ref={subtextRef}
-            className="reveal text-white/55 font-sans text-sm sm:text-base max-w-[520px] leading-relaxed"
+            className="text-white/55 font-sans text-sm sm:text-base max-w-[520px] leading-relaxed"
             style={{ letterSpacing: "0.02em" }}
           >
             Toggle between states to see exactly what AVYSTRA engineers.
@@ -206,7 +209,7 @@ export default function FounderFrictionSimulator() {
         {/* ─── PREMIUM TOGGLE — red/green active pill ─── */}
         <div
           ref={toggleRef}
-          className="reveal relative mx-auto mb-14 sm:mb-16 flex items-center h-12 w-full max-w-[380px] rounded-full p-1 backdrop-blur-md"
+          className="relative mx-auto mb-14 sm:mb-16 flex items-center h-12 w-full max-w-[380px] rounded-full p-1 backdrop-blur-md"
           style={{
             background: "rgba(255,255,255,0.05)",
             border: "1px solid rgba(255,255,255,0.14)",
@@ -322,8 +325,7 @@ export default function FounderFrictionSimulator() {
             return (
               <div
                 key={outcome.id}
-                data-reveal
-                className="reveal card-premium-dark absolute w-[200px] md:w-[220px] lg:w-[240px] rounded-2xl p-5 sm:p-6 z-10 overflow-hidden"
+                className="card-premium-dark absolute w-[200px] md:w-[220px] lg:w-[240px] rounded-2xl p-5 sm:p-6 z-10 overflow-hidden"
                 style={{
                   ...outcome.desktopStyle,
                   background: "rgba(255,255,255,0.07)",
@@ -413,7 +415,7 @@ export default function FounderFrictionSimulator() {
           })}
 
           {/* ─── CENTER NODE — founder portrait crossfade, accent ring, label ─── */}
-          <div ref={desktopCenterNodeRef} className="reveal absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center">
+          <div ref={desktopCenterNodeRef} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center">
             <div
               className="relative w-[150px] h-[150px] rounded-full overflow-hidden flex flex-col items-center justify-center text-center transition-all duration-700 ease-out-expo"
               style={{
@@ -452,7 +454,7 @@ export default function FounderFrictionSimulator() {
         {/* ═══ MOBILE STACKED VIEW (<768px) ═══ */}
         <div className="md:hidden flex flex-col items-center">
           {/* Center node — wrapped for scroll reveal (label BELOW circle) */}
-          <div ref={mobileCenterNodeRef} className="reveal flex flex-col items-center">
+          <div ref={mobileCenterNodeRef} className="flex flex-col items-center">
             {/* Center node circle */}
             <div
               className="relative w-[130px] h-[130px] rounded-full overflow-hidden transition-all duration-700 ease-out-expo"
@@ -495,8 +497,7 @@ export default function FounderFrictionSimulator() {
               return (
                 <div
                   key={outcome.id}
-                  data-reveal
-                  className="reveal card-premium-dark rounded-2xl p-5 sm:p-6"
+                  className="card-premium-dark rounded-2xl p-5 sm:p-6"
                   style={{
                     background: "rgba(255,255,255,0.07)",
                     border: "1px solid rgba(255,255,255,0.12)",
@@ -578,7 +579,7 @@ export default function FounderFrictionSimulator() {
         {/* ─── BOTTOM CTA STRIP ─── */}
         <div
           ref={ctaRef}
-          className="reveal mt-14 sm:mt-16 w-full max-w-[1000px] mx-auto rounded-2xl p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left"
+          className="mt-14 sm:mt-16 w-full max-w-[1000px] mx-auto rounded-2xl p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left"
           style={{
             background: "rgba(255,255,255,0.05)",
             border: "1px solid rgba(var(--gold-rgb), 0.18)",

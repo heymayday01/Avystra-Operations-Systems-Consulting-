@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "motion/react";
 import {
   Clock,
   TrendingUp,
@@ -9,7 +8,8 @@ import {
   PenLine,
   Calendar,
 } from "lucide-react";
-import { EASE } from "@/lib/motion";
+import { useGsapReveal } from "@/lib/useGsapReveal";
+import { useGsapCards } from "@/lib/useGsapCards";
 
 const penalties = [
   {
@@ -40,6 +40,10 @@ const penalties = [
 ];
 
 export default function CumulativePenalty() {
+  const headlineRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.1, duration: 0.8 });
+  const penaltiesRef = useGsapCards<HTMLDivElement>();
+  const bottomLineRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.5, duration: 0.75 });
+
   return (
     <section
       id="penalty"
@@ -77,7 +81,7 @@ export default function CumulativePenalty() {
               }}
             />
 
-            <div className="relative z-10">
+            <div ref={headlineRef} className="relative z-10">
               {/* Calendar icon */}
               <div className="mb-6">
                 <div className="w-12 h-12 rounded-xl bg-gold/15 border border-gold/30 flex items-center justify-center">
@@ -106,20 +110,12 @@ export default function CumulativePenalty() {
 
           {/* RIGHT PANEL — White with penalty list */}
           <div className="lg:col-span-3 bg-white p-6 sm:p-8 lg:p-10 flex flex-col justify-center">
-            <div className="space-y-3 sm:space-y-4">
+            <div ref={penaltiesRef} className="space-y-3 sm:space-y-4">
               {penalties.map((item, index) => {
                 const Icon = item.icon;
                 return (
-                  <motion.div
+                  <div
                     key={index}
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{
-                      duration: 0.5,
-                      delay: index * 0.1,
-                      ease: EASE,
-                    }}
                     className="flex items-center gap-4 sm:gap-5 p-3 sm:p-4 rounded-2xl hover:bg-slate-50 transition-colors duration-300 group"
                   >
                     {/* Icon */}
@@ -139,17 +135,14 @@ export default function CumulativePenalty() {
                         {item.suffix}
                       </span>
                     </div>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
 
             {/* Bottom emphasis line */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
+            <div
+              ref={bottomLineRef}
               className="mt-6 pt-5 border-t border-slate-100"
             >
               <p className="font-serif italic text-navy-deep/70 text-sm sm:text-base leading-relaxed text-center">
@@ -157,7 +150,7 @@ export default function CumulativePenalty() {
                 <br className="hidden sm:block" /> The question is whether you
                 know how much.
               </p>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

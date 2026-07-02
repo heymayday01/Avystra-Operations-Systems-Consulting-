@@ -1,8 +1,8 @@
 "use client";
 
 import { Quote, Star, MessageSquare } from "lucide-react";
-import TextReveal from "./TextReveal";
-import { useReveal } from "@/lib/useReveal";
+import { useGsapReveal } from "@/lib/useGsapReveal";
+import { useGsapCards } from "@/lib/useGsapCards";
 
 interface Testimonial {
   id: string;
@@ -14,8 +14,11 @@ interface Testimonial {
 }
 
 export default function TestimonialsSection() {
-  const headerRef = useReveal<HTMLDivElement>();
-  const gridRef = useReveal<HTMLDivElement>({ stagger: true });
+  const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", {
+    duration: 0.6,
+  });
+  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
+  const gridRef = useGsapCards<HTMLDivElement>();
 
   const testimonials: Testimonial[] = [
     {
@@ -55,11 +58,13 @@ export default function TestimonialsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 select-none">
         {/* Section Heading Container */}
         <div
-          ref={headerRef}
-          className="reveal flex flex-col items-center text-center max-w-3xl mx-auto mb-6 md:mb-8"
+          className="flex flex-col items-center text-center max-w-3xl mx-auto mb-6 md:mb-8"
         >
           {/* Aesthetic Capsule Badge */}
-          <div className="border border-gold/20 bg-gradient-to-br from-white to-slate-50 px-4 py-1.5 rounded-full inline-flex items-center gap-2.5 mb-3 shadow-sm">
+          <div
+            ref={eyebrowRef}
+            className="border border-gold/20 bg-gradient-to-br from-white to-slate-50 px-4 py-1.5 rounded-full inline-flex items-center gap-2.5 mb-3 shadow-sm"
+          >
             <MessageSquare className="w-3.5 h-3.5 text-gold" />
             <span className="text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase">
               Client Success Stories
@@ -67,23 +72,13 @@ export default function TestimonialsSection() {
           </div>
 
           {/* Heading */}
-          <h2 className="font-display font-medium text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-6 inline-flex flex-wrap justify-center gap-x-2">
-            <TextReveal
-              text="Trusted by "
-              delay={0.2}
-              words
-            />
-            <TextReveal
-              text="Industry"
-              delay={0.4}
-              words
-              className="font-serif italic font-light text-gold"
-            />
-            <TextReveal
-              text="Leaders"
-              delay={0.5}
-              words
-            />
+          <h2
+            ref={headingRef}
+            className="font-display font-medium text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-6 inline-flex flex-wrap justify-center gap-x-2"
+          >
+            Trusted by{" "}
+            <span className="font-serif italic font-light text-gold">Industry</span>{" "}
+            Leaders
           </h2>
         </div>
 
@@ -95,8 +90,7 @@ export default function TestimonialsSection() {
           {testimonials.map((testimonial) => (
             <div
               key={testimonial.id}
-              className="reveal card-premium group relative bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 sm:p-8 lg:p-10 flex flex-col justify-between overflow-hidden"
-              data-reveal
+              className="card-premium group relative bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 sm:p-8 lg:p-10 flex flex-col justify-between overflow-hidden"
             >
               {/* Shimmer sweep on hover */}
               <div className="absolute inset-0 bg-gradient-to-br from-gold/0 via-gold/5 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />

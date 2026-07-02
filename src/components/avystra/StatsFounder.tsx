@@ -15,8 +15,8 @@ import {
 import { UnderlineSquiggle } from "./DoodleWidgets";
 import CountUp from "./CountUp";
 import CumulativePenalty from "./CumulativePenalty";
-import { useReveal } from "@/lib/useReveal";
-import { useWordReveal } from "@/lib/useWordReveal";
+import { useGsapReveal } from "@/lib/useGsapReveal";
+import { useGsapCards } from "@/lib/useGsapCards";
 
 interface StatItemProps {
   id: string;
@@ -34,12 +34,14 @@ interface StatItemProps {
 export default function StatsFounder() {
   const [photoFailed, setPhotoFailed] = useState(false);
 
-  // Scroll reveal refs (single call per reveal group, never inside .map()).
-  const headerRef = useReveal<HTMLDivElement>();
-  const headingRef = useWordReveal<HTMLHeadingElement>();
-  const statsGridRef = useReveal<HTMLDivElement>({ stagger: true });
-  const portraitRef = useReveal<HTMLDivElement>();
-  const credentialsGridRef = useReveal<HTMLDivElement>({ stagger: true });
+  // GSAP ScrollTrigger reveals (single call per reveal group, never inside .map()).
+  const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { duration: 0.6 });
+  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
+  const subtextRef = useGsapReveal<HTMLParagraphElement>("fade", { delay: 0.2, duration: 0.75 });
+  const statsGridRef = useGsapCards<HTMLDivElement>();
+  const portraitRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.2, duration: 0.8 });
+  const credentialsLabelRef = useGsapReveal<HTMLParagraphElement>("fade", { delay: 0.1 });
+  const credentialsGridRef = useGsapCards<HTMLDivElement>();
 
   // CountUp (inside StatCard) uses motion/react useInView as a counter
   // trigger (not a reveal animation) — left untouched.
@@ -147,9 +149,9 @@ export default function StatsFounder() {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* SECTION 1: STATS */}
-        <div ref={headerRef} className="reveal mb-8 text-center">
+        <div className="mb-8 text-center">
           <div className="mb-8">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/60 border border-slate-200/50 rounded-full mb-3 shadow-sm">
+            <div ref={eyebrowRef} className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/60 border border-slate-200/50 rounded-full mb-3 shadow-sm">
               <AlertTriangle className="w-3.5 h-3.5 text-danger" />
               <span className="text-[10.5px] text-danger font-mono tracking-widest font-bold uppercase">
                 The Numbers Don&apos;t Lie
@@ -157,7 +159,7 @@ export default function StatsFounder() {
             </div>
             <h2
               ref={headingRef}
-              className="reveal-words font-display font-bold text-3xl sm:text-4xl text-danger tracking-tight mb-3 leading-[1.2]"
+              className="font-display font-bold text-3xl sm:text-4xl text-danger tracking-tight mb-3 leading-[1.2]"
             >
               India is Bleeding{" "}
               <span className="font-serif italic font-light relative inline-block">
@@ -169,7 +171,7 @@ export default function StatsFounder() {
                 />
               </span>
             </h2>
-            <p className="text-slate-600 font-sans text-xs sm:text-sm max-w-lg mx-auto font-medium leading-relaxed">
+            <p ref={subtextRef} className="text-slate-600 font-sans text-xs sm:text-sm max-w-lg mx-auto font-medium leading-relaxed">
               The cost of inaction is staggering. These are not opinions — they are research-backed realities every leader must confront.
             </p>
           </div>
@@ -180,7 +182,7 @@ export default function StatsFounder() {
             className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-10"
           >
             {stats.map((stat) => (
-              <div key={stat.id} className="reveal h-full" data-reveal>
+              <div key={stat.id} className="h-full">
                 <StatCard stat={stat} />
               </div>
             ))}
@@ -200,7 +202,7 @@ export default function StatsFounder() {
             {/* Founder Portrait Column — premium framed card */}
             <div
               ref={portraitRef}
-              className="reveal lg:col-span-5 flex justify-center"
+              className="lg:col-span-5 flex justify-center"
             >
               <div className="relative w-full max-w-[280px] sm:max-w-[320px]">
                 {/* Decorative gold glow behind portrait */}
@@ -311,7 +313,7 @@ export default function StatsFounder() {
 
           {/* Credentials Block */}
           <div className="mt-10 pt-6 border-t border-slate-100 text-left">
-            <p className="text-[11.5px] font-mono font-bold text-gold uppercase tracking-widest text-center mb-6">
+            <p ref={credentialsLabelRef} className="text-[11.5px] font-mono font-bold text-gold uppercase tracking-widest text-center mb-6">
               — A DECADE OF BUILDING WHAT WORKS —
             </p>
             <div
@@ -321,8 +323,7 @@ export default function StatsFounder() {
               {credentials.map((cred, i) => (
                 <div
                   key={i}
-                  className="reveal card-premium p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-white to-slate-50 shadow-sm flex flex-col"
-                  data-reveal
+                  className="card-premium p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-white to-slate-50 shadow-sm flex flex-col"
                 >
                   {/* Icon */}
                   <div className="p-2 bg-gold/10 rounded-xl w-fit mb-3 shrink-0">

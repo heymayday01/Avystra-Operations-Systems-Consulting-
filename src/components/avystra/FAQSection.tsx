@@ -3,8 +3,8 @@
 import { useState, useCallback } from "react";
 import { HelpCircle, ChevronDown } from "lucide-react";
 import { getLenis } from "@/lib/scroll";
-import { useReveal } from "@/lib/useReveal";
-import { useWordReveal } from "@/lib/useWordReveal";
+import { useGsapReveal } from "@/lib/useGsapReveal";
+import { useGsapCards } from "@/lib/useGsapCards";
 
 interface FAQItem {
   question: string;
@@ -43,9 +43,9 @@ const faqData: FAQItem[] = [
 export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const headerRef = useReveal<HTMLDivElement>();
-  const headingRef = useWordReveal<HTMLHeadingElement>();
-  const accordionsRef = useReveal<HTMLDivElement>();
+  const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { duration: 0.6 });
+  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
+  const accordionsRef = useGsapCards<HTMLDivElement>();
 
   const toggleIndex = useCallback((index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index));
@@ -73,11 +73,13 @@ export default function FAQSection() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 select-none">
         {/* Section Header */}
         <div
-          ref={headerRef}
-          className="reveal flex flex-col items-center text-center max-w-3xl mx-auto mb-6 md:mb-8"
+          className="flex flex-col items-center text-center max-w-3xl mx-auto mb-6 md:mb-8"
         >
           {/* Aesthetic Badge */}
-          <div className="border border-gold/20 bg-gradient-to-br from-white to-slate-50 px-4 py-1.5 rounded-full inline-flex items-center gap-2 mb-3 shadow-sm">
+          <div
+            ref={eyebrowRef}
+            className="border border-gold/20 bg-gradient-to-br from-white to-slate-50 px-4 py-1.5 rounded-full inline-flex items-center gap-2 mb-3 shadow-sm"
+          >
             <HelpCircle className="w-3.5 h-3.5 text-gold" />
             <span className="text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase">
               Common Questions
@@ -87,7 +89,7 @@ export default function FAQSection() {
           {/* Heading */}
           <h2
             ref={headingRef}
-            className="reveal-words font-display font-medium text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-6"
+            className="font-display font-medium text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-6"
           >
             Frequently Asked{" "}
             <span className="font-serif italic font-light text-gold">
@@ -105,7 +107,7 @@ export default function FAQSection() {
         {/* Accordions Containment Block */}
         <div
           ref={accordionsRef}
-          className="reveal bg-gradient-to-br from-white to-slate-50 border border-slate-100 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-8 lg:p-10 divide-y divide-slate-300/20"
+          className="bg-gradient-to-br from-white to-slate-50 border border-slate-100 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-8 lg:p-10 divide-y divide-slate-300/20"
         >
           {faqData.map((faq, index) => {
             const isOpen = openIndex === index;

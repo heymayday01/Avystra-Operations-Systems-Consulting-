@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useCallback, useState, useSyncExternalStore }
 import { ArrowRight, UserPlus, TrendingUp, Building2, Banknote, ClipboardList } from "lucide-react";
 import { UnderlineSquiggle } from "./DoodleWidgets";
 import { smoothScrollTo } from "@/lib/scroll";
-import { useParallax } from "@/lib/useParallax";
+import { useGsapReveal } from "@/lib/useGsapReveal";
 
 // Subscribe to prefers-reduced-motion without setState-in-effect
 const reducedMotionSubscribe = (callback: () => void) => {
@@ -19,12 +19,15 @@ const reducedMotionGetServerSnapshot = () => false;
 export default function Hero() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  // Subtle scroll-linked parallax for layered depth (Apple/Stripe-style).
-  // Applied ONLY to the h1 heading — it has no CSS animation on itself
-  // (only on child spans), so GSAP's transform composes with the children's
-  // CSS animations. Elements with CSS animations (hero-fade-in) on themselves
-  // can't use GSAP parallax (CSS animation overrides inline transform).
-  const headingParallax = useParallax<HTMLHeadingElement>({ distance: 40 });
+  // GSAP ScrollTrigger reveals for hero entrance (eyebrow / chips / card /
+  // CTAs / trust / marquee). The H1 heading stays on CSS animations
+  // (hero-line-1/2/3) per design — GSAP is not applied to it.
+  const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0, duration: 0.6 });
+  const chipsRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.3, duration: 0.6 });
+  const cardRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.5, duration: 0.8 });
+  const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.6, duration: 0.6 });
+  const trustRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.7, duration: 0.6 });
+  const marqueeRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.8, duration: 0.6 });
 
   const reducedMotion = useSyncExternalStore(
     reducedMotionSubscribe,
@@ -78,7 +81,7 @@ export default function Hero() {
         <div className="flex flex-col items-center text-center w-full">
 
           {/* Eyebrow badge — refined, subtle */}
-          <div className="mb-10 sm:mb-12 hero-fade-in" style={{ animationDelay: "0s" }}>
+          <div ref={eyebrowRef} className="mb-10 sm:mb-12">
             <span className="hero-badge-premium inline-flex items-center gap-2.5 rounded-full border border-gold/25 bg-white/50 backdrop-blur-sm px-5 py-2">
               <span className="relative flex h-1.5 w-1.5">
                 {!reducedMotion && (
@@ -95,7 +98,6 @@ export default function Hero() {
           {/* Main heading — refined typography with generous breathing room.
               Solid gold color (no background-clip) prevents iOS question mark clipping. */}
           <h1
-            ref={headingParallax}
             className="font-display font-bold text-[clamp(2.25rem,7vw,5rem)] tracking-[-0.04em] text-navy-deep select-none heading-balance mb-12 sm:mb-14"
             style={{ lineHeight: 1.15 }}
           >
@@ -114,7 +116,7 @@ export default function Hero() {
           </h1>
 
           {/* Feature chips — refined spacing + smooth hover */}
-          <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3 mb-12 sm:mb-14 max-w-3xl mx-auto">
+          <div ref={chipsRef} className="flex flex-wrap justify-center gap-2.5 sm:gap-3 mb-12 sm:mb-14 max-w-3xl mx-auto">
             {[
               { label: "Hired experienced people", Icon: UserPlus },
               { label: "Promoted managers", Icon: TrendingUp },
@@ -124,8 +126,7 @@ export default function Hero() {
             ].map(({ label, Icon }, idx) => (
               <div
                 key={idx}
-                className="hero-chip flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200/70 bg-white/50 hover:border-gold/35 hover:bg-white/80 transition-[border-color,background-color] duration-500 ease-out-expo"
-                style={{ animationDelay: `${0.5 + idx * 0.08}s` }}
+                className="flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200/70 bg-white/50 hover:border-gold/35 hover:bg-white/80 transition-[border-color,background-color] duration-500 ease-out-expo"
               >
                 <Icon className="w-3.5 h-3.5 text-gold/60 shrink-0" />
                 <span className="text-navy-deep/70 font-sans text-[11px] sm:text-[12px] font-medium whitespace-nowrap">
@@ -137,8 +138,8 @@ export default function Hero() {
 
           {/* Bridging content block — cleaner, less dense, better line-height */}
           <div
+            ref={cardRef}
             className="hero-card-premium mb-12 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-8 py-8 sm:px-12 sm:py-10 text-center"
-            style={{ animationDelay: "0.5s" }}
           >
             <p className="text-navy-deep font-sans text-lg sm:text-xl font-semibold leading-relaxed mb-5" style={{ lineHeight: 1.5 }}>
               So why does it still feel like the company slows down whenever you step away?
@@ -159,8 +160,8 @@ export default function Hero() {
 
           {/* CTAs — smooth premium hover */}
           <div
-            className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 mb-14 sm:mb-16 hero-fade-in"
-            style={{ animationDelay: "0.7s" }}
+            ref={ctaRef}
+            className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 mb-14 sm:mb-16"
           >
             <button
               onClick={handleScrollToForm}
@@ -184,8 +185,8 @@ export default function Hero() {
 
           {/* Trust indicators — refined, subtle */}
           <div
-            className="flex flex-wrap justify-center gap-x-10 sm:gap-x-14 gap-y-3 pt-8 border-t border-slate-200/50 w-full max-w-2xl hero-fade-in"
-            style={{ animationDelay: "0.9s" }}
+            ref={trustRef}
+            className="flex flex-wrap justify-center gap-x-10 sm:gap-x-14 gap-y-3 pt-8 border-t border-slate-200/50 w-full max-w-2xl"
           >
             {[
               "Leadership Development",
@@ -205,7 +206,7 @@ export default function Hero() {
       </div>
 
       {/* Marquee Ticker */}
-      <div className="mt-12 w-full border-y border-navy-deep/10 bg-navy-deep py-4 flex items-center relative z-10 overflow-hidden hero-fade-in" style={{ animationDelay: "1.0s" }}>
+      <div ref={marqueeRef} className="mt-12 w-full border-y border-navy-deep/10 bg-navy-deep py-4 flex items-center relative z-10 overflow-hidden">
         <div
           className="animate-marquee-slow flex whitespace-nowrap gap-x-24 select-none"
           style={{

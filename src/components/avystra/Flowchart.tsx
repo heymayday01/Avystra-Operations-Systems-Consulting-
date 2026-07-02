@@ -15,8 +15,8 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { DoodleSparkle, UnderlineSquiggle } from "./DoodleWidgets";
-import { useReveal } from "@/lib/useReveal";
-import { useWordReveal } from "@/lib/useWordReveal";
+import { useGsapReveal } from "@/lib/useGsapReveal";
+import { useGsapCards } from "@/lib/useGsapCards";
 import { EASE } from "@/lib/motion";
 
 interface StepData {
@@ -36,10 +36,19 @@ export default function Flowchart() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
 
-  const headerRef = useReveal<HTMLDivElement>();
-  const headingRef = useWordReveal<HTMLHeadingElement>();
-  const gridRef = useReveal<HTMLDivElement>({ stagger: true });
-  const bannerRef = useReveal<HTMLDivElement>();
+  const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", {
+    duration: 0.6,
+  });
+  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
+  const descriptionRef = useGsapReveal<HTMLParagraphElement>("fade", {
+    delay: 0.2,
+    duration: 0.75,
+  });
+  const gridRef = useGsapCards<HTMLDivElement>({ cardSelector: ".card-premium" });
+  const bannerRef = useGsapReveal<HTMLDivElement>("fade", {
+    delay: 0.3,
+    duration: 0.6,
+  });
 
   // The flowing pulses and pulse ring/dot remain as motion.div since they
   // are decorative infinite loops now gated behind whileInView (pause when
@@ -154,10 +163,10 @@ export default function Flowchart() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         {/* Section Header */}
         <div
-          ref={headerRef}
-          className="reveal text-center max-w-2xl mx-auto mb-8 sm:mb-10"
+          className="text-center max-w-2xl mx-auto mb-8 sm:mb-10"
         >
           <div
+            ref={eyebrowRef}
             className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/60 border border-slate-200/50 rounded-full mb-3.5 relative shadow-sm"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
@@ -169,7 +178,7 @@ export default function Flowchart() {
 
           <h2
             ref={headingRef}
-            className="reveal-words font-display font-bold text-3xl sm:text-5xl text-navy-deep tracking-tight leading-tight uppercase"
+            className="font-display font-bold text-3xl sm:text-5xl text-navy-deep tracking-tight leading-tight uppercase"
           >
             Our Four-Step{" "}
             <span className="font-serif italic font-light text-gold relative inline-block px-1">
@@ -182,6 +191,7 @@ export default function Flowchart() {
             </span>
           </h2>
           <p
+            ref={descriptionRef}
             className="text-slate-500 text-xs sm:text-sm font-sans font-light mt-4"
           >
             We don&apos;t run isolated motivational sessions. We design, deliver,
@@ -225,8 +235,7 @@ export default function Flowchart() {
                 key={step.step}
                 onMouseEnter={() => setHoveredCard(idx)}
                 onMouseLeave={() => setHoveredCard(null)}
-                data-reveal
-                className="reveal card-premium group relative flex flex-col justify-between bg-gradient-to-br from-white to-slate-50 border border-slate-100 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-6 transition-[box-shadow,border-color] duration-500 ease-out-expo z-10 overflow-hidden"
+                className="card-premium group relative flex flex-col justify-between bg-gradient-to-br from-white to-slate-50 border border-slate-100 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-6 transition-[box-shadow,border-color] duration-500 ease-out-expo z-10 overflow-hidden"
               >
                 {/* Gold gradient sweep on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/0 via-gold/5 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -348,7 +357,7 @@ export default function Flowchart() {
         {/* Double Banner Message */}
         <div
           ref={bannerRef}
-          className="reveal mt-6 bg-navy-deep border border-gold/30 rounded-[2rem] overflow-hidden shadow-2xl relative"
+          className="mt-6 bg-navy-deep border border-gold/30 rounded-[2rem] overflow-hidden shadow-2xl relative"
         >
           <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
 

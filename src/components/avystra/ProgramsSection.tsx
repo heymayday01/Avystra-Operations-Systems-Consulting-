@@ -4,8 +4,8 @@ import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import { BookOpen, Calendar, Users, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { EASE } from "@/lib/motion";
-import TextReveal from "./TextReveal";
-import { useReveal } from "@/lib/useReveal";
+import { useGsapReveal } from "@/lib/useGsapReveal";
+import { useGsapCards } from "@/lib/useGsapCards";
 
 interface Program {
   id: string;
@@ -106,9 +106,19 @@ export default function ProgramsSection() {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  const headingRef = useReveal<HTMLDivElement>();
-  const tabsRef = useReveal<HTMLDivElement>();
-  const gridRef = useReveal<HTMLDivElement>({ stagger: true });
+  const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", {
+    duration: 0.6,
+  });
+  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
+  const descriptionRef = useGsapReveal<HTMLParagraphElement>("fade", {
+    delay: 0.2,
+    duration: 0.75,
+  });
+  const tabsRef = useGsapReveal<HTMLDivElement>("fade", {
+    delay: 0.15,
+    duration: 0.6,
+  });
+  const gridRef = useGsapCards<HTMLDivElement>();
 
   // Track viewport for mobile carousel behavior
   useEffect(() => {
@@ -312,42 +322,39 @@ export default function ProgramsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 select-none">
         {/* Section Heading */}
         <div
-          ref={headingRef}
-          className="reveal flex flex-col items-center text-center max-w-3xl mx-auto mb-6 md:mb-8"
+          className="flex flex-col items-center text-center max-w-3xl mx-auto mb-6 md:mb-8"
         >
-          <div className="border border-gold/20 bg-gradient-to-br from-white to-slate-50 border border-slate-100 px-4 py-1.5 rounded-full inline-flex items-center gap-2 mb-3 shadow-sm">
+          <div
+            ref={eyebrowRef}
+            className="border border-gold/20 bg-gradient-to-br from-white to-slate-50 border border-slate-100 px-4 py-1.5 rounded-full inline-flex items-center gap-2 mb-3 shadow-sm"
+          >
             <BookOpen className="w-3.5 h-3.5 text-gold" />
             <span className="text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase">
               Operational Portfolios
             </span>
           </div>
-          <h2 className="font-display font-medium text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-6 inline-flex flex-wrap justify-center gap-x-2">
-            <TextReveal
-              text="Where Most "
-              delay={0.2}
-              words
-            />
+          <h2
+            ref={headingRef}
+            className="font-display font-medium text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-6 inline-flex flex-wrap justify-center gap-x-2"
+          >
+            Where Most{" "}
             <span className="font-serif italic font-light text-gold relative inline-block">
-              <TextReveal
-                text="Organizations Start"
-                delay={0.4}
-                words
-              />
+              Organizations Start
               {/* Static underline — previously an animated width draw, which
                   violated the "no width animation" rule. Now always visible. */}
               <div className="absolute -bottom-2 left-0 h-[3px] bg-gold/40 w-full" />
             </span>
           </h2>
-          <TextReveal
-            text="Syllabi engineered strictly for execution — bypassing the usual motivation traps and generic trainer scripts."
-            as="p"
+          <p
+            ref={descriptionRef}
             className="text-slate-500 font-sans text-base sm:text-lg font-light leading-relaxed max-w-2xl"
-            delay={0.6}
-          />
+          >
+            Syllabi engineered strictly for execution — bypassing the usual motivation traps and generic trainer scripts.
+          </p>
         </div>
 
         {/* Categories Tab Navigation */}
-        <div ref={tabsRef} className="reveal flex flex-nowrap overflow-x-auto scrollbar-none pb-4 lg:pb-0 lg:flex-wrap justify-start lg:justify-center gap-3 mb-6 select-none max-w-4xl mx-auto px-4 lg:px-0 lg:mx-auto" style={{ scrollPaddingRight: '2rem' }}>
+        <div ref={tabsRef} className="flex flex-nowrap overflow-x-auto scrollbar-none pb-4 lg:pb-0 lg:flex-wrap justify-start lg:justify-center gap-3 mb-6 select-none max-w-4xl mx-auto px-4 lg:px-0 lg:mx-auto" style={{ scrollPaddingRight: '2rem' }}>
           {categories.map((cat) => {
             const isActive = activeTab === cat.key;
             return (
@@ -407,8 +414,7 @@ export default function ProgramsSection() {
                   ease: EASE,
                   delay: index * 0.05,
                 }}
-                data-reveal
-                className="reveal h-full"
+                className="h-full"
               >
                 <ProgramCard prog={prog} />
               </motion.div>

@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, type FormEvent } from "react";
-import { useReveal } from "@/lib/useReveal";
-import { useWordReveal } from "@/lib/useWordReveal";
+import { useGsapReveal } from "@/lib/useGsapReveal";
 import {
   User,
   Briefcase,
@@ -110,8 +109,8 @@ export default function OGIDiagnostic() {
   const [autoSaved, setAutoSaved] = useState(false);
 
   // Ref to the content box — used to auto-scroll into view on screen changes
-  const contentBoxRef = useReveal<HTMLDivElement>();
-  const headingRef = useWordReveal<HTMLHeadingElement>();
+  const contentBoxRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.15, duration: 0.8 });
+  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
   // Track whether this is the first render — we don't auto-scroll on mount
   const isFirstRender = useRef(true);
 
@@ -345,7 +344,7 @@ export default function OGIDiagnostic() {
         {/* Content Box */}
         <div
           ref={contentBoxRef}
-          className="reveal card-premium bg-gradient-to-br from-white to-slate-50 border border-slate-100 rounded-3xl overflow-hidden min-h-[420px] flex flex-col justify-between"
+          className="card-premium bg-gradient-to-br from-white to-slate-50 border border-slate-100 rounded-3xl overflow-hidden min-h-[420px] flex flex-col justify-between"
         >
           <AnimatePresence mode="wait">
             {/* INTRO SCREEN */}
@@ -370,7 +369,7 @@ export default function OGIDiagnostic() {
 
                   <h2
                     ref={headingRef}
-                    className="reveal-words font-display font-medium text-3xl sm:text-5xl text-navy-soft tracking-tighter leading-[1.15] mb-5"
+                    className="font-display font-medium text-3xl sm:text-5xl text-navy-soft tracking-tighter leading-[1.15] mb-5"
                   >
                     OGI — <span className="font-serif italic text-gold">Organizational Growth Index</span>
                   </h2>

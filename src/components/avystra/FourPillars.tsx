@@ -3,10 +3,9 @@
 import React from "react";
 import { Compass, Target, Users, Landmark, Award, ChevronRight } from "lucide-react";
 import { DoodleSparkle, UnderlineSquiggle } from "./DoodleWidgets";
-import TextReveal from "./TextReveal";
 import TiltCard from "./TiltCard";
-import { useReveal } from "@/lib/useReveal";
-import { useWordReveal } from "@/lib/useWordReveal";
+import { useGsapReveal } from "@/lib/useGsapReveal";
+import { useGsapCards } from "@/lib/useGsapCards";
 
 interface Pillar {
   id: string;
@@ -18,9 +17,10 @@ interface Pillar {
 }
 
 export default function FourPillars() {
-  const headerRef = useReveal<HTMLDivElement>();
-  const headingRef = useWordReveal<HTMLHeadingElement>();
-  const gridRef = useReveal<HTMLDivElement>({ stagger: true });
+  const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { duration: 0.6 });
+  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
+  const descRef = useGsapReveal<HTMLParagraphElement>("fade", { delay: 0.2, duration: 0.75 });
+  const gridRef = useGsapCards<HTMLDivElement>();
 
   const pillars: Pillar[] = [
     {
@@ -69,10 +69,9 @@ export default function FourPillars() {
       <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 z-10">
         {/* Header Section */}
         <div
-          ref={headerRef}
-          className="reveal max-w-4xl mb-6 md:mb-8"
+          className="max-w-4xl mb-6 md:mb-8"
         >
-          <div className="inline-flex items-center gap-2 bg-gradient-to-br from-white to-slate-50 border border-slate-100 px-4 py-2 rounded-full mb-3 shadow-sm">
+          <div ref={eyebrowRef} className="inline-flex items-center gap-2 bg-gradient-to-br from-white to-slate-50 border border-slate-100 px-4 py-2 rounded-full mb-3 shadow-sm">
             <Award className="w-4 h-4 text-gold" />
             <span className="text-[11.5px] text-slate-600 font-mono tracking-[0.2em] font-black uppercase">
               The Framework for Autonomy
@@ -81,7 +80,7 @@ export default function FourPillars() {
 
           <h2
             ref={headingRef}
-            className="reveal-words font-display font-bold text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-4 uppercase"
+            className="font-display font-bold text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-4 uppercase"
           >
             The Four Pillars of{" "}
             <span className="font-serif italic font-light text-gold relative inline-block px-1">
@@ -94,12 +93,9 @@ export default function FourPillars() {
             </span>
           </h2>
 
-          <TextReveal
-            text="Sustainable performance isn't accidental. It's built on four pillars that strengthen your organization from the inside out."
-            as="p"
-            className="text-slate-500 font-sans text-lg md:text-xl font-light leading-relaxed max-w-2xl"
-            delay={0.8}
-          />
+          <p ref={descRef} className="text-slate-500 font-sans text-lg md:text-xl font-light leading-relaxed max-w-2xl">
+            Sustainable performance isn&apos;t accidental. It&apos;s built on four pillars that strengthen your organization from the inside out.
+          </p>
         </div>
 
         {/* Pillars Grid */}
@@ -107,8 +103,7 @@ export default function FourPillars() {
           {pillars.map((pillar, idx) => (
             <div
               key={pillar.id}
-              className="reveal pillar-card group relative h-full flex flex-col"
-              data-reveal
+              className="pillar-card group relative h-full flex flex-col"
               style={{ perspective: 1000 }}
             >
               <TiltCard

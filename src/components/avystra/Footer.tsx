@@ -3,16 +3,19 @@
 import { Linkedin, Instagram, MessageCircle, Facebook, Mail, Phone, ArrowUpRight } from "lucide-react";
 import AvystraLogo from "./AvystraLogo";
 import { smoothScrollTo } from "@/lib/scroll";
-import { useReveal } from "@/lib/useReveal";
-import { useWordReveal } from "@/lib/useWordReveal";
+import { useGsapReveal } from "@/lib/useGsapReveal";
 
 interface FooterProps {
   leadCount: number;
 }
 
 export default function Footer({ leadCount }: FooterProps) {
-  const mainRef = useReveal<HTMLDivElement>();
-  const headingRef = useWordReveal<HTMLHeadingElement>();
+  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
+  const descriptionRef = useGsapReveal<HTMLParagraphElement>("fade", { delay: 0.2, duration: 0.75 });
+  const contactLinksRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.3, duration: 0.6 });
+  const navLinksRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.35, duration: 0.6 });
+  const socialLinksRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.4, duration: 0.6 });
+  const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.45, duration: 0.6 });
 
   const scrollTo = (href: string) => {
     const elementId = href.substring(1);
@@ -58,8 +61,7 @@ export default function Footer({ leadCount }: FooterProps) {
       <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] rounded-full bg-gold/[0.02] blur-[120px] pointer-events-none" />
 
       <div
-        ref={mainRef}
-        className="reveal max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10 w-full"
+        className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10 w-full"
       >
         {/* Main Footer Content — compact 3-column grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 mb-10">
@@ -72,19 +74,25 @@ export default function Footer({ leadCount }: FooterProps) {
 
             <h2
               ref={headingRef}
-              className="reveal-words text-2xl sm:text-3xl lg:text-4xl font-display font-medium text-white mb-3 tracking-tight leading-[1.25]"
+              className="text-2xl sm:text-3xl lg:text-4xl font-display font-medium text-white mb-3 tracking-tight leading-[1.25]"
             >
               Let&apos;s re-engineer your{" "}
               <span className="text-gold">business performance.</span>
             </h2>
-            <p className="text-slate-400 max-w-md leading-relaxed text-sm mb-5">
+            <p
+              ref={descriptionRef}
+              className="text-slate-400 max-w-md leading-relaxed text-sm mb-5"
+            >
               AVYSTRA helps founders and leaders build the clarity,
               accountability, and systems necessary for scalable, decisive
               growth.
             </p>
 
             {/* Contact quick row */}
-            <div className="flex flex-wrap gap-2.5">
+            <div
+              ref={contactLinksRef}
+              className="flex flex-wrap gap-2.5"
+            >
               <a
                 href="mailto:info@avystra.co.in"
                 className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/5 border border-white/10 text-slate-200 hover:bg-gold/10 hover:border-gold/30 hover:text-gold transition-all duration-300 text-[13px] font-medium focus-ring"
@@ -103,7 +111,7 @@ export default function Footer({ leadCount }: FooterProps) {
           </div>
 
           {/* Links */}
-          <div className="col-span-1 lg:col-span-3">
+          <div ref={navLinksRef} className="col-span-1 lg:col-span-3">
             <h3 className="text-[12.5px] font-mono text-gold uppercase tracking-[0.2em] mb-4 font-bold">
               Navigation
             </h3>
@@ -129,7 +137,7 @@ export default function Footer({ leadCount }: FooterProps) {
           </div>
 
           {/* Connect & Socials */}
-          <div className="col-span-1 lg:col-span-3">
+          <div ref={socialLinksRef} className="col-span-1 lg:col-span-3">
             <h3 className="text-[12.5px] font-mono text-gold uppercase tracking-[0.2em] mb-4 font-bold">
               Connect
             </h3>
@@ -155,7 +163,10 @@ export default function Footer({ leadCount }: FooterProps) {
         </div>
 
         {/* Footer Meta — compact single row */}
-        <div className="py-5 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs font-mono text-slate-500">
+        <div
+          ref={ctaRef}
+          className="py-5 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs font-mono text-slate-500"
+        >
           <p className="text-center sm:text-left">
             &copy; {new Date().getFullYear()} AVYSTRA Consulting Pvt. Ltd. All
             rights reserved.
