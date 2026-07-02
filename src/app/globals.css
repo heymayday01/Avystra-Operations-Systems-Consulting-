@@ -342,13 +342,15 @@ body::-webkit-scrollbar {
 
 /* ═══ WORD-BY-WORD TEXT REVEAL ═══
    Splits text into word spans that stagger in on scroll.
-   Uses --word-index CSS var (set per-word by TextReveal component).
-   Works with the .is-revealed class from the useReveal system.
-   600ms expo-out per word, 80ms stagger (var(--stagger)). */
+   Uses --word-index CSS var (set per-word by useWordReveal hook or TextReveal).
+   600ms expo-out per word, 80ms stagger (var(--stagger)).
+   Safety: 30s fallback — long enough that users will have scrolled to any
+   content before it fires. Previous 4s/8s was too short — fired before
+   users reached below-the-fold headings, ruining the animation. */
 .js .reveal-words .word {
   display: inline-block;
   opacity: 0;
-  transform: translateY(14px);
+  transform: translateY(20px);
   transition: opacity var(--dur-entrance) var(--ease-out),
               transform var(--dur-entrance) var(--ease-out);
   transition-delay: calc(var(--word-index, 0) * var(--stagger));
@@ -358,17 +360,23 @@ body::-webkit-scrollbar {
   opacity: 1;
   transform: none;
 }
-/* Safety fallback: force visible after 4s */
+/* Safety fallback: 30s — only fires if IntersectionObserver truly fails */
+@keyframes word-safety {
+  to { opacity: 1; transform: none; }
+}
 .js .reveal-words .word {
-  animation: reveal-safety 0.01s 4s forwards;
+  animation: word-safety 0.01s 30s forwards;
 }
 .js .reveal-words.is-revealed .word {
   animation: none;
 }
-/* Reduced motion: skip transforms, keep opacity only */
+/* Reduced motion: always visible */
 @media (prefers-reduced-motion: reduce) {
   .js .reveal-words .word {
+    opacity: 1;
     transform: none;
+    transition: none;
+    animation: none;
   }
 }
 

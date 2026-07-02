@@ -16,6 +16,7 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import { DoodleSparkle, UnderlineSquiggle } from "./DoodleWidgets";
 import { useReveal } from "@/lib/useReveal";
+import { useWordReveal } from "@/lib/useWordReveal";
 import { EASE } from "@/lib/motion";
 
 interface StepData {
@@ -36,6 +37,7 @@ export default function Flowchart() {
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
 
   const headerRef = useReveal<HTMLDivElement>();
+  const headingRef = useWordReveal<HTMLHeadingElement>();
   const gridRef = useReveal<HTMLDivElement>({ stagger: true });
   const bannerRef = useReveal<HTMLDivElement>();
 
@@ -166,7 +168,8 @@ export default function Flowchart() {
           </div>
 
           <h2
-            className="font-display font-bold text-3xl sm:text-5xl text-navy-deep tracking-tight leading-tight uppercase"
+            ref={headingRef}
+            className="reveal-words font-display font-bold text-3xl sm:text-5xl text-navy-deep tracking-tight leading-tight uppercase"
           >
             Our Four-Step{" "}
             <span className="font-serif italic font-light text-gold relative inline-block px-1">

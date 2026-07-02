@@ -16,6 +16,7 @@ import { UnderlineSquiggle } from "./DoodleWidgets";
 import CountUp from "./CountUp";
 import CumulativePenalty from "./CumulativePenalty";
 import { useReveal } from "@/lib/useReveal";
+import { useWordReveal } from "@/lib/useWordReveal";
 
 interface StatItemProps {
   id: string;
@@ -35,6 +36,7 @@ export default function StatsFounder() {
 
   // Scroll reveal refs (single call per reveal group, never inside .map()).
   const headerRef = useReveal<HTMLDivElement>();
+  const headingRef = useWordReveal<HTMLHeadingElement>();
   const statsGridRef = useReveal<HTMLDivElement>({ stagger: true });
   const portraitRef = useReveal<HTMLDivElement>();
   const credentialsGridRef = useReveal<HTMLDivElement>({ stagger: true });
@@ -153,7 +155,10 @@ export default function StatsFounder() {
                 The Numbers Don&apos;t Lie
               </span>
             </div>
-            <h2 className="font-display font-bold text-3xl sm:text-4xl text-danger tracking-tight mb-3 leading-[1.2]">
+            <h2
+              ref={headingRef}
+              className="reveal-words font-display font-bold text-3xl sm:text-4xl text-danger tracking-tight mb-3 leading-[1.2]"
+            >
               India is Bleeding{" "}
               <span className="font-serif italic font-light relative inline-block">
                 Performance

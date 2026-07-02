@@ -4,6 +4,7 @@ import { Linkedin, Instagram, MessageCircle, Facebook, Mail, Phone, ArrowUpRight
 import AvystraLogo from "./AvystraLogo";
 import { smoothScrollTo } from "@/lib/scroll";
 import { useReveal } from "@/lib/useReveal";
+import { useWordReveal } from "@/lib/useWordReveal";
 
 interface FooterProps {
   leadCount: number;
@@ -11,6 +12,7 @@ interface FooterProps {
 
 export default function Footer({ leadCount }: FooterProps) {
   const mainRef = useReveal<HTMLDivElement>();
+  const headingRef = useWordReveal<HTMLHeadingElement>();
 
   const scrollTo = (href: string) => {
     const elementId = href.substring(1);
@@ -68,7 +70,10 @@ export default function Footer({ leadCount }: FooterProps) {
               <AvystraLogo size="lg" showTagline={true} theme="dark" />
             </div>
 
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-medium text-white mb-3 tracking-tight leading-[1.25]">
+            <h2
+              ref={headingRef}
+              className="reveal-words text-2xl sm:text-3xl lg:text-4xl font-display font-medium text-white mb-3 tracking-tight leading-[1.25]"
+            >
               Let&apos;s re-engineer your{" "}
               <span className="text-gold">business performance.</span>
             </h2>

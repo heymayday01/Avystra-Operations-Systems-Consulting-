@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { HelpCircle, ChevronDown } from "lucide-react";
 import { getLenis } from "@/lib/scroll";
 import { useReveal } from "@/lib/useReveal";
+import { useWordReveal } from "@/lib/useWordReveal";
 
 interface FAQItem {
   question: string;
@@ -43,6 +44,7 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const headerRef = useReveal<HTMLDivElement>();
+  const headingRef = useWordReveal<HTMLHeadingElement>();
   const accordionsRef = useReveal<HTMLDivElement>();
 
   const toggleIndex = useCallback((index: number) => {
@@ -83,7 +85,10 @@ export default function FAQSection() {
           </div>
 
           {/* Heading */}
-          <h2 className="font-display font-medium text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-6">
+          <h2
+            ref={headingRef}
+            className="reveal-words font-display font-medium text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-6"
+          >
             Frequently Asked{" "}
             <span className="font-serif italic font-light text-gold">
               Questions

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, type FormEvent } from "react";
 import { useReveal } from "@/lib/useReveal";
+import { useWordReveal } from "@/lib/useWordReveal";
 import {
   User,
   Briefcase,
@@ -110,6 +111,7 @@ export default function OGIDiagnostic() {
 
   // Ref to the content box — used to auto-scroll into view on screen changes
   const contentBoxRef = useReveal<HTMLDivElement>();
+  const headingRef = useWordReveal<HTMLHeadingElement>();
   // Track whether this is the first render — we don't auto-scroll on mount
   const isFirstRender = useRef(true);
 
@@ -366,7 +368,10 @@ export default function OGIDiagnostic() {
                     </span>
                   </div>
 
-                  <h2 className="font-display font-medium text-3xl sm:text-5xl text-navy-soft tracking-tighter leading-[1.15] mb-5">
+                  <h2
+                    ref={headingRef}
+                    className="reveal-words font-display font-medium text-3xl sm:text-5xl text-navy-soft tracking-tighter leading-[1.15] mb-5"
+                  >
                     OGI — <span className="font-serif italic text-gold">Organizational Growth Index</span>
                   </h2>
 

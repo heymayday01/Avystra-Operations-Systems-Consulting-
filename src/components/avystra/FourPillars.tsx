@@ -6,6 +6,7 @@ import { DoodleSparkle, UnderlineSquiggle } from "./DoodleWidgets";
 import TextReveal from "./TextReveal";
 import TiltCard from "./TiltCard";
 import { useReveal } from "@/lib/useReveal";
+import { useWordReveal } from "@/lib/useWordReveal";
 
 interface Pillar {
   id: string;
@@ -18,6 +19,7 @@ interface Pillar {
 
 export default function FourPillars() {
   const headerRef = useReveal<HTMLDivElement>();
+  const headingRef = useWordReveal<HTMLHeadingElement>();
   const gridRef = useReveal<HTMLDivElement>({ stagger: true });
 
   const pillars: Pillar[] = [
@@ -77,7 +79,10 @@ export default function FourPillars() {
             </span>
           </div>
 
-          <h2 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-4 uppercase">
+          <h2
+            ref={headingRef}
+            className="reveal-words font-display font-bold text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-4 uppercase"
+          >
             The Four Pillars of{" "}
             <span className="font-serif italic font-light text-gold relative inline-block px-1">
               Organizational Excellence
