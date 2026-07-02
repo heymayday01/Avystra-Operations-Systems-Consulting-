@@ -56,7 +56,17 @@ export default function Home() {
     if ("scrollRestoration" in history) {
       history.scrollRestoration = "manual";
     }
+
+    // Force scroll to top IMMEDIATELY (before any paint) + after Lenis initializes
     window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    // Also reset Lenis scroll position if it exists (desktop smooth scroll)
+    const lenisInstance = (window as unknown as { lenis?: { scrollTo: (target: number, opts?: { immediate?: boolean }) => void } }).lenis;
+    if (lenisInstance) {
+      lenisInstance.scrollTo(0, { immediate: true });
+    }
 
     // Hide loading screen at 800ms, then mark page ready at 1300ms
     // (after the 500ms fade transition completes).
@@ -64,8 +74,9 @@ export default function Home() {
     const readyTimer = setTimeout(() => {
       setPageReady(true);
       // Add .page-ready class to <html> so Hero CSS animations can start
-      // (they're gated behind .page-ready in globals.css)
       document.documentElement.classList.add("page-ready");
+      // Double-check scroll is at top (Lenis may have moved it)
+      window.scrollTo(0, 0);
     }, 1300);
     return () => {
       clearTimeout(loadTimer);

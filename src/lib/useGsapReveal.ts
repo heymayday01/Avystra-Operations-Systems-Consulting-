@@ -9,46 +9,26 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * useGsapReveal — GSAP ScrollTrigger-powered scroll reveal.
  *
- * Replaces the old useReveal + useWordReveal + revealPool system.
- * ONE hook handles both block fades and word-by-word slide reveals.
+ * FLASH PREVENTION:
+ * - On mount (before pageReady), elements are immediately hidden via gsap.set().
+ *   This prevents the flash where content appears, then disappears, then animates in.
+ * - When pageReady fires (after loading screen), gsap.to() animates them to visible.
+ * - For below-the-fold elements, ScrollTrigger handles the timing.
  *
- * SAFETY DESIGN:
- * - Never sets opacity:0 in JS on mount. GSAP's from() tweens handle the
- *   initial state, but only fire when pageReady is true (after loading screen).
- * - Before pageReady: elements are at their natural state (visible).
- * - Reduced motion: sets elements visible immediately, no tweens.
- * - Cleanup: kills only its own tweens + ScrollTriggers (via gsap.context).
- *
- * MODES:
- * - mode="fade": element fades up (y:16px, opacity 0→1, 480ms power3.out)
- * - mode="words": word-by-word slide reveal (each word yPercent 110→0,
- *   480ms power4.out, 60ms stagger). Splits text nodes preserving nested spans.
- *
- * USAGE:
- *   // Block fade:
- *   const ref = useGsapReveal<HTMLDivElement>("fade");
- *   <div ref={ref}>...</div>
- *
- *   // Word-by-word (for h2 headings):
- *   const ref = useGsapReveal<HTMLHeadingElement>("words");
- *   <h2 ref={ref}>The Four Pillars of <span className="text-gold">Excellence</span></h2>
- *
- *   // With delay:
- *   const ref = useGsapReveal<HTMLDivElement>("fade", { delay: 0.2 });
+ * SAFETY:
+ * - If pageReady never fires, elements stay hidden (but the loading screen
+ *   timeout at 1.3s ensures pageReady always fires).
+ * - Reduced motion: elements set visible immediately, no tweens.
+ * - Cleanup: gsap.context kills only its own tweens/triggers.
  */
 
 export type RevealMode = "fade" | "words";
 
 export interface GsapRevealOptions {
-  /** Delay before animation starts (seconds). Default: 0 */
   delay?: number;
-  /** Duration override (seconds). Default: 0.48 for fade, 0.6 for words */
   duration?: number;
-  /** Stagger between words (seconds). Default: 0.06. Only for mode="words" */
   stagger?: number;
-  /** ScrollTrigger start position. Default: "top 87%" */
   start?: string;
-  /** Y distance for fade (px). Default: 16 */
   y?: number;
 }
 
@@ -57,11 +37,6 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-/**
- * Split text nodes into word spans for GSAP animation.
- * Preserves nested elements (gold spans, italic, SVGs).
- * Returns the array of inner spans to animate.
- */
 function splitWords(el: HTMLElement): HTMLElement[] {
   const wordInners: HTMLElement[] = [];
 
@@ -91,7 +66,6 @@ function splitWords(el: HTMLElement): HTMLElement[] {
       node.parentNode?.replaceChild(frag, node);
     } else if (node.nodeType === Node.ELEMENT_NODE) {
       const elem = node as Element;
-      // Skip SVGs (UnderlineSquiggle) and already-split words
       if (elem.tagName === "SVG" || elem.hasAttribute("data-no-split")) return;
       Array.from(node.childNodes).forEach(walk);
     }
@@ -108,6 +82,23 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
   const ref = useRef<T>(null);
   const pageReady = usePageReady();
 
+  // PHASE 1: Immediately hide the element on mount (prevents flash).
+  // This runs before pageReady — the element is hidden from the first paint.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (prefersReducedMotion()) return; // Don't hide for reduced-motion users
+
+    if (mode === "words") {
+      // For words mode, we can't split yet (text nodes need to be ready).
+      // Just hide the container — splitting happens in phase 2.
+      gsap.set(el, { opacity: 0 });
+    } else {
+      gsap.set(el, { opacity: 0, y: options.y ?? 16 });
+    }
+  }, [mode]);
+
+  // PHASE 2: Animate to visible when pageReady fires.
   useEffect(() => {
     if (!pageReady) return;
 
@@ -128,15 +119,14 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
       y = 16,
     } = options;
 
-    // gsap.context ensures cleanup kills only THIS component's tweens/triggers
     const ctx = gsap.context(() => {
       if (mode === "words") {
         const wordInners = splitWords(el);
         if (wordInners.length === 0) {
-          // Fallback to fade if no text
-          gsap.from(el, {
-            y,
-            opacity: 0,
+          // Fallback to fade
+          gsap.to(el, {
+            opacity: 1,
+            y: 0,
             duration: duration || 0.48,
             ease: "power3.out",
             delay,
@@ -148,8 +138,11 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
           });
           return;
         }
-        gsap.from(wordInners, {
-          yPercent: 110,
+        // Show the container, animate words from hidden
+        gsap.set(el, { opacity: 1 });
+        gsap.set(wordInners, { yPercent: 110 });
+        gsap.to(wordInners, {
+          yPercent: 0,
           duration: duration || 0.6,
           ease: "power4.out",
           stagger,
@@ -161,10 +154,10 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
           },
         });
       } else {
-        // fade
-        gsap.from(el, {
-          y,
-          opacity: 0,
+        // fade — animate from hidden (set in phase 1) to visible
+        gsap.to(el, {
+          opacity: 1,
+          y: 0,
           duration: duration || 0.48,
           ease: "power3.out",
           delay,
