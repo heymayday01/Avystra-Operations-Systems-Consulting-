@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { usePageReady } from "@/lib/pageReady";
+import { EASE } from "@/lib/motion";
 import AvystraLogo from "./AvystraLogo";
 import { smoothScrollTo, scrollToTop } from "@/lib/scroll";
 
@@ -206,10 +207,10 @@ export default function Header() {
     >
       <header
         ref={headerRef}
-        className={`w-full max-w-6xl pointer-events-auto transition-all duration-500 ease-out-expo ${
+        className={`w-full max-w-6xl pointer-events-auto transition-all duration-500 ease-out-expo rounded-[22px] ${
           scrolled || isOpen
-            ? "py-2 px-4 sm:px-5 lg:py-1.5 lg:px-5 border border-white/50 bg-white/75 shadow-[0_8px_32px_-8px_rgba(var(--navy-rgb),0.18)] backdrop-blur-xl backdrop-saturate-150"
-            : "py-2.5 px-4 sm:py-3 sm:px-6 lg:px-8 bg-white/55 backdrop-blur-lg border border-white/30 shadow-sm"
+            ? "py-2 px-3 sm:px-4 lg:py-2 lg:px-4 border border-white/50 bg-white/75 shadow-[0_8px_32px_-8px_rgba(var(--navy-rgb),0.18)] backdrop-blur-xl backdrop-saturate-150"
+            : "py-2.5 px-3 sm:px-5 lg:px-6 bg-white/55 backdrop-blur-lg border border-white/30 shadow-sm"
         }`}
       >
         <div className="flex items-center gap-4 lg:gap-6">
@@ -333,7 +334,7 @@ export default function Header() {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.35, ease: EASE }}
-              className="lg:hidden overflow-hidden"
+              className="lg:hidden overflow-hidden rounded-[18px]"
             >
               <div className="pt-3 pb-1.5 space-y-1">
                 {navItems.map((item, i) => (
