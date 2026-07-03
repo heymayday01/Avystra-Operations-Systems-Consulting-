@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { usePageReady } from "@/lib/pageReady";
 import AvystraLogo from "./AvystraLogo";

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { Quote, Star, MessageSquare } from "lucide-react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { gsap } from "@/lib/gsap";
 import { usePageReady } from "@/lib/pageReady";
 import { useGsapReveal } from "@/lib/useGsapReveal";
 import { useGsapCards } from "@/lib/useGsapCards";
