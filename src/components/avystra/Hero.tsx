@@ -27,25 +27,32 @@ export default function Hero() {
   //
   // SYNCED TIMELINE (all delays measured from pageReady — the moment the
   // loading screen finishes its exit fade and the page wrapper begins
-  // fading in over 0.25s). The hero cascade emerges WITH the page:
+  // fading in over 0.25s). The hero cascade emerges WITH the page.
+  //
+  // SMOOTHNESS: y:10 (reduced from 16) for a gentler slide that doesn't
+  // fight with the page wrapper's opacity fade. Larger slides look jumpy
+  // when the whole page is also fading in — 10px is the sweet spot.
+  // Durations are 0.5s (slightly longer) with power3.out for a smoother
+  // settle. The cascade is compressed to 0.75s total (was 0.95s) so the
+  // whole hero reveals as one cohesive motion.
   // H1 line 1 (CSS):  0.05s delay, 0.4s dur  → finishes at 0.45s
   // H1 line 2 (CSS):  0.18s delay, 0.4s dur  → finishes at 0.58s
   // H1 line 3 (CSS):  0.32s delay, 0.4s dur  → finishes at 0.72s
-  // Eyebrow (GSAP):   0s    delay, 0.4s dur  → finishes at 0.40s (above heading)
-  // Chips (GSAP):     0.4s  delay, 0.4s dur  → finishes at 0.80s (overlaps H1 line 3)
-  // Card (GSAP):      0.55s delay, 0.4s dur  → finishes at 0.95s (after H1 done)
-  // CTAs (GSAP):      0.7s  delay, 0.4s dur  → finishes at 1.10s
-  // Trust (GSAP):     0.85s delay, 0.4s dur  → finishes at 1.25s
-  // Marquee (GSAP):   0.95s delay, 0.4s dur, y:0 (pure fade — no slide gap)
+  // Eyebrow (GSAP):   0s    delay, 0.5s dur  → finishes at 0.50s
+  // Chips (GSAP):     0.3s  delay, 0.5s dur  → finishes at 0.80s
+  // Card (GSAP):      0.45s delay, 0.5s dur  → finishes at 0.95s
+  // CTAs (GSAP):      0.6s  delay, 0.5s dur  → finishes at 1.10s
+  // Trust (GSAP):     0.7s  delay, 0.5s dur  → finishes at 1.20s
+  // Marquee (GSAP):   0.8s  delay, 0.5s dur, y:0 (pure fade — no slide gap)
   // Squiggle (FM):    0.4s  delay, 0.8s dur  → draws under line 3 as it settles
-  const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0, duration: 0.4 });
-  const chipsRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.4, duration: 0.4 });
-  const cardRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.55, duration: 0.4 });
-  const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.7, duration: 0.4 });
-  const trustRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.85, duration: 0.4 });
+  const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0, duration: 0.5, y: 10 });
+  const chipsRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.3, duration: 0.5, y: 10 });
+  const cardRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.45, duration: 0.5, y: 10 });
+  const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.6, duration: 0.5, y: 10 });
+  const trustRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.7, duration: 0.5, y: 10 });
   // Marquee: pure fade (y:0) — a slide-up would leave a visible cream gap
   // below the navy band as it animates into place.
-  const marqueeRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.95, duration: 0.4, y: 0 });
+  const marqueeRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.8, duration: 0.5, y: 0 });
 
   const reducedMotion = useSyncExternalStore(
     reducedMotionSubscribe,
@@ -158,24 +165,27 @@ export default function Hero() {
             ))}
           </div>
 
-          {/* Bridging content block — cleaner, less dense, better line-height */}
+          {/* Bridging content block — cleaner, less dense, better line-height.
+              Font consistency: all paragraphs use font-medium (500) for a
+              uniform look. Hierarchy is established via COLOR + SIZE, not
+              weight jumps (which looked mismatched: semibold→regular→light→bold). */}
           <div
             ref={cardRef}
             className="hero-card-premium mb-12 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-8 py-8 sm:px-12 sm:py-10 text-center"
           >
-            <p className="text-navy-deep font-sans text-lg sm:text-xl font-semibold leading-relaxed mb-5" style={{ lineHeight: 1.5 }}>
+            <p className="text-navy-deep font-sans text-lg sm:text-xl font-medium leading-relaxed mb-5" style={{ lineHeight: 1.5 }}>
               So why does it still feel like the company slows down whenever you step away?
             </p>
             <div className="hero-divider w-12 h-px mx-auto mb-5" />
-            <p className="text-navy-deep/90 font-sans text-sm sm:text-base leading-relaxed mb-2" style={{ lineHeight: 1.65 }}>
+            <p className="text-navy-deep/80 font-sans text-sm sm:text-base font-medium leading-relaxed mb-2" style={{ lineHeight: 1.65 }}>
               Most organizations don&apos;t struggle because people don&apos;t know what to do.
             </p>
-            <p className="text-slate-600 font-sans text-sm sm:text-base leading-relaxed font-light mb-6" style={{ lineHeight: 1.65 }}>
+            <p className="text-slate-600 font-sans text-sm sm:text-base font-medium leading-relaxed mb-6" style={{ lineHeight: 1.65 }}>
               They struggle because knowing and doing are two very different things.
             </p>
-            <p className="text-navy-deep font-sans text-xs sm:text-sm font-bold tracking-[0.12em] uppercase">
+            <p className="text-navy-deep font-sans text-xs sm:text-sm font-medium tracking-[0.12em] uppercase">
               That&apos;s the gap{" "}
-              <span className="text-gold font-black">AVYSTRA</span>{" "}
+              <span className="text-gold font-bold">AVYSTRA</span>{" "}
               helps organizations close.
             </p>
           </div>

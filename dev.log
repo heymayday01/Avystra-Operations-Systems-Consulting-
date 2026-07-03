@@ -75,3 +75,19 @@
  GET / 200 in 147ms (compile: 7ms, render: 140ms)
 ✓ Compiled in 211ms
  GET / 200 in 369ms (compile: 66ms, render: 303ms)
+ GET / 200 in 245ms (compile: 4ms, render: 241ms)
+ GET / 200 in 112ms (compile: 4ms, render: 108ms)
+ GET / 200 in 82ms (compile: 3ms, render: 79ms)
+ GET / 200 in 110ms (compile: 3ms, render: 107ms)
+ GET / 200 in 92ms (compile: 7ms, render: 85ms)
+ GET / 200 in 188ms (compile: 11ms, render: 177ms)
+ GET / 200 in 142ms (compile: 3ms, render: 139ms)
+ GET / 200 in 145ms (compile: 9ms, render: 135ms)
+ GET / 200 in 122ms (compile: 3ms, render: 119ms)
+ GET / 200 in 132ms (compile: 7ms, render: 125ms)
+✓ Compiled in 896ms
+✓ Compiled in 208ms
+✓ Compiled in 339ms
+✓ Compiled in 0ms
+ GET / 200 in 369ms (compile: 78ms, render: 291ms)
+ GET / 200 in 165ms (compile: 6ms, render: 159ms)

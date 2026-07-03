@@ -249,7 +249,10 @@
     /* NAVY during loading (matches the loading screen so there's no white
        flash before paint). Switches to CREAM via html.page-ready below once
        the loading screen exits — so the body never shows navy behind content
-       during mobile scroll (which caused the glitch screen). */
+       during mobile scroll (which caused the glitch screen).
+       The transition is SYNCHRONIZED with the page wrapper's opacity fade
+       (0.25s) so the background color change happens in lockstep with the
+       content fade-in — no gray flash in between. */
     background-color: var(--color-navy-deep);
     color: #4A5568;
     font-family: var(--font-sans);
@@ -257,11 +260,15 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* Smooth transition from navy → cream, matching the page wrapper fade.
+       Duration matches the 0.25s opacity transition on the page wrapper. */
+    transition: background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   /* After page-ready (loading screen gone), body becomes cream to match the
      page content. This eliminates the navy flash that appeared on mobile when
-     scrolling fast and the content hadn't repainted yet. */
+     scrolling fast and the content hadn't repainted yet. The transition on
+     `body` (above) makes this change smooth instead of a hard snap. */
   html.page-ready body {
     background-color: #F7F4ED;
   }
