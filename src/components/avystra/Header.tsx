@@ -30,7 +30,6 @@ export default function Header() {
   const headerRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLAnchorElement>(null);
   const navRef = useRef<HTMLElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
 
   // ── GSAP navbar entrance ──
   useEffect(() => {
@@ -90,31 +89,11 @@ export default function Header() {
     };
   }, []);
 
-  // ── GSAP mobile menu expand/collapse ──
-  useEffect(() => {
-    const el = menuRef.current;
-    if (!el) return;
-
-    // Kill any running tween on this element first
-    gsap.killTweensOf(el);
-
-    if (isOpen) {
-      // Expand: measure natural height, animate from 0 to that height
-      gsap.set(el, { height: "auto" });
-      const autoHeight = el.offsetHeight;
-      gsap.fromTo(el,
-        { height: 0, opacity: 0 },
-        { height: autoHeight, opacity: 1, duration: 0.35, ease: "power3.out",
-          onComplete: () => gsap.set(el, { height: "auto" }) }
-      );
-    } else {
-      // Collapse: animate from current height to 0
-      gsap.fromTo(el,
-        { height: el.offsetHeight, opacity: 1 },
-        { height: 0, opacity: 0, duration: 0.3, ease: "power3.in" }
-      );
-    }
-  }, [isOpen]);
+  // ── Mobile menu expand/collapse ──
+  // Uses CSS grid-template-rows: 0fr → 1fr trick (GPU-composited, zero layout
+  // reflow per frame — same technique iOS uses for sheet expand/collapse).
+  // The grid transition is handled by CSS class toggle, not GSAP.
+  // GSAP handles only the opacity fade + content slide-in for polish.
 
   const navItems: NavItem[] = useMemo(
     () => [
@@ -260,39 +239,46 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Menu — GSAP-powered smooth expand/collapse */}
+        {/* Mobile Menu — CSS grid expand/collapse (iOS-smooth, zero layout reflow) */}
         <div
-          ref={menuRef}
-          className="lg:hidden overflow-hidden"
-          style={{ height: 0, opacity: 0 }}
+          className="lg:hidden grid transition-[grid-template-rows] duration-[350ms] ease-[cubic-bezier(0.32,0.72,0,1)]"
+          style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
         >
-          <div className="mt-2 pt-2 pb-1.5 space-y-1 bg-navy-deep/[0.03] backdrop-blur-md rounded-[18px] border border-navy-deep/[0.06] p-2">
-            {navItems.map((item) => (
+          <div className="overflow-hidden">
+            <div className="mt-2 pt-2 pb-1.5 space-y-1 bg-navy-deep/[0.03] backdrop-blur-md rounded-[18px] border border-navy-deep/[0.06] p-2"
+              style={{
+                opacity: isOpen ? 1 : 0,
+                transform: isOpen ? "translateY(0)" : "translateY(-8px)",
+                transition: "opacity 0.3s ease, transform 0.3s cubic-bezier(0.32,0.72,0,1)",
+              }}
+            >
+              {navItems.map((item) => (
+                <a
+                  href={item.href}
+                  onClick={(e) => handleScrollTo(e, item.href.substring(1))}
+                  key={item.name}
+                  className="flex items-center gap-3 px-4 py-3 min-h-[48px] rounded-xl bg-transparent hover:bg-navy-deep/[0.06] active:bg-navy-deep/[0.1] border border-transparent hover:border-navy-deep/[0.04] transition-[background-color,border-color] duration-300 font-sans group cursor-pointer focus-ring"
+                  style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+                >
+                  <span className="font-mono text-[10.5px] font-bold text-gold tracking-widest opacity-90 shrink-0">
+                    {item.number}
+                  </span>
+                  <span className="font-display font-semibold text-[13px] uppercase tracking-wider text-navy-deep group-hover:translate-x-1 transition-transform flex-1">
+                    {item.name}
+                  </span>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-navy-deep transition-colors shrink-0" />
+                </a>
+              ))}
               <a
-                href={item.href}
-                onClick={(e) => handleScrollTo(e, item.href.substring(1))}
-                key={item.name}
-                className="flex items-center gap-3 px-4 py-3 min-h-[48px] rounded-xl bg-transparent hover:bg-navy-deep/[0.06] active:bg-navy-deep/[0.1] border border-transparent hover:border-navy-deep/[0.04] transition-[background-color,border-color] duration-300 font-sans group cursor-pointer focus-ring"
+                href="#consult"
+                onClick={(e) => handleScrollTo(e, "consult")}
+                className="w-full mt-2 py-3.5 min-h-[48px] bg-navy-deep text-white font-bold font-display text-[11.5px] uppercase tracking-[0.16em] flex items-center justify-center gap-2 rounded-xl shadow-lg active:scale-[0.98] transition-transform whitespace-nowrap cursor-pointer focus-ring"
                 style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
               >
-                <span className="font-mono text-[10.5px] font-bold text-gold tracking-widest opacity-90 shrink-0">
-                  {item.number}
-                </span>
-                <span className="font-display font-semibold text-[13px] uppercase tracking-wider text-navy-deep group-hover:translate-x-1 transition-transform flex-1">
-                  {item.name}
-                </span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-navy-deep transition-colors shrink-0" />
+                Check Your OGI Score
+                <ArrowUpRight className="w-3.5 h-3.5 text-gold" />
               </a>
-            ))}
-            <a
-              href="#consult"
-              onClick={(e) => handleScrollTo(e, "consult")}
-              className="w-full mt-2 py-3.5 min-h-[48px] bg-navy-deep text-white font-bold font-display text-[11.5px] uppercase tracking-[0.16em] flex items-center justify-center gap-2 rounded-xl shadow-lg active:scale-[0.98] transition-transform whitespace-nowrap cursor-pointer focus-ring"
-              style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
-            >
-              Check Your OGI Score
-              <ArrowUpRight className="w-3.5 h-3.5 text-gold" />
-            </a>
+            </div>
           </div>
         </div>
       </header>
