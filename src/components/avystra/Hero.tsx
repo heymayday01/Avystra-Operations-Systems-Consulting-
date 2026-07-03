@@ -120,8 +120,8 @@ export default function Hero() {
             </span>
           </h1>
 
-          {/* Feature chips — refined spacing + smooth hover */}
-          <div ref={chipsRef} className="flex flex-wrap justify-center gap-2.5 sm:gap-3 mb-12 sm:mb-14 max-w-3xl mx-auto">
+          {/* Feature chips — single column on mobile, wrap on desktop */}
+          <div ref={chipsRef} className="flex flex-col items-center gap-2.5 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3 mb-12 sm:mb-14 max-w-3xl mx-auto">
             {[
               { label: "Hired experienced people", Icon: UserPlus },
               { label: "Promoted managers", Icon: TrendingUp },
