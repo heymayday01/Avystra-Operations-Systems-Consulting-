@@ -4,52 +4,17 @@
 - Environments: .env
 
 ✓ Starting...
-Attention: Next.js now collects completely anonymous telemetry regarding usage.
-This information is used to shape Next.js' roadmap and prioritize features.
-You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
-https://nextjs.org/telemetry
-
-✓ Ready in 1169ms
-○ Compiling / ...
- GET / 200 in 117ms (compile: 4ms, render: 114ms)
- GET / 200 in 144ms (compile: 5ms, render: 139ms)
- GET / 200 in 125ms (compile: 5ms, render: 120ms)
- GET / 200 in 100ms (compile: 3ms, render: 96ms)
- GET / 200 in 98ms (compile: 3ms, render: 95ms)
- GET / 200 in 98ms (compile: 3ms, render: 95ms)
- GET / 200 in 93ms (compile: 4ms, render: 90ms)
- GET / 200 in 81ms (compile: 3ms, render: 79ms)
-✓ Compiled in 903ms
-⨯ ./src/app/globals.css:5970:23
-Parsing CSS source code failed
-[0m [90m 5968 |[39m }
- [90m 5969 |[39m [33m@[39mmedia (hover[33m:[39m none) {
-[31m[1m>[22m[39m[90m 5970 |[39m   [33m.[39mpillar[33m-[39mcard [33m.[39mgroup[33m:[39mhover[37m[41m[1m\[22m[49m[39m[33m:[39mtext[33m-[39mgold[37m[41m[1m\[22m[49m[39m[33m/[39m[35m20[39m[33m,[39m
- [90m      |[39m                       [31m[1m^[22m[39m
- [90m 5971 |[39m   [33m.[39mpillar[33m-[39mcard span[33m.[39mgroup[33m-[39mhover[37m[41m[1m\[22m[49m[39m[33m:[39mtext[33m-[39mgold[37m[41m[1m\[22m[49m[39m[33m/[39m[35m20[39m {
- [90m 5972 |[39m     color[33m:[39m rgba([36mvar[39m([33m--[39mgold[33m-[39mrgb)[33m,[39m [35m0.2[39m) [33m![39mimportant[33m;[39m
- [90m 5973 |[39m   }[0m
-
-'hover:text-gold/20' is not recognized as a valid pseudo-class. Did you mean '::hover:text-gold/20' (pseudo-element) or is this a typo?
-
-Import trace:
-  Client Component Browser:
-    ./src/app/globals.css [Client Component Browser]
-    ./src/app/layout.tsx [Server Component]
-
-
- GET / 500 in 1188ms (compile: 988ms, render: 200ms)
-✓ Compiled in 776ms
- GET / 200 in 140ms (compile: 14ms, render: 126ms)
-✓ Compiled in 182ms
-✓ Compiled in 110ms
-✓ Compiled in 131ms
-✓ Compiled in 93ms
-✓ Compiled in 97ms
-✓ Compiled in 95ms
- GET / 200 in 414ms (compile: 70ms, render: 345ms)
- GET / 200 in 139ms (compile: 5ms, render: 134ms)
- GET / 200 in 177ms (compile: 6ms, render: 171ms)
- GET / 200 in 159ms (compile: 7ms, render: 153ms)
- GET / 200 in 112ms (compile: 3ms, render: 109ms)
- GET / 200 in 104ms (compile: 5ms, render: 99ms)
+✓ Ready in 1155ms
+ GET / 200 in 2.5s (compile: 2.1s, render: 401ms)
+ GET /api/ogi/health 200 in 114ms (compile: 102ms, render: 12ms)
+[ogi/submit] outcome: {
+  submissionId: 'cmr4ronod0000q1f2udje9nx6',
+  smtpConfigured: false,
+  ownerNotified: false,
+  userEmailSent: false,
+  excelExported: true,
+  ownerError: 'SMTP not configured — missing SMTP_USER or SMTP_PASS in .env',
+  userError: 'SMTP not configured — missing SMTP_USER or SMTP_PASS in .env'
+}
+ POST /api/ogi/submit 200 in 702ms (compile: 633ms, render: 69ms)
+ 702ms (compile: 633ms, render: 69ms)

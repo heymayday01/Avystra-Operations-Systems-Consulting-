@@ -72,7 +72,10 @@ interface OGIResultsProps {
   answers: { [key: number]: number };
   isSubmitting: boolean;
   submitError: string;
-  submissionResult: { emailSent: boolean } | null;
+  submissionResult: {
+    emailSent: boolean;
+    smtpConfigured?: boolean;
+  } | null;
   onSubmit: () => void;
   onRestart: () => void;
 }
@@ -844,6 +847,8 @@ export default function OGIResults({
               <p className="text-xs sm:text-sm text-slate-300 font-sans font-light leading-relaxed max-w-md mx-auto">
                 {submissionResult.emailSent
                   ? `A summary of your OGI score has been sent to ${email}. Our team will reach out shortly to walk through the findings.`
+                  : submissionResult.smtpConfigured === false
+                  ? "Thank you for completing the OGI assessment. Your results have been recorded — our team will reach out to you directly to walk through the findings."
                   : "Thank you for completing the OGI assessment. A member of the AVYSTRA team will follow up with you soon."}
               </p>
             </motion.div>

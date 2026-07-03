@@ -84,6 +84,7 @@ export default function OGIDiagnostic() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionResult, setSubmissionResult] = useState<{
     emailSent: boolean;
+    smtpConfigured?: boolean;
   } | null>(null);
   const [submitError, setSubmitError] = useState("");
   // Tracks whether the auto-save (DB + Excel) has been done for this session.
@@ -294,7 +295,10 @@ export default function OGIDiagnostic() {
       if (!res.ok || !data.success) {
         throw new Error(data?.error || "Submission failed");
       }
-      setSubmissionResult({ emailSent: !!data.emailSent });
+      setSubmissionResult({
+        emailSent: !!data.emailSent,
+        smtpConfigured: data.smtpConfigured,
+      });
     } catch (err) {
       console.error("[OGI] submit failed:", err);
       setSubmitError(
