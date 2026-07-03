@@ -68,18 +68,17 @@ export default function Home() {
       lenisInstance.scrollTo(0, { immediate: true });
     }
 
-    // Loading screen fades at 500ms (fast 0.3s exit), pageReady fires
-    // at 700ms — 200ms after fade starts. This ensures the loading screen
-    // is mostly gone before hero animations begin, so users SEE the
-    // entrance animations instead of them playing behind the fading overlay.
+    // Loading screen fades at 400ms (0.3s exit), pageReady fires at 550ms
+    // — 150ms after fade starts. Tight timing: loading screen is 80% gone
+    // when hero animations begin. No ghost screen, no visible gap.
     const loadTimer = setTimeout(() => {
       setIsLoading(false);
-    }, 500);
+    }, 400);
     const readyTimer = setTimeout(() => {
       setPageReady(true);
       document.documentElement.classList.add("page-ready");
       window.scrollTo(0, 0);
-    }, 700);
+    }, 550);
     return () => {
       clearTimeout(loadTimer);
       clearTimeout(readyTimer);
@@ -106,15 +105,12 @@ export default function Home() {
           shift from 0px to full page height, briefly showing a scrollbar. */}
       <div
         className={isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}
-        style={{ transition: "opacity 0.3s ease" }}
+        style={{ transition: "opacity 0.3s cubic-bezier(0.16,1,0.3,1)" }}
       >
-          {/* ═══ LIVELY AMBIENT BACKGROUND — ENHANCED + GPU-SAFE ═══
-              4 drifting orbs with GPU-only animations (transform/opacity).
-              Each orb is on its own compositor layer (will-change: transform)
-              so animations never trigger main-thread repaint. Radial gradients
-              are pre-rendered to the layer once, then only transform changes
-              per frame — ~60fps with zero scroll jank.
-              Sizes capped at 40vw (down from 60vw) to reduce fill area. */}
+          {/* ═══ LIVELY AMBIENT BACKGROUND ═══
+              4 drifting orbs with CSS keyframe animations (transform/opacity).
+              No will-change needed — CSS animations are auto-composited by
+              the browser. Radial gradients pre-render to the layer once. */}
           <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
             {/* Warm ivory base wash */}
             <div className="absolute inset-0 bg-cream-bg" />
@@ -125,7 +121,6 @@ export default function Home() {
               style={{
                 background:
                   "radial-gradient(circle, rgba(184,146,78,0.40) 0%, transparent 65%)",
-                willChange: "transform",
               }}
             />
             {/* Navy orb — bottom right, strong, slow drift (reverse) */}
@@ -134,7 +129,6 @@ export default function Home() {
               style={{
                 background:
                   "radial-gradient(circle, rgba(11,27,46,0.22) 0%, transparent 65%)",
-                willChange: "transform",
                 animationDelay: "2s",
               }}
             />
@@ -144,7 +138,6 @@ export default function Home() {
               style={{
                 background:
                   "radial-gradient(ellipse, rgba(212,178,106,0.22) 0%, transparent 70%)",
-                willChange: "transform, opacity",
               }}
             />
             {/* Accent gold orb — mid-right, small, vivid */}
@@ -153,7 +146,6 @@ export default function Home() {
               style={{
                 background:
                   "radial-gradient(circle, rgba(184,146,78,0.30) 0%, transparent 60%)",
-                willChange: "transform",
                 animationDelay: "4s",
               }}
             />

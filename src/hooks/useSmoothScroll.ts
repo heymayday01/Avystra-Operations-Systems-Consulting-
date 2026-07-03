@@ -156,9 +156,9 @@ export function useSmoothScroll() {
     // ═══ DESKTOP ONLY: Full Lenis + scrollerProxy setup ═══
 
     const lenis = new Lenis({
-      // lerp 0.08 = smoother, premium feel. Lower = smoother but laggier.
-      // 0.09 was slightly too responsive; 0.08 adds a touch more glide.
-      lerp: 0.08,
+      // lerp 0.1 = premium smooth-scroll feel. Matches iOS Safari momentum.
+      // 0.08 was too laggy, 0.12 too instant. 0.1 is the sweet spot.
+      lerp: 0.1,
       smoothWheel: true,
       syncTouch: false,
       infinite: false,
