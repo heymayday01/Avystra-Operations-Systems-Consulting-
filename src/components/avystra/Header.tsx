@@ -90,27 +90,28 @@ export default function Header() {
     };
   }, []);
 
-  // ── GSAP mobile menu expand/collapse (replaces Framer Motion height:auto) ──
+  // ── GSAP mobile menu expand/collapse ──
   useEffect(() => {
     const el = menuRef.current;
     if (!el) return;
 
+    // Kill any running tween on this element first
+    gsap.killTweensOf(el);
+
     if (isOpen) {
-      // Expand: set height to auto, animate from 0
-      gsap.set(el, { height: "auto", opacity: 1 });
+      // Expand: measure natural height, animate from 0 to that height
+      gsap.set(el, { height: "auto" });
       const autoHeight = el.offsetHeight;
       gsap.fromTo(el,
         { height: 0, opacity: 0 },
         { height: autoHeight, opacity: 1, duration: 0.35, ease: "power3.out",
-          onComplete: () => gsap.set(el, { height: "auto", clearProps: "all" }) }
+          onComplete: () => gsap.set(el, { height: "auto" }) }
       );
     } else {
-      // Collapse: animate to 0
-      const currentHeight = el.offsetHeight;
+      // Collapse: animate from current height to 0
       gsap.fromTo(el,
-        { height: currentHeight, opacity: 1 },
-        { height: 0, opacity: 0, duration: 0.3, ease: "power3.in",
-          onComplete: () => gsap.set(el, { clearProps: "all" }) }
+        { height: el.offsetHeight, opacity: 1 },
+        { height: 0, opacity: 0, duration: 0.3, ease: "power3.in" }
       );
     }
   }, [isOpen]);
