@@ -5,7 +5,6 @@ import { ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { usePageReady } from "@/lib/pageReady";
-import { EASE } from "@/lib/motion";
 import AvystraLogo from "./AvystraLogo";
 import { smoothScrollTo, scrollToTop } from "@/lib/scroll";
 
@@ -13,8 +12,10 @@ interface NavItem {
   name: string;
   href: string;
   number: string;
-  desc: string;
 }
+
+// iOS spring easing — used for all navbar transitions
+const IOS_EASE = [0.32, 0.72, 0, 1] as const;
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,73 +26,38 @@ export default function Header() {
   const activeSectionRef = useRef("bottlenecks");
   const pageReady = usePageReady();
 
-  // GSAP refs for navbar entrance animation
+  // Refs
   const headerRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLAnchorElement>(null);
   const navRef = useRef<HTMLElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  // GSAP navbar entrance — fires after pageReady (loading screen done)
+  // ── GSAP navbar entrance ──
   useEffect(() => {
-    if (!pageReady) return;
-    if (shouldReduceMotion) return;
+    if (!pageReady || shouldReduceMotion) return;
 
     const ctx = gsap.context(() => {
-      // Header slides down from top
-      gsap.fromTo(
-        headerRef.current,
-        { y: -30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          ease: "power3.out",
-          delay: 0.1,
-          clearProps: "all",
-        }
+      gsap.fromTo(headerRef.current,
+        { y: -24, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, ease: "power3.out", delay: 0.1, clearProps: "all" }
       );
-
-      // Logo fades in
-      gsap.fromTo(
-        logoRef.current,
-        { y: -10, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.5,
-          ease: "power3.out",
-          delay: 0.3,
-          clearProps: "all",
-        }
+      gsap.fromTo(logoRef.current,
+        { y: -8, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.45, ease: "power3.out", delay: 0.25, clearProps: "all" }
       );
-
-      // Nav links stagger in
       if (navRef.current) {
         const links = navRef.current.querySelectorAll("a");
-        gsap.fromTo(
-          links,
-          { y: -10, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.4,
-            ease: "power3.out",
-            stagger: 0.08,
-            delay: 0.5,
-            clearProps: "all",
-          }
+        gsap.fromTo(links,
+          { y: -8, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.35, ease: "power3.out", stagger: 0.06, delay: 0.4, clearProps: "all" }
         );
       }
     }, headerRef);
-
     return () => ctx.revert();
   }, [pageReady, shouldReduceMotion]);
 
+  // ── Scroll state + active section tracking ──
   useEffect(() => {
-    // ── Header "scrolled" state — native scroll listener (works on all devices) ──
-    // A single passive window scroll listener is cheaper and more reliable than
-    // subscribing to Lenis (which may not be ready yet on mobile, requiring a
-    // fallback anyway). Lenis on desktop writes to the native scroll position,
-    // so this listener fires on both desktop + mobile.
     const handleScrollState = () => {
       const isScrolled = window.scrollY > 15;
       setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
@@ -99,17 +65,13 @@ export default function Header() {
     handleScrollState();
     window.addEventListener("scroll", handleScrollState, { passive: true });
 
-    // ── Active-section tracking via ScrollTrigger (synced with Lenis on desktop) ──
     const sections = ["bottlenecks", "process", "programs", "team", "consult"];
     const triggers: ScrollTrigger[] = [];
-
     sections.forEach((id) => {
       const el = document.getElementById(id);
       if (el) {
         const trigger = ScrollTrigger.create({
-          trigger: el,
-          start: "top 45%",
-          end: "bottom 45%",
+          trigger: el, start: "top 45%", end: "bottom 45%",
           onToggle: (self) => {
             if (self.isActive && activeSectionRef.current !== id) {
               activeSectionRef.current = id;
@@ -120,8 +82,6 @@ export default function Header() {
         triggers.push(trigger);
       }
     });
-
-    // Refresh once triggers are created (catches late layout shifts)
     ScrollTrigger.refresh();
 
     return () => {
@@ -130,38 +90,38 @@ export default function Header() {
     };
   }, []);
 
+  // ── GSAP mobile menu expand/collapse (replaces Framer Motion height:auto) ──
+  useEffect(() => {
+    const el = menuRef.current;
+    if (!el) return;
+
+    if (isOpen) {
+      // Expand: set height to auto, animate from 0
+      gsap.set(el, { height: "auto", opacity: 1 });
+      const autoHeight = el.offsetHeight;
+      gsap.fromTo(el,
+        { height: 0, opacity: 0 },
+        { height: autoHeight, opacity: 1, duration: 0.35, ease: "power3.out",
+          onComplete: () => gsap.set(el, { height: "auto", clearProps: "all" }) }
+      );
+    } else {
+      // Collapse: animate to 0
+      const currentHeight = el.offsetHeight;
+      gsap.fromTo(el,
+        { height: currentHeight, opacity: 1 },
+        { height: 0, opacity: 0, duration: 0.3, ease: "power3.in",
+          onComplete: () => gsap.set(el, { clearProps: "all" }) }
+      );
+    }
+  }, [isOpen]);
+
   const navItems: NavItem[] = useMemo(
     () => [
-      {
-        name: "The Problem",
-        href: "#bottlenecks",
-        number: "01",
-        desc: "Structural points of friction",
-      },
-      {
-        name: "What We Do",
-        href: "#process",
-        number: "02",
-        desc: "Our procedural roadmap",
-      },
-      {
-        name: "Programs",
-        href: "#programs",
-        number: "03",
-        desc: "Bespoke system training",
-      },
-      {
-        name: "About",
-        href: "#about",
-        number: "04",
-        desc: "The founder's background",
-      },
-      {
-        name: "Contact",
-        href: "#contact-wa",
-        number: "05",
-        desc: "Tell us about your organization",
-      },
+      { name: "The Problem", href: "#bottlenecks", number: "01" },
+      { name: "What We Do", href: "#process", number: "02" },
+      { name: "Programs", href: "#programs", number: "03" },
+      { name: "About", href: "#about", number: "04" },
+      { name: "Contact", href: "#contact-wa", number: "05" },
     ],
     []
   );
@@ -172,36 +132,23 @@ export default function Header() {
       e.stopPropagation();
       setIsOpen(false);
 
-      // "Contact" opens WhatsApp directly — most direct contact method
       if (targetId === "contact-wa") {
         const message = "Hi AVYSTRA, I visited your website and would like to know more. Can we connect?";
         window.open(`https://wa.me/918596059607?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
         return;
       }
-
       setActiveSection(targetId);
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          smoothScrollTo(targetId);
-        });
+        requestAnimationFrame(() => smoothScrollTo(targetId));
       });
     },
-    []
-  );
-
-  const navActivePillTransition = useMemo(
-    () => ({
-      type: "spring" as const,
-      stiffness: 380,
-      damping: 30,
-    }),
     []
   );
 
   return (
     <div
       className={`fixed left-0 right-0 z-[60] flex justify-center px-4 sm:px-6 lg:px-8 transition-[top] duration-300 ease-out-expo ${
-        scrolled || isOpen ? "top-2 md:top-3" : "top-4 sm:top-6"
+        scrolled || isOpen ? "top-3 md:top-4" : "top-10 sm:top-12"
       }`}
       style={{ pointerEvents: "none" }}
     >
@@ -214,18 +161,12 @@ export default function Header() {
         }`}
       >
         <div className="flex items-center gap-4 lg:gap-6">
-          {/* Logo brand frame — flex-1 to keep nav centered.
-              Added pl-1 on mobile for extra corner padding so the
-              "Consulting" subtitle text has breathing room from the edge. */}
+          {/* Logo */}
           <div className="flex items-center min-w-0 flex-1 pl-1 sm:pl-0">
             <a
               ref={logoRef}
               href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                setIsOpen(false);
-                scrollToTop(1.2);
-              }}
+              onClick={(e) => { e.preventDefault(); setIsOpen(false); scrollToTop(1.0); }}
               className="flex items-center gap-2 group cursor-pointer focus-ring rounded-xl shrink-0"
               aria-label="AVYSTRA home"
             >
@@ -233,7 +174,7 @@ export default function Header() {
             </a>
           </div>
 
-          {/* Desktop Navigation — shows on lg+ (1024px) instead of xl (1280px) */}
+          {/* Desktop Nav */}
           <nav
             ref={navRef}
             aria-label="Main navigation"
@@ -253,21 +194,17 @@ export default function Header() {
                     handleScrollTo(e, item.href.substring(1));
                   }}
                   className={`nav-premium group relative px-4 xl:px-5 py-2 font-display text-[11px] xl:text-[11.5px] uppercase tracking-[0.14em] font-bold rounded-full z-10 whitespace-nowrap focus-ring ${
-                    isActive
-                      ? "text-navy-deep"
-                      : "text-navy-deep/55"
+                    isActive ? "text-navy-deep" : "text-navy-deep/55"
                   }`}
                 >
                   <span className="relative z-10">{item.name}</span>
-
                   {isActive && !shouldReduceMotion && (
                     <motion.span
                       layoutId="nav-active-pill"
                       className="absolute inset-0 bg-navy-deep/[0.06] rounded-full -z-10"
-                      transition={navActivePillTransition}
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
-
                   {hoveredIndex === i && !isActive && !shouldReduceMotion && (
                     <motion.span
                       layoutId="nav-hover-pill"
@@ -280,34 +217,32 @@ export default function Header() {
             })}
           </nav>
 
-          {/* CTA Action — desktop (flex-1 + justify-end keeps nav centered) */}
+          {/* Desktop CTA */}
           <div className="hidden lg:flex items-center justify-end shrink-0 flex-1">
             <a
               href="#consult"
               onClick={(e) => handleScrollTo(e, "consult")}
-              className="relative inline-flex items-center gap-2 bg-navy-deep text-white font-display text-[10.5px] uppercase tracking-[0.18em] font-bold px-4 sm:px-5 xl:px-6 py-2.5 rounded-full hover:bg-navy-soft transition-all duration-500 group overflow-hidden shine-on-hover whitespace-nowrap focus-ring"
+              className="relative inline-flex items-center gap-2 bg-navy-deep text-white font-display text-[10.5px] uppercase tracking-[0.18em] font-bold px-4 sm:px-5 xl:px-6 py-2.5 rounded-full hover:bg-navy-soft transition-colors duration-300 group overflow-hidden shine-on-hover whitespace-nowrap focus-ring"
             >
               <span className="relative z-10 whitespace-nowrap">Check Your OGI Score</span>
-              <ArrowUpRight className="w-3 h-3 text-gold group-hover:rotate-45 transition-transform duration-500 relative z-10" />
+              <ArrowUpRight className="w-3 h-3 text-gold group-hover:rotate-45 transition-transform duration-300 relative z-10" />
             </a>
           </div>
 
-          {/* Mobile/Tablet Menu trigger — shows below lg (1024px) */}
+          {/* Mobile Hamburger */}
           <div className="lg:hidden flex items-center shrink-0">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="relative w-11 h-11 flex items-center justify-center text-navy-deep focus-ring rounded-full bg-white/70 border border-white/40 transition-[background-color] duration-300 hover:bg-white/80 active:bg-white/90"
+              className="relative w-11 h-11 flex items-center justify-center text-navy-deep focus-ring rounded-full bg-white/70 border border-white/40 transition-colors duration-300 hover:bg-white/80 active:bg-white/90"
               style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
               aria-label="Toggle Menu"
               aria-expanded={isOpen}
             >
               <div className="relative w-5 h-3.5 flex flex-col justify-between items-center">
                 <motion.span
-                  animate={
-                    isOpen ? { rotate: 45, y: 6.25 } : { rotate: 0, y: 0 }
-                  }
+                  animate={isOpen ? { rotate: 45, y: 6.25 } : { rotate: 0, y: 0 }}
                   className="w-full h-[1.5px] bg-navy-deep origin-center rounded-full"
-                  transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+                  transition={{ duration: 0.3, ease: IOS_EASE }}
                 />
                 <motion.span
                   animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
@@ -315,63 +250,50 @@ export default function Header() {
                   transition={{ duration: 0.2, ease: "easeOut" }}
                 />
                 <motion.span
-                  animate={
-                    isOpen ? { rotate: -45, y: -6.25 } : { rotate: 0, y: 0 }
-                  }
+                  animate={isOpen ? { rotate: -45, y: -6.25 } : { rotate: 0, y: 0 }}
                   className="w-full h-[1.5px] bg-navy-deep origin-center rounded-full"
-                  transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+                  transition={{ duration: 0.3, ease: IOS_EASE }}
                 />
               </div>
             </button>
           </div>
         </div>
 
-        {/* Mobile/Tablet Dropdown Menu — iOS-style smooth reveal */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{
-                height: { duration: 0.35, ease: [0.32, 0.72, 0, 1] },
-                opacity: { duration: 0.25, ease: "easeOut" },
-              }}
-              className="lg:hidden overflow-hidden rounded-[18px] mt-2"
-              style={{ transformOrigin: "top" }}
+        {/* Mobile Menu — GSAP-powered smooth expand/collapse */}
+        <div
+          ref={menuRef}
+          className="lg:hidden overflow-hidden"
+          style={{ height: 0, opacity: 0 }}
+        >
+          <div className="mt-2 pt-2 pb-1.5 space-y-1 bg-navy-deep/[0.03] backdrop-blur-md rounded-[18px] border border-navy-deep/[0.06] p-2">
+            {navItems.map((item) => (
+              <a
+                href={item.href}
+                onClick={(e) => handleScrollTo(e, item.href.substring(1))}
+                key={item.name}
+                className="flex items-center gap-3 px-4 py-3 min-h-[48px] rounded-xl bg-transparent hover:bg-navy-deep/[0.06] active:bg-navy-deep/[0.1] border border-transparent hover:border-navy-deep/[0.04] transition-[background-color,border-color] duration-300 font-sans group cursor-pointer focus-ring"
+                style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+              >
+                <span className="font-mono text-[10.5px] font-bold text-gold tracking-widest opacity-90 shrink-0">
+                  {item.number}
+                </span>
+                <span className="font-display font-semibold text-[13px] uppercase tracking-wider text-navy-deep group-hover:translate-x-1 transition-transform flex-1">
+                  {item.name}
+                </span>
+                <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-navy-deep transition-colors shrink-0" />
+              </a>
+            ))}
+            <a
+              href="#consult"
+              onClick={(e) => handleScrollTo(e, "consult")}
+              className="w-full mt-2 py-3.5 min-h-[48px] bg-navy-deep text-white font-bold font-display text-[11.5px] uppercase tracking-[0.16em] flex items-center justify-center gap-2 rounded-xl shadow-lg active:scale-[0.98] transition-transform whitespace-nowrap cursor-pointer focus-ring"
+              style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
             >
-              <div className="pt-2 pb-1.5 space-y-1 bg-navy-deep/[0.03] backdrop-blur-md rounded-[18px] border border-navy-deep/[0.06] p-2">
-                {navItems.map((item) => (
-                  <a
-                    href={item.href}
-                    onClick={(e) => handleScrollTo(e, item.href.substring(1))}
-                    key={item.name}
-                    className="flex items-center gap-3 px-4 py-3 min-h-[48px] rounded-xl bg-transparent hover:bg-navy-deep/[0.06] active:bg-navy-deep/[0.1] border border-transparent hover:border-navy-deep/[0.04] transition-[background-color,border-color] duration-300 font-sans group cursor-pointer focus-ring"
-                    style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", pointerEvents: "auto" }}
-                  >
-                    <span className="font-mono text-[10.5px] font-bold text-gold tracking-widest opacity-90 shrink-0">
-                      {item.number}
-                    </span>
-                    <span className="font-display font-semibold text-[13px] uppercase tracking-wider text-navy-deep group-hover:translate-x-1 transition-transform flex-1">
-                      {item.name}
-                    </span>
-                    <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-navy-deep transition-colors shrink-0" />
-                  </a>
-                ))}
-
-                <a
-                  href="#consult"
-                  onClick={(e) => handleScrollTo(e, "consult")}
-                  className="w-full mt-2 py-3.5 min-h-[48px] bg-navy-deep text-white font-bold font-display text-[11.5px] uppercase tracking-[0.16em] flex items-center justify-center gap-2 rounded-xl shadow-lg active:scale-[0.98] transition-transform whitespace-nowrap cursor-pointer focus-ring"
-                  style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", pointerEvents: "auto" }}
-                >
-                  Check Your OGI Score
-                  <ArrowUpRight className="w-3.5 h-3.5 text-gold" />
-                </a>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              Check Your OGI Score
+              <ArrowUpRight className="w-3.5 h-3.5 text-gold" />
+            </a>
+          </div>
+        </div>
       </header>
     </div>
   );

@@ -5,7 +5,7 @@ import Header from "@/components/avystra/Header";
 import Hero from "@/components/avystra/Hero";
 import ScrollProgress from "@/components/avystra/ScrollProgress";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { smoothScrollTo } from "@/lib/scroll";
 import LoadingScreen from "@/components/avystra/LoadingScreen";
 import { PageReadyProvider } from "@/lib/pageReady";
@@ -98,9 +98,7 @@ export default function Home() {
   return (
     <PageReadyProvider value={pageReady}>
     <div className="relative min-h-[100dvh] text-navy-deep selection:bg-gold/20 selection:text-gold font-sans antialiased flex flex-col overflow-x-hidden">
-      <AnimatePresence>
-        {isLoading && <LoadingScreen />}
-      </AnimatePresence>
+      {isLoading && <LoadingScreen />}
 
       {/* Page content is always mounted (behind the loading screen).
           This prevents the ghost scrollbar that appeared when content

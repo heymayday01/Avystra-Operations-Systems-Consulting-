@@ -1,61 +1,55 @@
 "use client";
 
-import { motion } from "motion/react";
-import { useEffect, useState } from "react";
-import { EASE } from "@/lib/motion";
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "@/lib/gsap";
 
 /**
- * Professional loading screen — clean, minimal, enterprise-grade.
- *
- * PERFORMANCE: Uses opacity-only transitions (no blur, no scale).
- * The previous version used filter:blur() on exit + logo which created
- * GPU compositing layers that caused jank when transitioning to the hero
- * (which also had blur animations). Now it's pure opacity — buttery smooth.
+ * Professional loading screen — GSAP-powered, no Framer Motion.
+ * Pure opacity transitions. Logo + progress bar + percentage.
  */
 export default function LoadingScreen() {
   const [progress, setProgress] = useState(0);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
+  const pctRef = useRef<HTMLSpanElement>(null);
 
+  // Progress counter
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          return 100;
-        }
-        const remaining = 100 - prev;
-        return prev + Math.max(1, remaining * 0.15);
+        if (prev >= 100) { clearInterval(interval); return 100; }
+        return prev + Math.max(1, (100 - prev) * 0.15);
       });
     }, 70);
     return () => clearInterval(interval);
   }, []);
 
+  // GSAP entrance
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(rootRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" });
+      gsap.fromTo(logoRef.current, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", delay: 0.1 });
+      gsap.fromTo(barRef.current, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out", delay: 0.3 });
+      gsap.fromTo(pctRef.current, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out", delay: 0.4 });
+    }, rootRef);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3, ease: EASE }}
+    <div
+      ref={rootRef}
       className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-navy-deep"
     >
-      {/* Logo — opacity fade-in only (no blur) */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
-        className="mb-8"
-      >
+      <div ref={logoRef} className="mb-8">
         <img
           src="/avystra-logo-new-white.webp"
           alt="AVYSTRA Consulting Pvt. Ltd."
           style={{ height: "90px", width: "auto" }}
         />
-      </motion.div>
-
-      {/* Progress bar */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.4 }}
+      </div>
+      <div
+        ref={barRef}
         className="h-px bg-white/10 rounded-full overflow-hidden"
         style={{ width: "10rem" }}
       >
@@ -63,22 +57,17 @@ export default function LoadingScreen() {
           className="h-full rounded-full"
           style={{
             width: `${progress}%`,
-            background:
-              "linear-gradient(90deg, var(--color-gold), var(--color-gold-light))",
+            background: "linear-gradient(90deg, var(--color-gold), var(--color-gold-light))",
             transition: "width 0.3s cubic-bezier(0.16,1,0.3,1)",
           }}
         />
-      </motion.div>
-
-      {/* Percentage */}
-      <motion.span
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 0.4 }}
+      </div>
+      <span
+        ref={pctRef}
         className="mt-3 font-mono text-[10.5px] tracking-[0.3em] text-slate-500 uppercase tabular-nums"
       >
         {Math.round(progress)}%
-      </motion.span>
-    </motion.div>
+      </span>
+    </div>
   );
 }
