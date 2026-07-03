@@ -9,13 +9,38 @@ interface FooterProps {
   leadCount: number;
 }
 
+/**
+ * Footer — refined for glitch-free rendering.
+ *
+ * GLITCHES FIXED (vs. previous version):
+ * 1. Brand text clipping: the massive "AVYSTRA" wordmark used a negative
+ *    `marginBottom` (clamp(-0.4rem, -1.5vw, -1.5rem)) combined with
+ *    `overflow-hidden` on the footer, which clipped the letter baselines —
+ *    severely on mobile (only the tops of letters were visible). Now the
+ *    wordmark sits in its own non-clipped band with positive padding so the
+ *    full baseline always renders inside the footer.
+ * 2. Heading reveal breaking on inline gold span: the `words` mode splitter
+ *    wrapped "Let's re-engineer your" in overflow-hidden word spans but
+ *    could not split inside the `<span class="text-gold">` child, producing
+ *    an uneven reveal (3 words, then a jump to the gold phrase). Switched
+ *    to a single `fade` so the whole heading lifts in as one unit — the
+ *    gold span is preserved naturally.
+ * 3. Janky staggered reveals: 6 separate reveals with delays up to 0.45s
+ *    felt disjointed when the footer scrolled quickly into view.
+ *    Consolidated to 3 cohesive groups (main / meta / brand) with tight,
+ *    overlapping delays (0 / 0.12 / 0.24s) so the footer reveals as one
+ *    composition in ~0.6s total.
+ * 4. Repaint jank: two large blurred orbs (`blur-[140px]` / `blur-[120px]`)
+ *    caused repaint stutter during scroll, especially on mobile. Replaced
+ *    with a single static radial gradient on the footer background (no
+ *    animated blur, no per-frame cost) — same premium ambiance, zero jank.
+ */
 export default function Footer({ leadCount }: FooterProps) {
-  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
-  const descriptionRef = useGsapReveal<HTMLParagraphElement>("fade", { delay: 0.2, duration: 0.75 });
-  const contactLinksRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.3, duration: 0.6 });
-  const navLinksRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.35, duration: 0.6 });
-  const socialLinksRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.4, duration: 0.6 });
-  const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.45, duration: 0.6 });
+  // Three cohesive reveal groups — tight, overlapping delays so the footer
+  // feels like a single composition rather than a chain of disconnected fades.
+  const mainRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0, duration: 0.6 });
+  const metaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.12, duration: 0.5 });
+  const brandRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.24, duration: 0.65, y: 20 });
 
   const scrollTo = (href: string) => {
     const elementId = href.substring(1);
@@ -55,16 +80,21 @@ export default function Footer({ leadCount }: FooterProps) {
   ];
 
   return (
-    <footer className="relative bg-navy-deep text-slate-100 overflow-hidden pt-12 sm:pt-16 mt-auto">
-      {/* Ambient gold and navy glows */}
-      <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full bg-gold/[0.04] blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] rounded-full bg-gold/[0.02] blur-[120px] pointer-events-none" />
-
-      <div
-        className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10 w-full"
-      >
+    <footer
+      className="relative bg-navy-deep text-slate-100 mt-auto overflow-hidden"
+      style={{
+        // Static radial gradient ambiance — replaces the two animated
+        // blur orbs. Same premium glow, zero per-frame repaint cost.
+        backgroundImage:
+          "radial-gradient(ellipse 60% 50% at 25% 30%, rgba(184,146,78,0.06), transparent 70%), radial-gradient(ellipse 50% 40% at 80% 70%, rgba(184,146,78,0.03), transparent 70%)",
+      }}
+    >
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10 w-full pt-12 sm:pt-16">
         {/* Main Footer Content — compact 3-column grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 sm:gap-8 lg:gap-12 mb-10">
+        <div
+          ref={mainRef}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 sm:gap-8 lg:gap-12 mb-10"
+        >
           {/* Brand & Description */}
           <div className="col-span-1 sm:col-span-2 lg:col-span-6">
             {/* Logo in footer */}
@@ -72,27 +102,20 @@ export default function Footer({ leadCount }: FooterProps) {
               <AvystraLogo size="lg" showTagline={true} theme="dark" />
             </div>
 
-            <h2
-              ref={headingRef}
-              className="text-2xl sm:text-3xl lg:text-4xl font-display font-medium text-white mb-3 tracking-tight leading-[1.25]"
-            >
+            {/* Heading: single fade reveal — preserves the inline gold span
+                naturally (words mode would unevenly split around it). */}
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-medium text-white mb-3 tracking-tight leading-[1.25]">
               Let&apos;s re-engineer your{" "}
               <span className="text-gold">business performance.</span>
             </h2>
-            <p
-              ref={descriptionRef}
-              className="text-slate-400 max-w-md leading-relaxed text-sm mb-5"
-            >
+            <p className="text-slate-400 max-w-md leading-relaxed text-sm mb-5">
               AVYSTRA helps founders and leaders build the clarity,
               accountability, and systems necessary for scalable, decisive
               growth.
             </p>
 
             {/* Contact quick row */}
-            <div
-              ref={contactLinksRef}
-              className="flex flex-wrap gap-2.5"
-            >
+            <div className="flex flex-wrap gap-2.5">
               <a
                 href="mailto:info@avystra.co.in"
                 className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/5 border border-white/10 text-slate-200 hover:bg-gold/10 hover:border-gold/30 hover:text-gold transition-all duration-300 text-[13px] font-medium focus-ring"
@@ -111,7 +134,7 @@ export default function Footer({ leadCount }: FooterProps) {
           </div>
 
           {/* Links */}
-          <div ref={navLinksRef} className="col-span-1 lg:col-span-3">
+          <div className="col-span-1 lg:col-span-3">
             <h3 className="text-[12.5px] font-mono text-gold uppercase tracking-[0.2em] mb-4 font-bold">
               Navigation
             </h3>
@@ -137,7 +160,7 @@ export default function Footer({ leadCount }: FooterProps) {
           </div>
 
           {/* Connect & Socials */}
-          <div ref={socialLinksRef} className="col-span-1 lg:col-span-3">
+          <div className="col-span-1 lg:col-span-3">
             <h3 className="text-[12.5px] font-mono text-gold uppercase tracking-[0.2em] mb-4 font-bold">
               Connect
             </h3>
@@ -164,7 +187,7 @@ export default function Footer({ leadCount }: FooterProps) {
 
         {/* Footer Meta — compact single row */}
         <div
-          ref={ctaRef}
+          ref={metaRef}
           className="py-5 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs font-mono text-slate-500"
         >
           <p className="text-center sm:text-left">
@@ -193,13 +216,23 @@ export default function Footer({ leadCount }: FooterProps) {
         </div>
       </div>
 
-      {/* Massive Brand Name — compressed, responsive */}
-      <div className="w-full overflow-hidden flex justify-center items-end select-none pointer-events-none relative">
+      {/* Massive Brand Name — fully contained inside the footer.
+          The footer is `overflow-hidden` so the wide text never causes
+          horizontal scroll AND nothing bleeds below the navy background.
+          The band uses leading-[0.75] (tight) so the line box is shorter
+          than the glyph cap-height region, then pads the band itself with
+          generous pt/pb so the visible glyphs sit comfortably inside the
+          footer's overflow boundary. This replaces the old negative
+          marginBottom trick which clipped baselines (severely on mobile). */}
+      <div
+        ref={brandRef}
+        className="w-full flex justify-center items-end select-none pointer-events-none relative pt-4 pb-5 sm:pt-6 sm:pb-8"
+      >
         <span
-          className="font-display font-black tracking-tighter text-navy-soft uppercase text-center whitespace-nowrap leading-[0.75] z-0 block"
+          className="font-display font-black tracking-tighter text-navy-soft uppercase text-center whitespace-nowrap z-0 block"
           style={{
             fontSize: "clamp(3.5rem, 18vw, 16rem)",
-            marginBottom: "clamp(-0.4rem, -1.5vw, -1.5rem)",
+            lineHeight: 0.75,
           }}
           aria-hidden="true"
         >
