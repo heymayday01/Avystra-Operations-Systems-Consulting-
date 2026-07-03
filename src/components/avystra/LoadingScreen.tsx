@@ -34,7 +34,7 @@ export default function LoadingScreen() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.4, ease: EASE }}
+      transition={{ duration: 0.3, ease: EASE }}
       className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-navy-deep"
     >
       {/* Logo — opacity fade-in only (no blur) */}

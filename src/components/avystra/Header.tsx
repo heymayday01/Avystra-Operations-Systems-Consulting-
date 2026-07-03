@@ -207,10 +207,10 @@ export default function Header() {
     >
       <header
         ref={headerRef}
-        className={`w-full max-w-6xl pointer-events-auto transition-all duration-500 ease-out-expo rounded-[22px] ${
+        className={`w-full max-w-6xl pointer-events-auto transition-[background-color,border-color,box-shadow,padding] duration-300 ease-out-expo rounded-[22px] ${
           scrolled || isOpen
-            ? "py-2 px-3 sm:px-4 lg:py-2 lg:px-4 border border-white/50 bg-white/75 shadow-[0_8px_32px_-8px_rgba(var(--navy-rgb),0.18)] backdrop-blur-xl backdrop-saturate-150"
-            : "py-2.5 px-3 sm:px-5 lg:px-6 bg-white/55 backdrop-blur-lg border border-white/30 shadow-sm"
+            ? "py-2 px-3 sm:px-4 lg:py-2 lg:px-4 border border-white/60 bg-white/70 shadow-[0_8px_32px_-8px_rgba(var(--navy-rgb),0.18)] backdrop-blur-xl backdrop-saturate-150"
+            : "py-2.5 px-3 sm:px-5 lg:px-6 bg-white/50 backdrop-blur-lg border border-white/25 shadow-sm"
         }`}
       >
         <div className="flex items-center gap-4 lg:gap-6">
@@ -326,28 +326,28 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile/Tablet Dropdown Menu — compact */}
+        {/* Mobile/Tablet Dropdown Menu — Apple-style vibrancy */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.35, ease: EASE }}
-              className="lg:hidden overflow-hidden rounded-[18px]"
+              transition={{ duration: 0.3, ease: EASE }}
+              className="lg:hidden overflow-hidden rounded-[18px] mt-2"
             >
-              <div className="pt-3 pb-1.5 space-y-1">
+              <div className="pt-2 pb-1.5 space-y-1 bg-navy-deep/[0.03] backdrop-blur-md rounded-[18px] border border-navy-deep/[0.06] p-2">
                 {navItems.map((item, i) => (
                   <motion.div
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.04, duration: 0.35 }}
+                    transition={{ delay: i * 0.04, duration: 0.3 }}
                     key={item.name}
                   >
                     <a
                       href={item.href}
                       onClick={(e) => handleScrollTo(e, item.href.substring(1))}
-                      className="flex items-center gap-3 px-3.5 py-3 min-h-[48px] rounded-xl bg-white/50 hover:bg-white/70 active:bg-white/80 border border-white/30 hover:border-gold/20 transition-all font-sans group cursor-pointer focus-ring"
+                      className="flex items-center gap-3 px-4 py-3 min-h-[48px] rounded-xl bg-transparent hover:bg-navy-deep/[0.06] active:bg-navy-deep/[0.1] border border-transparent hover:border-navy-deep/[0.04] transition-[background-color,border-color] duration-300 font-sans group cursor-pointer focus-ring"
                       style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", pointerEvents: "auto" }}
                     >
                       <span className="font-mono text-[10.5px] font-bold text-gold tracking-widest opacity-90 shrink-0">
