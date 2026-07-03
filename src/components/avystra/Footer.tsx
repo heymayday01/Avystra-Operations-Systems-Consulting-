@@ -219,20 +219,28 @@ export default function Footer({ leadCount }: FooterProps) {
       {/* Massive Brand Name — fully contained inside the footer.
           The footer is `overflow-hidden` so the wide text never causes
           horizontal scroll AND nothing bleeds below the navy background.
-          The band uses leading-[0.75] (tight) so the line box is shorter
-          than the glyph cap-height region, then pads the band itself with
-          generous pt/pb so the visible glyphs sit comfortably inside the
-          footer's overflow boundary. This replaces the old negative
-          marginBottom trick which clipped baselines (severely on mobile). */}
+
+          FIXES:
+          - Last 'A' clipping: `tracking-tighter` (negative letter-spacing)
+            applies after EVERY character including the last, which clips the
+            right side bearing of the final 'A'. Fixed by switching to
+            `tracking-tight` (less aggressive) + adding horizontal padding
+            (px-2) to the band so the last glyph has breathing room.
+          - Baseline clipping: leading-[0.75] (tight line-box) + generous
+            band pt/pb so full glyphs sit inside the overflow boundary.
+          - Visibility: muted gold (rgba(184,146,78,0.5)) solid color —
+            clearly visible against navy-deep without relying on
+            background-clip:text (which was unreliable in some browsers). */}
       <div
         ref={brandRef}
-        className="w-full flex justify-center items-end select-none pointer-events-none relative pt-4 pb-5 sm:pt-6 sm:pb-8"
+        className="w-full flex justify-center items-end select-none pointer-events-none relative pt-4 pb-5 sm:pt-6 sm:pb-8 px-2"
       >
         <span
-          className="font-display font-black tracking-tighter text-navy-soft uppercase text-center whitespace-nowrap z-0 block"
+          className="font-display font-black tracking-tight uppercase text-center whitespace-nowrap z-0 block"
           style={{
-            fontSize: "clamp(3.5rem, 18vw, 16rem)",
+            fontSize: "clamp(3rem, 17vw, 16rem)",
             lineHeight: 0.75,
+            color: "rgba(184, 146, 78, 0.5)",
           }}
           aria-hidden="true"
         >

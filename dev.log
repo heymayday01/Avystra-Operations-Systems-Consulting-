@@ -17,3 +17,61 @@
  GET / 200 in 115ms (compile: 3ms, render: 112ms)
 [email] SMTP connection verified — host=smtp.gmail.com port=465 user=info.avystra@gmail.com
  GET /api/ogi/health?verify=true 200 in 610ms (compile: 2ms, render: 607ms)
+ GET / 200 in 262ms (compile: 3ms, render: 259ms)
+ GET / 200 in 132ms (compile: 4ms, render: 129ms)
+ GET / 200 in 141ms (compile: 3ms, render: 138ms)
+ POST /api/ogi/save 200 in 336ms (compile: 304ms, render: 32ms)
+[email] sent: {
+  messageId: '<a2c92d10-f109-8551-51f4-89dbf6ad81d1@gmail.com>',
+  to: 'aryanthakare2003@gmail.com',
+  subject: 'Your AVYSTRA OGI Result'
+}
+[email] sent: {
+  messageId: '<fc7fc8f9-29d5-4a90-c730-460d62a455f2@gmail.com>',
+  to: 'info.avystra@gmail.com',
+  subject: 'New OGI Submission — Aryan thakare (ceo)'
+}
+[ogi/submit] outcome: {
+  submissionId: 'cmr4sql490000q1bg05bir52y',
+  smtpConfigured: true,
+  ownerNotified: true,
+  userEmailSent: true,
+  excelExported: true,
+  ownerError: undefined,
+  userError: undefined
+}
+ POST /api/ogi/submit 200 in 1955ms (compile: 41ms, render: 1914ms)
+ GET / 200 in 132ms (compile: 5ms, render: 127ms)
+ GET / 200 in 94ms (compile: 3ms, render: 91ms)
+ GET / 200 in 97ms (compile: 3ms, render: 94ms)
+ GET / 200 in 115ms (compile: 2ms, render: 113ms)
+ GET / 200 in 89ms (compile: 3ms, render: 85ms)
+ GET / 200 in 109ms (compile: 4ms, render: 106ms)
+ GET / 200 in 124ms (compile: 3ms, render: 121ms)
+ GET / 200 in 99ms (compile: 3ms, render: 96ms)
+ GET / 200 in 127ms (compile: 8ms, render: 119ms)
+ GET / 200 in 94ms (compile: 3ms, render: 92ms)
+ GET / 200 in 78ms (compile: 3ms, render: 75ms)
+ GET / 200 in 238ms (compile: 74ms, render: 164ms)
+ GET / 200 in 142ms (compile: 5ms, render: 136ms)
+ GET / 200 in 140ms (compile: 57ms, render: 82ms)
+ GET / 200 in 92ms (compile: 61ms, render: 31ms)
+ GET / 200 in 35ms (compile: 4ms, render: 31ms)
+✓ Compiled in 230ms
+ GET / 200 in 436ms (compile: 66ms, render: 371ms)
+ GET / 200 in 147ms (compile: 7ms, render: 140ms)
+ GET / 200 in 132ms (compile: 3ms, render: 129ms)
+✓ Compiled in 230ms
+ GET / 200 in 380ms (compile: 67ms, render: 314ms)
+ GET / 200 in 145ms (compile: 4ms, render: 140ms)
+ GET / 200 in 157ms (compile: 5ms, render: 151ms)
+ GET / 200 in 150ms (compile: 4ms, render: 146ms)
+ GET / 200 in 131ms (compile: 7ms, render: 124ms)
+ GET / 200 in 136ms (compile: 9ms, render: 127ms)
+✓ Compiled in 350ms
+ GET / 200 in 358ms (compile: 59ms, render: 299ms)
+✓ Compiled in 195ms
+ GET / 200 in 430ms (compile: 71ms, render: 359ms)
+ GET / 200 in 147ms (compile: 7ms, render: 140ms)
+✓ Compiled in 211ms
+ GET / 200 in 369ms (compile: 66ms, render: 303ms)
