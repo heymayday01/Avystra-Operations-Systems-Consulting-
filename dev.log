@@ -4,17 +4,7 @@
 - Environments: .env
 
 ✓ Starting...
-✓ Ready in 1155ms
- GET / 200 in 2.5s (compile: 2.1s, render: 401ms)
- GET /api/ogi/health 200 in 114ms (compile: 102ms, render: 12ms)
-[ogi/submit] outcome: {
-  submissionId: 'cmr4ronod0000q1f2udje9nx6',
-  smtpConfigured: false,
-  ownerNotified: false,
-  userEmailSent: false,
-  excelExported: true,
-  ownerError: 'SMTP not configured — missing SMTP_USER or SMTP_PASS in .env',
-  userError: 'SMTP not configured — missing SMTP_USER or SMTP_PASS in .env'
-}
- POST /api/ogi/submit 200 in 702ms (compile: 633ms, render: 69ms)
- 702ms (compile: 633ms, render: 69ms)
+✓ Ready in 1148ms
+ GET / 200 in 2.6s (compile: 2.2s, render: 398ms)
+ GET / 200 in 100ms (compile: 4ms, render: 97ms)
+in 100ms (compile: 4ms, render: 97ms)
