@@ -22,17 +22,23 @@ export default function Hero() {
   // GSAP ScrollTrigger reveals for hero entrance (eyebrow / chips / card /
   // CTAs / trust / marquee). The H1 heading stays on CSS animations
   // (hero-line-1/2/3) per design — GSAP is not applied to it.
-  // Timing (all delays from pageReady at T=0.6s):
-  // H1 lines: 0.08/0.2/0.32s delays, 0.4s each (finishes at ~0.72s)
-  // Eyebrow fires at 0s (above heading, simultaneous with H1 line 1).
-  // Chips at 0.3s (overlaps H1 line 3). Card at 0.45s. CTAs at 0.6s.
-  // Trust at 0.75s. Marquee at 0.85s — tight sequence, no dead air.
+  //
+  // SYNCED TIMELINE (all delays from pageReady):
+  // H1 line 1 (CSS):  0.05s delay, 0.5s dur  → finishes at 0.55s
+  // H1 line 2 (CSS):  0.18s delay, 0.5s dur  → finishes at 0.68s
+  // H1 line 3 (CSS):  0.32s delay, 0.5s dur  → finishes at 0.82s
+  // Eyebrow (GSAP):   0s    delay, 0.4s dur  → finishes at 0.40s (above heading)
+  // Chips (GSAP):     0.4s  delay, 0.4s dur  → finishes at 0.80s (overlaps H1 line 3)
+  // Card (GSAP):      0.55s delay, 0.4s dur  → finishes at 0.95s (after H1 done)
+  // CTAs (GSAP):      0.7s  delay, 0.4s dur  → finishes at 1.10s
+  // Trust (GSAP):     0.85s delay, 0.4s dur  → finishes at 1.25s
+  // Marquee (GSAP):   0.95s delay, 0.4s dur  → finishes at 1.35s
   const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0, duration: 0.4 });
-  const chipsRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.3, duration: 0.35 });
-  const cardRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.45, duration: 0.4 });
-  const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.6, duration: 0.35 });
-  const trustRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.75, duration: 0.35 });
-  const marqueeRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.85, duration: 0.35 });
+  const chipsRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.4, duration: 0.4 });
+  const cardRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.55, duration: 0.4 });
+  const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.7, duration: 0.4 });
+  const trustRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.85, duration: 0.4 });
+  const marqueeRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.95, duration: 0.4 });
 
   const reducedMotion = useSyncExternalStore(
     reducedMotionSubscribe,

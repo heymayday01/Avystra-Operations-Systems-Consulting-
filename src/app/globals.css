@@ -373,17 +373,22 @@ body::-webkit-scrollbar {
    Gated behind .page-ready — starts AFTER loading screen fades.
    All other Hero elements (eyebrow, chips, card, CTAs) use GSAP useGsapReveal. */
 @keyframes hero-line-reveal {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 /* Before page-ready: H1 lines hidden, no animation */
 .hero-line-1, .hero-line-2, .hero-line-3 { opacity: 0; }
 
-/* After page-ready: H1 lines stagger in — tight 0.08/0.2/0.32s, 0.4s each */
-.page-ready .hero-line-1 { animation: hero-line-reveal 0.4s var(--ease-out) 0.08s forwards; }
-.page-ready .hero-line-2 { animation: hero-line-reveal 0.4s var(--ease-out) 0.2s forwards; }
-.page-ready .hero-line-3 { animation: hero-line-reveal 0.4s var(--ease-out) 0.32s forwards; }
+/* After page-ready: H1 lines stagger in.
+   Delays synced with GSAP element delays:
+   - Line 1: 0.05s (fires just after eyebrow at 0s)
+   - Line 2: 0.18s (overlaps with chips starting at 0.3s)
+   - Line 3: 0.32s (finishes at ~0.82s, overlapping with card at 0.45s)
+   - Duration 0.5s — matches GSAP fade durations for visual consistency */
+.page-ready .hero-line-1 { animation: hero-line-reveal 0.5s var(--ease-out) 0.05s forwards; }
+.page-ready .hero-line-2 { animation: hero-line-reveal 0.5s var(--ease-out) 0.18s forwards; }
+.page-ready .hero-line-3 { animation: hero-line-reveal 0.5s var(--ease-out) 0.32s forwards; }
 
 /* ═══ HERO HOVER STYLES ONLY (entrance animations via GSAP) ═══ */
 
