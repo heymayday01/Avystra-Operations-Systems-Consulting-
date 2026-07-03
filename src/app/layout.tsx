@@ -112,7 +112,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="antialiased bg-background text-foreground">
+      <body className="antialiased bg-navy-deep text-foreground">
         {/* Skip-to-content link — first focusable element for keyboard users */}
         <a
           href="#main"

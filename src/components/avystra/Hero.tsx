@@ -5,6 +5,7 @@ import { ArrowRight, UserPlus, TrendingUp, Building2, Banknote, ClipboardList } 
 import { UnderlineSquiggle } from "./DoodleWidgets";
 import { smoothScrollTo } from "@/lib/scroll";
 import { useGsapReveal } from "@/lib/useGsapReveal";
+import { usePageReady } from "@/lib/pageReady";
 
 // Subscribe to prefers-reduced-motion without setState-in-effect
 const reducedMotionSubscribe = (callback: () => void) => {
@@ -18,27 +19,33 @@ const reducedMotionGetServerSnapshot = () => false;
 
 export default function Hero() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const pageReady = usePageReady();
 
   // GSAP ScrollTrigger reveals for hero entrance (eyebrow / chips / card /
   // CTAs / trust / marquee). The H1 heading stays on CSS animations
   // (hero-line-1/2/3) per design — GSAP is not applied to it.
   //
-  // SYNCED TIMELINE (all delays from pageReady):
-  // H1 line 1 (CSS):  0.05s delay, 0.5s dur  → finishes at 0.55s
-  // H1 line 2 (CSS):  0.18s delay, 0.5s dur  → finishes at 0.68s
-  // H1 line 3 (CSS):  0.32s delay, 0.5s dur  → finishes at 0.82s
+  // SYNCED TIMELINE (all delays measured from pageReady — the moment the
+  // loading screen finishes its exit fade and the page wrapper begins
+  // fading in over 0.25s). The hero cascade emerges WITH the page:
+  // H1 line 1 (CSS):  0.05s delay, 0.4s dur  → finishes at 0.45s
+  // H1 line 2 (CSS):  0.18s delay, 0.4s dur  → finishes at 0.58s
+  // H1 line 3 (CSS):  0.32s delay, 0.4s dur  → finishes at 0.72s
   // Eyebrow (GSAP):   0s    delay, 0.4s dur  → finishes at 0.40s (above heading)
   // Chips (GSAP):     0.4s  delay, 0.4s dur  → finishes at 0.80s (overlaps H1 line 3)
   // Card (GSAP):      0.55s delay, 0.4s dur  → finishes at 0.95s (after H1 done)
   // CTAs (GSAP):      0.7s  delay, 0.4s dur  → finishes at 1.10s
   // Trust (GSAP):     0.85s delay, 0.4s dur  → finishes at 1.25s
-  // Marquee (GSAP):   0.95s delay, 0.4s dur  → finishes at 1.35s
+  // Marquee (GSAP):   0.95s delay, 0.4s dur, y:0 (pure fade — no slide gap)
+  // Squiggle (FM):    0.4s  delay, 0.8s dur  → draws under line 3 as it settles
   const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0, duration: 0.4 });
   const chipsRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.4, duration: 0.4 });
   const cardRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.55, duration: 0.4 });
   const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.7, duration: 0.4 });
   const trustRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.85, duration: 0.4 });
-  const marqueeRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.95, duration: 0.4 });
+  // Marquee: pure fade (y:0) — a slide-up would leave a visible cream gap
+  // below the navy band as it animates into place.
+  const marqueeRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.95, duration: 0.4, y: 0 });
 
   const reducedMotion = useSyncExternalStore(
     reducedMotionSubscribe,
@@ -120,7 +127,12 @@ export default function Hero() {
             <span className="block text-center hero-line-3 mt-1">
               <span className="relative inline-block font-serif italic font-semibold whitespace-nowrap text-gold">
                 Depend On You?
-                <UnderlineSquiggle className="text-gold/50" delay={1.0} duration={1.0} />
+                {/* Squiggle mounts only after pageReady so its delay is
+                    measured from the hero reveal start (not from initial
+                    mount, which would fire behind the loading screen). */}
+                {pageReady && (
+                  <UnderlineSquiggle className="text-gold/50" delay={0.4} duration={0.8} />
+                )}
               </span>
             </span>
           </h1>

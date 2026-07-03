@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import Header from "@/components/avystra/Header";
 import Hero from "@/components/avystra/Hero";
 import ScrollProgress from "@/components/avystra/ScrollProgress";
@@ -43,9 +43,10 @@ const WhatsAppGlyph = ({ size = 22 }: { size?: number }) => (
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
-  // pageReady flips AFTER the loading screen fades (800ms load + 500ms fade).
-  // All reveal observers + hero CSS animations wait for this — so animations
-  // play AFTER the user sees the page, not behind the loading screen.
+  // pageReady flips when the loading screen finishes its exit fade — this is
+  // the single source of truth that gates every reveal observer + the hero
+  // CSS animations (via the `.page-ready` class on <html>). Animations play
+  // AFTER the user sees the page, never behind the loading screen.
   const [pageReady, setPageReady] = useState(false);
 
   useEffect(() => {
@@ -67,23 +68,26 @@ export default function Home() {
     if (lenisInstance) {
       lenisInstance.scrollTo(0, { immediate: true });
     }
-
-    // Loading screen fades at 400ms (0.3s exit), pageReady fires at 550ms
-    // — 150ms after fade starts. Tight timing: loading screen is 80% gone
-    // when hero animations begin. No ghost screen, no visible gap.
-    const loadTimer = setTimeout(() => {
-      setIsLoading(false);
-    }, 400);
-    const readyTimer = setTimeout(() => {
-      setPageReady(true);
-      document.documentElement.classList.add("page-ready");
-      window.scrollTo(0, 0);
-    }, 550);
-    return () => {
-      clearTimeout(loadTimer);
-      clearTimeout(readyTimer);
-    };
   }, []);
+
+  // Clean handoff: when the LoadingScreen finishes its exit fade, unmount it
+  // AND flip pageReady in the same tick. The loading screen is already at
+  // opacity 0 (it just finished fading), so unmounting is visually invisible.
+  // The page wrapper then fades in (0.25s) while the hero cascade begins —
+  // the hero emerges with the page, with no navy tint over it.
+  const handleLoadingComplete = useCallback(() => {
+    setIsLoading(false);
+    setPageReady(true);
+  }, []);
+
+  // Mirror pageReady onto <html> as a class — the hero H1 CSS animations are
+  // gated behind `.page-ready` so their delays start from this moment, not
+  // from mount.
+  useEffect(() => {
+    if (pageReady) {
+      document.documentElement.classList.add("page-ready");
+    }
+  }, [pageReady]);
 
   const leadCount = 0;
 
@@ -97,7 +101,7 @@ export default function Home() {
   return (
     <PageReadyProvider value={pageReady}>
     <div className="relative min-h-[100dvh] text-navy-deep selection:bg-gold/20 selection:text-gold font-sans antialiased flex flex-col overflow-x-hidden">
-      {isLoading && <LoadingScreen />}
+      {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
 
       {/* Page content is always mounted (behind the loading screen).
           This prevents the ghost scrollbar that appeared when content
@@ -105,7 +109,7 @@ export default function Home() {
           shift from 0px to full page height, briefly showing a scrollbar. */}
       <div
         className={isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}
-        style={{ transition: "opacity 0.3s cubic-bezier(0.16,1,0.3,1)" }}
+        style={{ transition: "opacity 0.25s cubic-bezier(0.16,1,0.3,1)" }}
       >
           {/* ═══ LIVELY AMBIENT BACKGROUND ═══
               4 drifting orbs with CSS keyframe animations (transform/opacity).
