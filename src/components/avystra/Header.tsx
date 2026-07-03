@@ -200,8 +200,8 @@ export default function Header() {
 
   return (
     <div
-      className={`fixed left-0 right-0 z-[60] flex justify-center px-4 sm:px-6 lg:px-8 transition-all duration-500 ease-out-expo ${
-        scrolled || isOpen ? "top-2 md:top-3" : "top-[36px] sm:top-[48px]"
+      className={`fixed left-0 right-0 z-[60] flex justify-center px-4 sm:px-6 lg:px-8 transition-[top] duration-300 ease-out-expo ${
+        scrolled || isOpen ? "top-2 md:top-3" : "top-4 sm:top-6"
       }`}
       style={{ pointerEvents: "none" }}
     >
@@ -229,7 +229,7 @@ export default function Header() {
               className="flex items-center gap-2 group cursor-pointer focus-ring rounded-xl shrink-0"
               aria-label="AVYSTRA home"
             >
-              <AvystraLogo size="sm" showSubtitle={true} className="scale-110 sm:scale-100" />
+              <AvystraLogo size="sm" showSubtitle={true} className="scale-105 sm:scale-100" />
             </a>
           </div>
 
@@ -237,7 +237,7 @@ export default function Header() {
           <nav
             ref={navRef}
             aria-label="Main navigation"
-            className="hidden lg:flex items-center gap-0.5 relative bg-white/80 px-1 py-1 rounded-full border border-white/40 shadow-sm"
+            className="hidden lg:flex items-center gap-0.5 relative bg-white/40 px-1 py-1 rounded-full border border-white/30"
             onMouseLeave={() => setHoveredIndex(null)}
           >
             {navItems.map((item, i) => {
@@ -263,7 +263,7 @@ export default function Header() {
                   {isActive && !shouldReduceMotion && (
                     <motion.span
                       layoutId="nav-active-pill"
-                      className="absolute inset-0 bg-white/80 rounded-full -z-10"
+                      className="absolute inset-0 bg-navy-deep/[0.06] rounded-full -z-10"
                       transition={navActivePillTransition}
                     />
                   )}
@@ -271,7 +271,7 @@ export default function Header() {
                   {hoveredIndex === i && !isActive && !shouldReduceMotion && (
                     <motion.span
                       layoutId="nav-hover-pill"
-                      className="absolute inset-0 bg-white/50 rounded-full -z-10"
+                      className="absolute inset-0 bg-navy-deep/[0.04] rounded-full -z-10"
                       transition={{ type: "spring", stiffness: 450, damping: 28 }}
                     />
                   )}
