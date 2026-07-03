@@ -4,8 +4,16 @@
 - Environments: .env
 
 ✓ Starting...
-✓ Ready in 1172ms
- GET / 200 in 2.6s (compile: 2.2s, render: 417ms)
- GET / 200 in 80ms (compile: 4ms, render: 77ms)
- GET / 200 in 195ms (compile: 5ms, render: 189ms)
-n 195ms (compile: 5ms, render: 189ms)
+✓ Ready in 1166ms
+ GET / 200 in 3.1s (compile: 2.6s, render: 469ms)
+ GET / 200 in 3.1s (compile: 2.5s, render: 551ms)
+ GET / 200 in 3.1s (compile: 2.6s, render: 493ms)
+ GET / 200 in 136ms (compile: 4ms, render: 132ms)
+ GET / 200 in 154ms (compile: 6ms, render: 148ms)
+ GET / 200 in 122ms (compile: 5ms, render: 117ms)
+ GET /api/ogi/health 200 in 148ms (compile: 135ms, render: 13ms)
+ GET / 200 in 170ms (compile: 3ms, render: 167ms)
+ GET / 200 in 116ms (compile: 4ms, render: 112ms)
+ GET / 200 in 115ms (compile: 3ms, render: 112ms)
+[email] SMTP connection verified — host=smtp.gmail.com port=465 user=info.avystra@gmail.com
+ GET /api/ogi/health?verify=true 200 in 610ms (compile: 2ms, render: 607ms)
