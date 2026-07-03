@@ -296,7 +296,7 @@ export default function Header() {
           <div className="lg:hidden flex items-center shrink-0">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="relative w-11 h-11 flex items-center justify-center text-navy-deep focus-ring rounded-full bg-white/80 border border-white/40 shadow-sm transition-all hover:bg-white/90 active:bg-white/95"
+              className="relative w-11 h-11 flex items-center justify-center text-navy-deep focus-ring rounded-full bg-white/70 border border-white/40 transition-[background-color] duration-300 hover:bg-white/80 active:bg-white/90"
               style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
               aria-label="Toggle Menu"
               aria-expanded={isOpen}
@@ -307,75 +307,67 @@ export default function Header() {
                     isOpen ? { rotate: 45, y: 6.25 } : { rotate: 0, y: 0 }
                   }
                   className="w-full h-[1.5px] bg-navy-deep origin-center rounded-full"
-                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
                 />
                 <motion.span
                   animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
                   className="w-full h-[1.5px] bg-navy-deep rounded-full"
-                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
                 />
                 <motion.span
                   animate={
                     isOpen ? { rotate: -45, y: -6.25 } : { rotate: 0, y: 0 }
                   }
                   className="w-full h-[1.5px] bg-navy-deep origin-center rounded-full"
-                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
                 />
               </div>
             </button>
           </div>
         </div>
 
-        {/* Mobile/Tablet Dropdown Menu — Apple-style vibrancy */}
+        {/* Mobile/Tablet Dropdown Menu — iOS-style smooth reveal */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: EASE }}
+              transition={{
+                height: { duration: 0.35, ease: [0.32, 0.72, 0, 1] },
+                opacity: { duration: 0.25, ease: "easeOut" },
+              }}
               className="lg:hidden overflow-hidden rounded-[18px] mt-2"
+              style={{ transformOrigin: "top" }}
             >
               <div className="pt-2 pb-1.5 space-y-1 bg-navy-deep/[0.03] backdrop-blur-md rounded-[18px] border border-navy-deep/[0.06] p-2">
-                {navItems.map((item, i) => (
-                  <motion.div
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.04, duration: 0.3 }}
-                    key={item.name}
-                  >
-                    <a
-                      href={item.href}
-                      onClick={(e) => handleScrollTo(e, item.href.substring(1))}
-                      className="flex items-center gap-3 px-4 py-3 min-h-[48px] rounded-xl bg-transparent hover:bg-navy-deep/[0.06] active:bg-navy-deep/[0.1] border border-transparent hover:border-navy-deep/[0.04] transition-[background-color,border-color] duration-300 font-sans group cursor-pointer focus-ring"
-                      style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", pointerEvents: "auto" }}
-                    >
-                      <span className="font-mono text-[10.5px] font-bold text-gold tracking-widest opacity-90 shrink-0">
-                        {item.number}
-                      </span>
-                      <span className="font-display font-semibold text-[13px] uppercase tracking-wider text-navy-deep group-hover:translate-x-1 transition-transform flex-1">
-                        {item.name}
-                      </span>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-navy-deep transition-colors shrink-0" />
-                    </a>
-                  </motion.div>
-                ))}
-
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: navItems.length * 0.04, duration: 0.35 }}
-                >
+                {navItems.map((item) => (
                   <a
-                    href="#consult"
-                    onClick={(e) => handleScrollTo(e, "consult")}
-                    className="w-full mt-2 py-3.5 min-h-[48px] bg-navy-deep text-white font-bold font-display text-[11.5px] uppercase tracking-[0.16em] flex items-center justify-center gap-2 rounded-xl shadow-lg active:scale-[0.98] transition-transform whitespace-nowrap cursor-pointer focus-ring"
+                    href={item.href}
+                    onClick={(e) => handleScrollTo(e, item.href.substring(1))}
+                    key={item.name}
+                    className="flex items-center gap-3 px-4 py-3 min-h-[48px] rounded-xl bg-transparent hover:bg-navy-deep/[0.06] active:bg-navy-deep/[0.1] border border-transparent hover:border-navy-deep/[0.04] transition-[background-color,border-color] duration-300 font-sans group cursor-pointer focus-ring"
                     style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", pointerEvents: "auto" }}
                   >
-                    Check Your OGI Score
-                    <ArrowUpRight className="w-3.5 h-3.5 text-gold" />
+                    <span className="font-mono text-[10.5px] font-bold text-gold tracking-widest opacity-90 shrink-0">
+                      {item.number}
+                    </span>
+                    <span className="font-display font-semibold text-[13px] uppercase tracking-wider text-navy-deep group-hover:translate-x-1 transition-transform flex-1">
+                      {item.name}
+                    </span>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-navy-deep transition-colors shrink-0" />
                   </a>
-                </motion.div>
+                ))}
+
+                <a
+                  href="#consult"
+                  onClick={(e) => handleScrollTo(e, "consult")}
+                  className="w-full mt-2 py-3.5 min-h-[48px] bg-navy-deep text-white font-bold font-display text-[11.5px] uppercase tracking-[0.16em] flex items-center justify-center gap-2 rounded-xl shadow-lg active:scale-[0.98] transition-transform whitespace-nowrap cursor-pointer focus-ring"
+                  style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", pointerEvents: "auto" }}
+                >
+                  Check Your OGI Score
+                  <ArrowUpRight className="w-3.5 h-3.5 text-gold" />
+                </a>
               </div>
             </motion.div>
           )}
