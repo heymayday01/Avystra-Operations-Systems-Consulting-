@@ -269,11 +269,11 @@ export default function StatsFounder() {
                     Kirankumar Pandey
                   </h3>
                   <span className="text-[13px] font-sans text-slate-500 font-medium tracking-wide mt-1 block">
-                    Founder &amp; Director, AVYSTRA Consulting
+                    Founder &amp; Director, AVYSTRA Consulting Pvt. Ltd.
                   </span>
                 </div>
 
-                <p className="text-slate-600 text-[13.5px] sm:text-[14.5px] font-sans font-normal leading-relaxed">
+                <p className="text-slate-600 text-[13.5px] sm:text-[14.5px] font-sans font-light leading-relaxed">
                   Most organizations don&apos;t struggle with knowing what to do.
                   They struggle with consistently doing it. Kirankumar Pandey has
                   spent over a decade in that room — and what he kept seeing
@@ -290,13 +290,17 @@ export default function StatsFounder() {
 
                 {/* Premium quote box — gold gradient with decorative marks */}
                 <div className="relative my-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-navy-deep to-navy-soft border border-gold/20 shadow-[0_12px_36px_-12px_rgba(11,27,46,0.25)] overflow-hidden">
-                  {/* Decorative quote mark */}
+                  {/* Decorative opening quote mark */}
                   <span className="absolute top-2 left-4 text-5xl font-serif text-gold/20 leading-none select-none pointer-events-none">
                     &ldquo;
                   </span>
+                  {/* Decorative closing quote mark */}
+                  <span className="absolute bottom-0 right-4 text-5xl font-serif text-gold/20 leading-none select-none pointer-events-none">
+                    &rdquo;
+                  </span>
                   {/* Gold accent line */}
                   <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-gold via-gold/60 to-transparent" />
-                  <p className="text-white font-serif italic text-[15px] sm:text-base leading-relaxed font-medium pl-6 pt-2">
+                  <p className="text-white font-serif italic text-[15px] sm:text-base leading-relaxed font-medium pl-6 pr-6 pt-2">
                     Great companies aren&apos;t built by knowing more. They are
                     built by executing better.
                   </p>
