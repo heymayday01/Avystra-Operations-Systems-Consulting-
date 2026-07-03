@@ -869,3 +869,17 @@ html, body {
   will-change: transform;
   backface-visibility: hidden;
 }
+
+/* ═══ TOUCH DEVICE HOVER FALLBACK ═══
+   On touch devices (no hover capability), group-hover effects never fire.
+   This makes the "illuminated" state the default so touch users see the
+   same visual emphasis as mouse users on hover. */
+@media (hover: none) {
+  /* Four Pillars card — illuminate number, icon, category, description */
+  .pillar-card .pillar-num { color: rgba(var(--gold-rgb), 0.2) !important; }
+  .pillar-card .pillar-icon { background-color: rgba(var(--gold-rgb), 0.1) !important; transform: scale(1.1) rotate(6deg) !important; }
+  .pillar-card .pillar-category { opacity: 1 !important; }
+  .pillar-card .pillar-desc { color: rgb(51, 65, 85) !important; }
+  .pillar-card .pillar-footer { border-color: rgba(var(--gold-rgb), 0.1) !important; }
+  .pillar-card .pillar-arrow { transform: translateX(0) !important; opacity: 1 !important; }
+}

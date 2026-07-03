@@ -111,18 +111,18 @@ export default function FourPillars() {
               >
                 <div className="card-premium relative h-full bg-gradient-to-br from-white to-slate-50 rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:p-10 flex flex-col justify-between overflow-hidden">
                   {/* Background Number Accent */}
-                  <span className="absolute top-6 right-8 text-7xl font-serif font-black text-slate-200/30 group-hover:text-gold/20 transition-colors duration-700 select-none z-0">
+                  <span className="pillar-num absolute top-6 right-8 text-7xl font-serif font-black text-slate-200/30 group-hover:text-gold/20 transition-colors duration-700 select-none z-0">
                     {pillar.num}
                   </span>
 
                   <div className="relative z-10" style={{ transform: "translateZ(40px)" }}>
                     {/* Icon Slot */}
-                    <div className="mb-10 inline-flex p-4 rounded-2xl bg-gradient-to-br from-white to-slate-50 border border-slate-100 text-gold group-hover:bg-gold/10 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                    <div className="pillar-icon mb-10 inline-flex p-4 rounded-2xl bg-gradient-to-br from-white to-slate-50 border border-slate-100 text-gold group-hover:bg-gold/10 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
                       {pillar.icon}
                     </div>
 
                     {/* Category */}
-                    <span className="block text-[10.5px] font-mono font-black text-gold uppercase tracking-[0.2em] mb-4 opacity-70 group-hover:opacity-100 transition-opacity">
+                    <span className="pillar-category block text-[10.5px] font-mono font-black text-gold uppercase tracking-[0.2em] mb-4 opacity-70 group-hover:opacity-100 transition-opacity">
                       {pillar.category}
                     </span>
 
@@ -132,17 +132,17 @@ export default function FourPillars() {
                     </h3>
 
                     {/* Description */}
-                    <p className="text-slate-500 text-sm md:text-[15px] font-light leading-relaxed transition-colors duration-500 group-hover:text-slate-700 break-words">
+                    <p className="pillar-desc text-slate-500 text-sm md:text-[15px] font-light leading-relaxed transition-colors duration-500 group-hover:text-slate-700 break-words">
                       {pillar.description}
                     </p>
                   </div>
 
                   {/* Micro-interaction Footer */}
-                  <div className="relative z-10 mt-10 pt-6 border-t border-slate-100 flex items-center justify-between group-hover:border-gold/10 transition-colors" style={{ transform: "translateZ(20px)" }}>
+                  <div className="pillar-footer relative z-10 mt-10 pt-6 border-t border-slate-100 flex items-center justify-between group-hover:border-gold/10 transition-colors" style={{ transform: "translateZ(20px)" }}>
                     <span className="text-[11.5px] font-mono font-bold text-slate-400 group-hover:text-navy-deep transition-colors uppercase tracking-widest">
                       Phase {pillar.num}
                     </span>
-                    <ChevronRight className="w-4 h-4 text-gold transform translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500" />
+                    <ChevronRight className="pillar-arrow w-4 h-4 text-gold transform translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500" />
                   </div>
 
                   {/* Subtle Hover Gradient */}
