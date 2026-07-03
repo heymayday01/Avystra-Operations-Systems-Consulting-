@@ -870,16 +870,6 @@ html, body {
   backface-visibility: hidden;
 }
 
-/* ═══ TOUCH DEVICE HOVER FALLBACK ═══
-   On touch devices (no hover capability), group-hover effects never fire.
-   This makes the "illuminated" state the default so touch users see the
-   same visual emphasis as mouse users on hover. */
-@media (hover: none) {
-  /* Four Pillars card — illuminate number, icon, category, description */
-  .pillar-card .pillar-num { color: rgba(var(--gold-rgb), 0.2) !important; }
-  .pillar-card .pillar-icon { background-color: rgba(var(--gold-rgb), 0.1) !important; transform: scale(1.1) rotate(6deg) !important; }
-  .pillar-card .pillar-category { opacity: 1 !important; }
-  .pillar-card .pillar-desc { color: rgb(51, 65, 85) !important; }
-  .pillar-card .pillar-footer { border-color: rgba(var(--gold-rgb), 0.1) !important; }
-  .pillar-card .pillar-arrow { transform: translateX(0) !important; opacity: 1 !important; }
-}
+/* Touch device illumination is handled via JS inline styles in FourPillars.tsx
+   (isTouch state + style props) because Tailwind v4 strips @media (hover: none)
+   blocks with custom class selectors from the compiled output. */
