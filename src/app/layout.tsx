@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
 
 const DESCRIPTION =
   "AVYSTRA helps Indian organizations close the gap between knowing and doing — through leadership development, manager effectiveness, and execution systems";
@@ -113,7 +112,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="antialiased bg-background text-foreground">
+      <body className="antialiased text-foreground">
         {/* Skip-to-content link — first focusable element for keyboard users */}
         <a
           href="#main"
@@ -122,7 +121,6 @@ export default function RootLayout({
           Skip to content
         </a>
         {children}
-        <Toaster />
       </body>
     </html>
   );

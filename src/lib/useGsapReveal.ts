@@ -4,8 +4,6 @@ import { useEffect, useRef, type RefObject } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { usePageReady } from "@/lib/pageReady";
 
-gsap.registerPlugin(ScrollTrigger);
-
 /**
  * useGsapReveal — GSAP ScrollTrigger-powered scroll reveal.
  *
@@ -155,12 +153,15 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
         });
       } else {
         // fade — animate from hidden (set in phase 1) to visible
+        // clearProps:"transform" removes the inline transform after animation,
+        // so CSS :hover transforms (e.g., .card-premium:hover translateY) work.
         gsap.to(el, {
           opacity: 1,
           y: 0,
           duration: duration || 0.48,
           ease: "power3.out",
           delay,
+          clearProps: "transform",
           scrollTrigger: {
             trigger: el,
             start,

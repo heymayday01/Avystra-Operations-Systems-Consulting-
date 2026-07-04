@@ -5,6 +5,7 @@ import { ArrowRight, UserPlus, TrendingUp, Building2, Banknote, ClipboardList } 
 import { UnderlineSquiggle } from "./DoodleWidgets";
 import { smoothScrollTo } from "@/lib/scroll";
 import { useGsapReveal } from "@/lib/useGsapReveal";
+import { usePageReady } from "@/lib/pageReady";
 
 // Subscribe to prefers-reduced-motion without setState-in-effect
 const reducedMotionSubscribe = (callback: () => void) => {
@@ -18,21 +19,40 @@ const reducedMotionGetServerSnapshot = () => false;
 
 export default function Hero() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const pageReady = usePageReady();
 
   // GSAP ScrollTrigger reveals for hero entrance (eyebrow / chips / card /
   // CTAs / trust / marquee). The H1 heading stays on CSS animations
   // (hero-line-1/2/3) per design — GSAP is not applied to it.
-  // Timing (all delays from pageReady at T=0.8s):
-  // H1 lines: 0.1/0.25/0.4s delays, 0.5s each (finishes at ~0.9s)
-  // Eyebrow fires at 0s (above heading, simultaneous with H1 line 1).
-  // Chips at 0.35s (overlaps H1 line 2-3). Card at 0.5s. CTAs at 0.65s.
-  // Trust at 0.8s. Marquee at 0.9s — flows seamlessly, no dead air.
-  const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0, duration: 0.45 });
-  const chipsRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.35, duration: 0.4 });
-  const cardRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.5, duration: 0.45 });
-  const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.65, duration: 0.4 });
-  const trustRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.8, duration: 0.4 });
-  const marqueeRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.9, duration: 0.4 });
+  //
+  // SYNCED TIMELINE (all delays measured from pageReady — the moment the
+  // loading screen finishes its exit fade and the page wrapper begins
+  // fading in over 0.25s). The hero cascade emerges WITH the page.
+  //
+  // SMOOTHNESS: y:10 (reduced from 16) for a gentler slide that doesn't
+  // fight with the page wrapper's opacity fade. Larger slides look jumpy
+  // when the whole page is also fading in — 10px is the sweet spot.
+  // Durations are 0.5s (slightly longer) with power3.out for a smoother
+  // settle. The cascade is compressed to 0.75s total (was 0.95s) so the
+  // whole hero reveals as one cohesive motion.
+  // H1 line 1 (CSS):  0.05s delay, 0.4s dur  → finishes at 0.45s
+  // H1 line 2 (CSS):  0.18s delay, 0.4s dur  → finishes at 0.58s
+  // H1 line 3 (CSS):  0.32s delay, 0.4s dur  → finishes at 0.72s
+  // Eyebrow (GSAP):   0s    delay, 0.5s dur  → finishes at 0.50s
+  // Chips (GSAP):     0.3s  delay, 0.5s dur  → finishes at 0.80s
+  // Card (GSAP):      0.45s delay, 0.5s dur  → finishes at 0.95s
+  // CTAs (GSAP):      0.6s  delay, 0.5s dur  → finishes at 1.10s
+  // Trust (GSAP):     0.7s  delay, 0.5s dur  → finishes at 1.20s
+  // Marquee (GSAP):   0.8s  delay, 0.5s dur, y:0 (pure fade — no slide gap)
+  // Squiggle (FM):    0.4s  delay, 0.8s dur  → draws under line 3 as it settles
+  const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0, duration: 0.5, y: 10 });
+  const chipsRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.3, duration: 0.5, y: 10 });
+  const cardRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.45, duration: 0.5, y: 10 });
+  const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.6, duration: 0.5, y: 10 });
+  const trustRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.7, duration: 0.5, y: 10 });
+  // Marquee: pure fade (y:0) — a slide-up would leave a visible cream gap
+  // below the navy band as it animates into place.
+  const marqueeRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.8, duration: 0.5, y: 0 });
 
   const reducedMotion = useSyncExternalStore(
     reducedMotionSubscribe,
@@ -56,8 +76,7 @@ export default function Hero() {
   }, []);
 
   // CTA micro-interactions are handled purely in CSS (.hero-btn-primary
-  // / .hero-btn-secondary) — scale(1.02) + gold glow on hover with
-  // power1.inOut easing. No elastic, no JS mouse tracking.
+  // / .hero-btn-secondary) — translateY + gold glow on hover.
 
   const handleScrollToForm = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -115,13 +134,18 @@ export default function Hero() {
             <span className="block text-center hero-line-3 mt-1">
               <span className="relative inline-block font-serif italic font-semibold whitespace-nowrap text-gold">
                 Depend On You?
-                <UnderlineSquiggle className="text-gold/50" delay={1.0} duration={1.0} />
+                {/* Squiggle mounts only after pageReady so its delay is
+                    measured from the hero reveal start (not from initial
+                    mount, which would fire behind the loading screen). */}
+                {pageReady && (
+                  <UnderlineSquiggle className="text-gold/50" delay={0.4} duration={0.8} />
+                )}
               </span>
             </span>
           </h1>
 
-          {/* Feature chips — refined spacing + smooth hover */}
-          <div ref={chipsRef} className="flex flex-wrap justify-center gap-2.5 sm:gap-3 mb-12 sm:mb-14 max-w-3xl mx-auto">
+          {/* Feature chips — single column on mobile, wrap on desktop */}
+          <div ref={chipsRef} className="flex flex-col items-center gap-2.5 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3 mb-12 sm:mb-14 max-w-3xl mx-auto">
             {[
               { label: "Hired experienced people", Icon: UserPlus },
               { label: "Promoted managers", Icon: TrendingUp },
@@ -141,24 +165,27 @@ export default function Hero() {
             ))}
           </div>
 
-          {/* Bridging content block — cleaner, less dense, better line-height */}
+          {/* Bridging content block — cleaner, less dense, better line-height.
+              Font consistency: all paragraphs use font-medium (500) for a
+              uniform look. Hierarchy is established via COLOR + SIZE, not
+              weight jumps (which looked mismatched: semibold→regular→light→bold). */}
           <div
             ref={cardRef}
             className="hero-card-premium mb-12 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-8 py-8 sm:px-12 sm:py-10 text-center"
           >
-            <p className="text-navy-deep font-sans text-lg sm:text-xl font-semibold leading-relaxed mb-5" style={{ lineHeight: 1.5 }}>
+            <p className="text-navy-deep font-sans text-lg sm:text-xl font-medium leading-relaxed mb-5" style={{ lineHeight: 1.5 }}>
               So why does it still feel like the company slows down whenever you step away?
             </p>
             <div className="hero-divider w-12 h-px mx-auto mb-5" />
-            <p className="text-navy-deep/80 font-sans text-sm sm:text-base leading-relaxed mb-2" style={{ lineHeight: 1.65 }}>
+            <p className="text-navy-deep/80 font-sans text-sm sm:text-base font-medium leading-relaxed mb-2" style={{ lineHeight: 1.65 }}>
               Most organizations don&apos;t struggle because people don&apos;t know what to do.
             </p>
-            <p className="text-slate-500 font-sans text-sm sm:text-base leading-relaxed font-light mb-6" style={{ lineHeight: 1.65 }}>
+            <p className="text-slate-600 font-sans text-sm sm:text-base font-medium leading-relaxed mb-6" style={{ lineHeight: 1.65 }}>
               They struggle because knowing and doing are two very different things.
             </p>
-            <p className="text-navy-deep font-sans text-xs sm:text-sm font-bold tracking-[0.12em] uppercase">
+            <p className="text-navy-deep font-sans text-xs sm:text-sm font-medium tracking-[0.12em] uppercase">
               That&apos;s the gap{" "}
-              <span className="text-gold font-black">AVYSTRA</span>{" "}
+              <span className="text-gold font-bold">AVYSTRA</span>{" "}
               helps organizations close.
             </p>
           </div>
@@ -201,7 +228,7 @@ export default function Hero() {
             ].map((label, i) => (
               <div key={i} className="flex items-center gap-2.5 group cursor-default">
                 <span className="w-1 h-1 rounded-full bg-gold/40 group-hover:bg-gold transition-colors duration-500" />
-                <span className="font-mono text-[10px] sm:text-[11px] font-bold text-navy-deep/50 uppercase tracking-[0.16em] group-hover:text-navy-deep/70 transition-colors duration-500">
+                <span className="font-mono text-[10px] sm:text-[11px] font-bold text-navy-deep/60 uppercase tracking-[0.16em] group-hover:text-navy-deep transition-colors duration-500">
                   {label}
                 </span>
               </div>
@@ -211,7 +238,7 @@ export default function Hero() {
       </div>
 
       {/* Marquee Ticker */}
-      <div ref={marqueeRef} className="mt-12 w-full border-y border-navy-deep/10 bg-navy-deep py-4 flex items-center relative z-10 overflow-hidden">
+      <div ref={marqueeRef} className="mt-12 w-full border-y border-white/10 bg-navy-deep py-4 flex items-center relative z-10 overflow-hidden">
         <div
           aria-hidden="true"
           className="animate-marquee-slow flex whitespace-nowrap gap-x-24 select-none"
@@ -222,19 +249,19 @@ export default function Hero() {
         >
           {[1, 2, 3, 4].map((loopIdx) => (
             <React.Fragment key={loopIdx}>
-              <span className="font-display font-black text-[10px] tracking-[0.45em] text-white uppercase flex items-center gap-4">
+              <span className="font-display font-black text-[11px] tracking-[0.4em] text-white uppercase flex items-center gap-4">
                 THINK <span className="text-gold">CLEARLY</span>
               </span>
               <span className="text-slate-500 font-light mx-4">•</span>
-              <span className="font-serif italic font-light text-[10px] tracking-[0.25em] text-gold uppercase flex items-center gap-4">
+              <span className="font-serif italic font-light text-[11px] tracking-[0.2em] text-gold uppercase flex items-center gap-4">
                 ACT DECISIVELY
               </span>
               <span className="text-slate-500 font-light mx-4">•</span>
-              <span className="font-display font-black text-[10px] tracking-[0.45em] text-white uppercase flex items-center gap-4">
+              <span className="font-display font-black text-[11px] tracking-[0.4em] text-white uppercase flex items-center gap-4">
                 ELIMINATE <span className="text-gold">FRICTION</span>
               </span>
               <span className="text-slate-500 font-light mx-4">•</span>
-              <span className="font-serif italic font-light text-[10px] tracking-[0.25em] text-slate-400 uppercase flex items-center gap-4">
+              <span className="font-serif italic font-light text-[11px] tracking-[0.2em] text-slate-400 uppercase flex items-center gap-4">
                 STREAMLINED SUCCESS
               </span>
               <span className="text-slate-500 font-light mx-4">•</span>

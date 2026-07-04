@@ -4,8 +4,6 @@ import { useEffect, useRef, type RefObject } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { usePageReady } from "@/lib/pageReady";
 
-gsap.registerPlugin(ScrollTrigger);
-
 /**
  * useGsapCards — GSAP ScrollTrigger-powered staggered card reveals.
  *
@@ -88,6 +86,7 @@ export function useGsapCards<T extends HTMLElement = HTMLDivElement>(
             duration,
             ease: "power3.out",
             stagger,
+            clearProps: "transform",
           });
         },
         once: true,

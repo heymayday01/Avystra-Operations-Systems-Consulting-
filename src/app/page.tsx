@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import Header from "@/components/avystra/Header";
 import Hero from "@/components/avystra/Hero";
 import ScrollProgress from "@/components/avystra/ScrollProgress";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { smoothScrollTo } from "@/lib/scroll";
+import { ScrollTrigger } from "@/lib/gsap";
 import LoadingScreen from "@/components/avystra/LoadingScreen";
 import { PageReadyProvider } from "@/lib/pageReady";
 
@@ -43,9 +44,10 @@ const WhatsAppGlyph = ({ size = 22 }: { size?: number }) => (
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
-  // pageReady flips AFTER the loading screen fades (800ms load + 500ms fade).
-  // All reveal observers + hero CSS animations wait for this — so animations
-  // play AFTER the user sees the page, not behind the loading screen.
+  // pageReady flips when the loading screen finishes its exit fade — this is
+  // the single source of truth that gates every reveal observer + the hero
+  // CSS animations (via the `.page-ready` class on <html>). Animations play
+  // AFTER the user sees the page, never behind the loading screen.
   const [pageReady, setPageReady] = useState(false);
 
   useEffect(() => {
@@ -67,20 +69,40 @@ export default function Home() {
     if (lenisInstance) {
       lenisInstance.scrollTo(0, { immediate: true });
     }
-
-    // Hide loading screen AND mark page ready at 600ms — simultaneously.
-    // No ghost screen: loading screen starts fading (0.4s transition)
-    // while hero animations begin immediately — no gap.
-    const loadTimer = setTimeout(() => {
-      setIsLoading(false);
-      setPageReady(true);
-      document.documentElement.classList.add("page-ready");
-      window.scrollTo(0, 0);
-    }, 600);
-    return () => {
-      clearTimeout(loadTimer);
-    };
   }, []);
+
+  // Clean handoff: when the LoadingScreen finishes its exit fade, unmount it
+  // AND flip pageReady in the same tick. The loading screen is already at
+  // opacity 0 (it just finished fading), so unmounting is visually invisible.
+  // The page wrapper then fades in (0.25s) while the hero cascade begins —
+  // the hero emerges with the page, with no navy tint over it.
+  const handleLoadingComplete = useCallback(() => {
+    setIsLoading(false);
+    setPageReady(true);
+  }, []);
+
+  // Mirror pageReady onto <html> as a class — the hero H1 CSS animations are
+  // gated behind `.page-ready` so their delays start from this moment, not
+  // from mount.
+  useEffect(() => {
+    if (pageReady) {
+      document.documentElement.classList.add("page-ready");
+    }
+  }, [pageReady]);
+
+  // Refresh ScrollTrigger after pageReady + after lazy components mount.
+  // Lazy-loaded sections change the page height when they load, which
+  // invalidates ScrollTrigger positions. A delayed refresh (after the first
+  // paint + after lazy chunks likely loaded) keeps trigger positions accurate.
+  useEffect(() => {
+    if (!pageReady) return;
+    const raf = requestAnimationFrame(() => ScrollTrigger.refresh());
+    const timer = setTimeout(() => ScrollTrigger.refresh(), 1500);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+    };
+  }, [pageReady]);
 
   const leadCount = 0;
 
@@ -94,9 +116,7 @@ export default function Home() {
   return (
     <PageReadyProvider value={pageReady}>
     <div className="relative min-h-[100dvh] text-navy-deep selection:bg-gold/20 selection:text-gold font-sans antialiased flex flex-col overflow-x-hidden">
-      <AnimatePresence>
-        {isLoading && <LoadingScreen />}
-      </AnimatePresence>
+      {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
 
       {/* Page content is always mounted (behind the loading screen).
           This prevents the ghost scrollbar that appeared when content
@@ -104,54 +124,49 @@ export default function Home() {
           shift from 0px to full page height, briefly showing a scrollbar. */}
       <div
         className={isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}
-        style={{ transition: "opacity 0.4s ease" }}
+        style={{ transition: "opacity 0.25s cubic-bezier(0.16,1,0.3,1)" }}
       >
-          {/* ═══ LIVELY AMBIENT BACKGROUND — ENHANCED + GPU-SAFE ═══
-              4 drifting orbs with GPU-only animations (transform/opacity).
-              Each orb is on its own compositor layer (will-change: transform)
-              so animations never trigger main-thread repaint. Radial gradients
-              are pre-rendered to the layer once, then only transform changes
-              per frame — ~60fps with zero scroll jank.
-              Sizes capped at 40vw (down from 60vw) to reduce fill area. */}
+          {/* ═══ AMBIENT BACKGROUND ═══
+              4 drifting orbs with CSS keyframe animations (transform/opacity
+              only — GPU-composited, no layout thrash). Opacities tuned down
+              from 70/60/60/50 to 50/40/45/35 for a quieter, more refined
+              backdrop that doesn't compete with content. Disabled on mobile
+              via CSS (performance). */}
           <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
             {/* Warm ivory base wash */}
             <div className="absolute inset-0 bg-cream-bg" />
 
-            {/* Gold orb — top left, strong, slow drift */}
+            {/* Gold orb — top left, slow drift */}
             <div
-              className="absolute -top-[10%] -left-[8%] w-[40vw] h-[40vw] rounded-full opacity-70 animate-glow-blob"
+              className="absolute -top-[10%] -left-[8%] w-[40vw] h-[40vw] rounded-full opacity-50 animate-glow-blob"
               style={{
                 background:
-                  "radial-gradient(circle, rgba(184,146,78,0.40) 0%, transparent 65%)",
-                willChange: "transform",
+                  "radial-gradient(circle, rgba(184,146,78,0.35) 0%, transparent 65%)",
               }}
             />
-            {/* Navy orb — bottom right, strong, slow drift (reverse) */}
+            {/* Navy orb — bottom right, slow drift (reverse) */}
             <div
-              className="absolute top-[55%] -right-[10%] w-[38vw] h-[38vw] rounded-full opacity-60 animate-glow-blob-reverse"
+              className="absolute top-[55%] -right-[10%] w-[38vw] h-[38vw] rounded-full opacity-40 animate-glow-blob-reverse"
               style={{
                 background:
-                  "radial-gradient(circle, rgba(11,27,46,0.22) 0%, transparent 65%)",
-                willChange: "transform",
+                  "radial-gradient(circle, rgba(11,27,46,0.18) 0%, transparent 65%)",
                 animationDelay: "2s",
               }}
             />
             {/* Central warm gold haze — gentle pulse */}
             <div
-              className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[45vw] h-[30vw] rounded-full opacity-60 animate-pulse-slow"
+              className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[45vw] h-[30vw] rounded-full opacity-45 animate-pulse-slow"
               style={{
                 background:
-                  "radial-gradient(ellipse, rgba(212,178,106,0.22) 0%, transparent 70%)",
-                willChange: "transform, opacity",
+                  "radial-gradient(ellipse, rgba(212,178,106,0.18) 0%, transparent 70%)",
               }}
             />
             {/* Accent gold orb — mid-right, small, vivid */}
             <div
-              className="absolute top-[45%] right-[8%] w-[22vw] h-[22vw] rounded-full opacity-50 animate-glow-blob"
+              className="absolute top-[45%] right-[8%] w-[22vw] h-[22vw] rounded-full opacity-35 animate-glow-blob"
               style={{
                 background:
-                  "radial-gradient(circle, rgba(184,146,78,0.30) 0%, transparent 60%)",
-                willChange: "transform",
+                  "radial-gradient(circle, rgba(184,146,78,0.25) 0%, transparent 60%)",
                 animationDelay: "4s",
               }}
             />

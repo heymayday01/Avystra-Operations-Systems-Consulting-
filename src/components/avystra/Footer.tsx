@@ -55,10 +55,16 @@ export default function Footer({ leadCount }: FooterProps) {
   ];
 
   return (
-    <footer className="relative bg-navy-deep text-slate-100 overflow-hidden pt-12 sm:pt-16 mt-auto">
-      {/* Ambient gold and navy glows */}
-      <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full bg-gold/[0.04] blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] rounded-full bg-gold/[0.02] blur-[120px] pointer-events-none" />
+    <footer
+      className="relative bg-navy-deep text-slate-100 overflow-hidden pt-12 sm:pt-16 mt-auto"
+      style={{
+        // Static radial gradient ambiance — replaces the two heavy blur orbs
+        // that caused repaint jank during scroll. Same premium glow, zero
+        // per-frame cost (no blur filter, no animation).
+        backgroundImage:
+          "radial-gradient(ellipse 60% 50% at 25% 30%, rgba(184,146,78,0.06), transparent 70%), radial-gradient(ellipse 50% 40% at 80% 70%, rgba(184,146,78,0.03), transparent 70%)",
+      }}
+    >
 
       <div
         className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10 w-full"

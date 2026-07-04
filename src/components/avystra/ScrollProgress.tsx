@@ -15,8 +15,8 @@ export default function ScrollProgress() {
   const { scrollYProgress, scrollY } = useScroll();
 
   const scaleX = useSpring(scrollYProgress, {
-    stiffness: 90,
-    damping: 24,
+    stiffness: 120,
+    damping: 28,
     restDelta: 0.001,
   });
 
