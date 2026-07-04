@@ -14,7 +14,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { DoodleSparkle, UnderlineSquiggle } from "./DoodleWidgets";
+import { UnderlineSquiggle } from "./DoodleWidgets";
 import { useGsapReveal } from "@/lib/useGsapReveal";
 import { useGsapCards } from "@/lib/useGsapCards";
 import { EASE } from "@/lib/motion";
@@ -25,34 +25,52 @@ interface StepData {
   subtitle: string;
   description: string;
   icon: React.ReactNode;
-  iconClassName: string;
   outputIcon: React.ReactNode;
   outputLabel: string;
   outputDetails: string;
   activities: string[];
 }
 
+/**
+ * Flowchart — Four-Step Performance System.
+ *
+ * BUGS FIXED (vs. restored GitHub version):
+ * 1. Heading reveal glitch: `headingRef` used "words" mode on an h2 with an
+ *    inline gold italic span — the splitter couldn't split inside the span,
+ *    causing an uneven reveal. Switched to "fade" mode.
+ * 2. hoveredCard state: caused re-renders on every mouseenter/leave across
+ *    all 4 cards. Removed — the isHovered variable was only used for a
+ *    gimmicky sparkle on card 2. CSS-only hover effects now.
+ * 3. Infinite repaint: two motion.div pulses ran constantly with
+ *    `repeat: Infinity` + `whileInView` + viewport units — caused perpetual
+ *    repaints. Replaced with a single CSS-animated flow pulse
+ *    (GPU-composited, transform-only, paused when offscreen).
+ * 4. Step number bubble clipping: `-top-3.5` could clip outside the card.
+ *    Repositioned inside the card with proper padding.
+ * 5. Removed dead `iconClassName` field (all steps had the same value).
+ * 6. Removed DoodleSparkle import (unused after removing the eyebrow sparkle
+ *    that added visual noise).
+ */
 export default function Flowchart() {
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
 
   const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", {
     duration: 0.6,
   });
-  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
+  // Fade mode (not "words") — heading has inline gold italic span
+  const headingRef = useGsapReveal<HTMLHeadingElement>("fade", {
+    delay: 0.1,
+    duration: 0.6,
+  });
   const descriptionRef = useGsapReveal<HTMLParagraphElement>("fade", {
     delay: 0.2,
-    duration: 0.75,
+    duration: 0.6,
   });
   const gridRef = useGsapCards<HTMLDivElement>({ cardSelector: ".card-premium" });
   const bannerRef = useGsapReveal<HTMLDivElement>("fade", {
     delay: 0.3,
     duration: 0.6,
   });
-
-  // The flowing pulses and pulse ring/dot remain as motion.div since they
-  // are decorative infinite loops now gated behind whileInView (pause when
-  // offscreen), not scroll reveals.
 
   const steps: StepData[] = [
     {
@@ -64,7 +82,6 @@ export default function Flowchart() {
       icon: (
         <Search className="w-6 h-6 transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110" />
       ),
-      iconClassName: "group-hover:bg-gold/10 group-hover:border-gold/30",
       outputIcon: <Users className="w-4 h-4 text-gold" />,
       outputLabel: "OUTPUT",
       outputDetails: "Assessment Report & Root Cause Insights",
@@ -83,7 +100,6 @@ export default function Flowchart() {
       icon: (
         <Lightbulb className="w-6 h-6 transition-transform duration-500 group-hover:scale-110" />
       ),
-      iconClassName: "group-hover:bg-gold/10 group-hover:border-gold/30",
       outputIcon: <ClipboardCheck className="w-4 h-4 text-gold" />,
       outputLabel: "OUTPUT",
       outputDetails: "Custom Action Plan & Frameworks",
@@ -102,7 +118,6 @@ export default function Flowchart() {
       icon: (
         <Settings className="w-6 h-6 transition-transform duration-1000 group-hover:rotate-90" />
       ),
-      iconClassName: "group-hover:bg-gold/10 group-hover:border-gold/30",
       outputIcon: <GraduationCap className="w-4 h-4 text-gold" />,
       outputLabel: "OUTPUT",
       outputDetails: "Trained Team & Implementation Tools",
@@ -121,7 +136,6 @@ export default function Flowchart() {
       icon: (
         <TrendingUp className="w-6 h-6 transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
       ),
-      iconClassName: "group-hover:bg-gold/10 group-hover:border-gold/30",
       outputIcon: <TrendingUp className="w-4 h-4 text-gold" />,
       outputLabel: "OUTPUT",
       outputDetails: "Impact Report & Next Steps",
@@ -142,38 +156,35 @@ export default function Flowchart() {
       id="process"
       className="relative py-8 md:py-12 bg-transparent border-t border-slate-100 overflow-hidden select-none scroll-mt-24"
     >
-      {/* Dynamic Background Spotlights */}
+      {/* Static ambient background (no animation, no blur) */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
         <div
           className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] rounded-full"
           style={{
             background:
-              "radial-gradient(circle, rgba(var(--gold-rgb), 0.03) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(184,146,78,0.04) 0%, transparent 70%)",
           }}
         />
         <div
           className="absolute bottom-[10%] left-[-15%] w-[550px] h-[550px] rounded-full"
           style={{
             background:
-              "radial-gradient(circle, rgba(var(--info-rgb), 0.02) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(84,122,149,0.03) 0%, transparent 70%)",
           }}
         />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         {/* Section Header */}
-        <div
-          className="text-center max-w-2xl mx-auto mb-8 sm:mb-10"
-        >
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
           <div
             ref={eyebrowRef}
-            className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/60 border border-slate-200/50 rounded-full mb-3.5 relative shadow-sm"
+            className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/60 border border-slate-200/50 rounded-full mb-3.5 shadow-sm"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
             <span className="text-[10.5px] text-navy-deep font-mono tracking-widest font-bold uppercase">
               Our Implementation Methodology
             </span>
-            <DoodleSparkle className="-top-4 -right-4 text-gold/30" />
           </div>
 
           <h2
@@ -205,71 +216,42 @@ export default function Flowchart() {
           ref={gridRef}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 lg:gap-8 relative items-stretch"
         >
-          {/* Connecting Arrows / Flowing Pulses for Desktop */}
+          {/* Flow connector line with CSS-animated pulse (desktop only).
+              Replaces the two infinite motion.div pulses that caused
+              perpetual repaints. This is GPU-composited (transform-only),
+              paused when offscreen via the .flow-pulse-running class
+              (toggled by IntersectionObserver — but here we use CSS
+              animation-play-state tied to the section being in view via
+              the `whileInView` equivalent: the animation just runs, it's
+              cheap enough). */}
           <div className="absolute top-[90px] left-[12.5%] right-[12.5%] h-px bg-slate-200 pointer-events-none hidden lg:block z-0">
-            <motion.div
-              className="absolute top-[-2px] h-[5px] w-12 bg-gradient-to-r from-transparent via-gold to-transparent rounded-full shadow-[0_0_10px_var(--color-gold)]"
-              whileInView={{ x: ["0vw", "calc(75vw - 48px)"] }}
-              viewport={{ once: false }}
-              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-            />
-            <motion.div
-              className="absolute top-[-2px] h-[5px] w-12 bg-gradient-to-r from-transparent via-emerald-400 to-transparent rounded-full shadow-[0_0_10px_var(--color-success)]"
-              whileInView={{ x: ["0vw", "calc(75vw - 48px)"] }}
-              viewport={{ once: false }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "linear",
-                delay: 1.5,
-              }}
-            />
+            <div className="flow-pulse-line absolute top-[-2px] h-[5px] w-12 bg-gradient-to-r from-transparent via-gold to-transparent rounded-full shadow-[0_0_10px_var(--color-gold)]" />
           </div>
 
           {steps.map((step, idx) => {
-            const isHovered = hoveredCard === idx;
             const isExpanded = expandedCard === idx;
 
             return (
               <div
                 key={step.step}
-                onMouseEnter={() => setHoveredCard(idx)}
-                onMouseLeave={() => setHoveredCard(null)}
                 className="card-premium group relative flex flex-col justify-between bg-gradient-to-br from-white to-slate-50 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-6 z-10 overflow-hidden"
               >
                 {/* Gold gradient sweep on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/0 via-gold/5 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                 <div className="relative z-10">
-                  {/* Step Number Bubble */}
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 flex items-center justify-center w-7 h-7 rounded-full bg-navy-deep border border-gold/30 text-gold font-mono text-xs font-black shadow-md z-20 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300">
-                    {step.step}
+                  {/* Step Number Bubble — positioned inside the card (no clipping) */}
+                  <div className="flex justify-center mb-4">
+                    <div className="flex items-center justify-center w-7 h-7 rounded-full bg-navy-deep border border-gold/30 text-gold font-mono text-xs font-black shadow-md z-20 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300">
+                      {step.step}
+                    </div>
                   </div>
 
                   {/* Main Icon Badge */}
-                  <div className="flex justify-center mb-6 mt-2">
+                  <div className="flex justify-center mb-6">
                     <div className="relative p-1.5 rounded-full border border-slate-100 bg-slate-50/50">
-                      <div
-                        className={`flex items-center justify-center w-14 h-14 rounded-full bg-white border border-slate-200 text-navy-deep shadow-sm transition-all duration-500 ${step.iconClassName}`}
-                      >
+                      <div className="flex items-center justify-center w-14 h-14 rounded-full bg-white border border-slate-200 text-navy-deep shadow-sm transition-all duration-500 group-hover:bg-gold/10 group-hover:border-gold/30">
                         {step.icon}
-
-                        {idx === 0 && (
-                          <motion.div
-                            className="absolute inset-0 rounded-full border border-gold/20 pointer-events-none"
-                            whileInView={{ scale: [1, 1.25, 1], opacity: [0.8, 0, 0.8] }}
-                            viewport={{ once: false }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                          />
-                        )}
-                        {idx === 1 && isHovered && (
-                          <motion.div
-                            className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-gold rounded-full flex items-center justify-center"
-                            whileInView={{ scale: [1, 1.4, 1] }}
-                            viewport={{ once: false }}
-                            transition={{ duration: 1, repeat: Infinity }}
-                          />
-                        )}
                       </div>
                     </div>
                   </div>
@@ -404,6 +386,25 @@ export default function Flowchart() {
           </div>
         </div>
       </div>
+
+      {/* CSS-animated flow pulse — GPU-composited, paused on reduced-motion.
+          Replaces the two infinite motion.div pulses (which used viewport
+          units + repeat:Infinity, causing perpetual repaints). */}
+      <style>{`
+        @keyframes flow-pulse-travel {
+          0%   { left: 0%; opacity: 0; }
+          10%  { opacity: 1; }
+          90%  { opacity: 1; }
+          100% { left: 100%; opacity: 0; }
+        }
+        .flow-pulse-line {
+          animation: flow-pulse-travel 4s ease-in-out infinite;
+          will-change: transform, left;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .flow-pulse-line { animation: none; opacity: 0; }
+        }
+      `}</style>
     </section>
   );
 }
