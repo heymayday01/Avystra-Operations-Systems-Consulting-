@@ -851,11 +851,6 @@ html, body {
   overscroll-behavior: contain;
 }
 
-/* 13. iOS momentum scrolling — ensure smooth scrolling on overflow containers. */
-.overflow-y-auto, .overflow-auto, [class*="overflow-y"] {
-  -webkit-overflow-scrolling: touch;
-}
-
 /* ═══ SCROLL PERFORMANCE OPTIMIZATIONS ═══
    NOTE: content-visibility: auto was removed because it broke smooth-scroll
    positioning. When Lenis/scrollTo targets an element, it reads
