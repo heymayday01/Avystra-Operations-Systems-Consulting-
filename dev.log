@@ -4,28 +4,9 @@
 - Environments: .env
 
 ✓ Starting...
-✓ Ready in 970ms
- GET / 200 in 2.4s (compile: 2.0s, render: 374ms)
- GET / 200 in 126ms (compile: 6ms, render: 120ms)
-[email] SMTP connection verified — host=smtp.gmail.com port=465 user=info.avystra@gmail.com
-[email] sent: {
-  messageId: '<7f089e6a-3478-a4ff-4ee6-37bbcf12a12e@gmail.com>',
-  to: 'final@firm.com',
-  subject: "Your OGI Score: 75/100 — Here's What It Means"
-}
-[email] sent: {
-  messageId: '<7ad00ff3-8025-ada6-af89-841509dd438d@gmail.com>',
-  to: 'info.avystra@gmail.com',
-  subject: 'New OGI Submission — Premium Final Test (Founder & CEO)'
-}
-[ogi/submit] outcome: {
-  submissionId: 'cmr63m1zw0000w4lq0ojm6zmi',
-  smtpConfigured: true,
-  ownerNotified: true,
-  userEmailSent: true,
-  excelExported: true,
-  ownerError: undefined,
-  userError: undefined
-}
- POST /api/ogi/submit 200 in 3.2s (compile: 353ms, render: 2.8s)
-n 3.2s (compile: 353ms, render: 2.8s)
+✓ Ready in 1186ms
+ GET / 200 in 2.3s (compile: 1787ms, render: 480ms)
+ GET / 200 in 2.3s (compile: 1775ms, render: 530ms)
+ GET / 200 in 1100ms (compile: 505ms, render: 595ms)
+ GET / 200 in 154ms (compile: 6ms, render: 148ms)
+ GET / 200 in 100ms (compile: 4ms, render: 95ms)
