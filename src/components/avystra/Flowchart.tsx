@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Search,
   Lightbulb,
@@ -12,12 +12,13 @@ import {
   ShieldCheck,
   ChevronDown,
   CheckCircle2,
-  ArrowRight,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useGsapReveal } from "@/lib/useGsapReveal";
 import { useGsapCards } from "@/lib/useGsapCards";
 import { EASE } from "@/lib/motion";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { usePageReady } from "@/lib/pageReady";
 
 interface StepData {
   step: number;
@@ -30,39 +31,34 @@ interface StepData {
   outputDetails: string;
   activities: string[];
   accent: string;
+  accentRgb: string;
 }
 
 /**
- * Flowchart — Four-Step Performance System (redesigned).
+ * Flowchart — Four-Step Performance System.
  *
- * BUGS FIXED:
- * 1. Heading reveal glitch: `headingRef` used "words" mode on an h2 with an
- *    inline gold italic span — the splitter couldn't split inside the span,
- *    causing an uneven reveal. Switched to "fade" mode.
- * 2. Infinite repaint: two motion.div pulses ran constantly with
- *    `repeat: Infinity` + `whileInView` + viewport units — caused perpetual
- *    repaints. Replaced with a single CSS-animated flow dot (GPU-composited,
- *    transform-only, paused when offscreen via CSS animation-play-state).
- * 3. hoveredCard state: caused re-renders on every mouseenter/leave. Removed
- *    — CSS-only hover effects now.
- * 4. Step number bubble clipping: `-top-3.5` could clip outside the card.
- *    Repositioned inside the card with proper padding.
+ * ADVANCED FLOW VISUALIZATION (scroll-linked, one-directional):
+ * An SVG connector sits behind the 4 cards with:
+ * 1. A background track line (gray).
+ * 2. A progress line that DRAWS itself from left→right using
+ *    stroke-dashoffset — tied to scroll position via GSAP ScrollTrigger
+ *    (scrub). As you scroll down, the line draws from step 1 → step 4.
+ *    Scrolling up reverses it naturally, but the motion is always
+ *    forward-progressing (never bounces back and forth).
+ * 3. A glowing gold dot that travels along the line in ONE direction
+ *    (left→right), scroll-linked. Its position = the line's draw progress.
+ * 4. Four node circles (one per card) that light up sequentially — each
+ *    fills with its accent color + scales when the dot reaches it.
  *
- * FLOW ENHANCEMENTS:
- * 1. Progression colors: each step has a unique accent (navy → gold → blue →
- *    green) that visually progresses from "start" to "complete".
- * 2. Connecting flow line with animated dot: a horizontal line connects all
- *    4 cards with a gold dot that travels left→right, making the sequential
- *    flow obvious. Paused when offscreen (performance).
- * 3. Step arrows: chevron arrows between cards (desktop) reinforce the flow.
- * 4. Progress bar at the top of each card: fills from 0→100% as you move
- *    from step 1 to 4, showing completion progression.
+ * This is the premium "scroll-linked timeline" pattern seen in award-
+ * winning sites. The animation is driven by scroll, not a loop — so it
+ * feels intentional and connected to the user's progress through the page.
  */
 export default function Flowchart() {
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
+  const pageReady = usePageReady();
 
   const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { duration: 0.6 });
-  // Fade mode (not "words") — heading has inline gold italic span
   const headingRef = useGsapReveal<HTMLHeadingElement>("fade", {
     delay: 0.1,
     duration: 0.6,
@@ -82,6 +78,10 @@ export default function Flowchart() {
     duration: 0.6,
   });
 
+  // Refs for the SVG flow connector
+  const flowSvgRef = useRef<SVGSVGElement>(null);
+  const flowSectionRef = useRef<HTMLDivElement>(null);
+
   const steps: StepData[] = [
     {
       step: 1,
@@ -99,6 +99,7 @@ export default function Flowchart() {
         "Visual mapping of operational and delegation gaps",
       ],
       accent: "var(--color-navy-soft)",
+      accentRgb: "22, 38, 61",
     },
     {
       step: 2,
@@ -116,6 +117,7 @@ export default function Flowchart() {
         "Middle-management delegation blueprint structures",
       ],
       accent: "var(--color-gold)",
+      accentRgb: "184, 146, 78",
     },
     {
       step: 3,
@@ -133,6 +135,7 @@ export default function Flowchart() {
         "Practical application frameworks applied in same week",
       ],
       accent: "var(--color-info)",
+      accentRgb: "84, 122, 149",
     },
     {
       step: 4,
@@ -150,6 +153,7 @@ export default function Flowchart() {
         "Sustained accountability checks & quarterly system updates",
       ],
       accent: "var(--color-success)",
+      accentRgb: "16, 185, 129",
     },
   ];
 
@@ -157,12 +161,101 @@ export default function Flowchart() {
     setExpandedCard(expandedCard === index ? null : index);
   };
 
+  // ── Scroll-linked flow animation ──────────────────────────────────────────
+  // GSAP ScrollTrigger with scrub ties the flow line draw + dot travel + node
+  // activation to the user's scroll position. This is ONE-DIRECTIONAL:
+  // scrolling down progresses 1→4, scrolling up reverses 4→1. The motion
+  // never bounces or loops — it's a linear scrub tied to scroll.
+  useEffect(() => {
+    if (!pageReady) return;
+
+    const svg = flowSvgRef.current;
+    const section = flowSectionRef.current;
+    if (!svg || !section) return;
+
+    // Respect reduced motion — skip the animation, show everything lit
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const progressLine = svg.querySelector(".flow-progress-line");
+      const dot = svg.querySelector(".flow-dot-circle");
+      const nodes = svg.querySelectorAll(".flow-node");
+      if (progressLine) (progressLine as SVGPathElement).style.strokeDashoffset = "0";
+      if (dot) (dot as SVGCircleElement).setAttribute("cx", "740");
+      nodes.forEach((n) => n.classList.add("flow-node-active"));
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      const progressLine = svg.querySelector(".flow-progress-line") as SVGPathElement;
+      const dot = svg.querySelector(".flow-dot-circle") as SVGCircleElement;
+      const nodes = svg.querySelectorAll(".flow-node");
+
+      if (!progressLine || !dot) return;
+
+      // Get the total length of the line for the dash effect
+      const lineLength = progressLine.getTotalLength();
+      // Set up the dash — line starts fully hidden
+      progressLine.style.strokeDasharray = `${lineLength}`;
+      progressLine.style.strokeDashoffset = `${lineLength}`;
+
+      // Dot start/end X positions (match the line's x1/x2)
+      const dotStartX = 60;
+      const dotEndX = 740;
+
+      // Build the scroll-linked timeline
+      // The timeline is tied to scroll via ScrollTrigger scrub — as the user
+      // scrolls through the section, the timeline progresses linearly.
+      // This is strictly one-directional: scroll down = forward, scroll up = reverse.
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top 70%",
+          end: "bottom 60%",
+          scrub: 1, // smooth scrub (1s lag) — feels premium, not jerky
+        },
+      });
+
+      // 1. Draw the progress line (stroke-dashoffset → 0)
+      tl.fromTo(
+        progressLine,
+        { strokeDashoffset: lineLength },
+        { strokeDashoffset: 0, duration: 1, ease: "none" },
+        0
+      );
+
+      // 2. Move the dot from left → right (one direction)
+      tl.fromTo(
+        dot,
+        { attr: { cx: dotStartX }, opacity: 0 },
+        { attr: { cx: dotEndX }, opacity: 1, duration: 1, ease: "none" },
+        0
+      );
+
+      // 3. Light up each node sequentially at 25%, 50%, 75%, 100%
+      // Each node activates when the dot reaches it — className toggles the
+      // fill color + scale via CSS transitions.
+      nodes.forEach((node, idx) => {
+        const activateAt = (idx + 1) / 4; // 0.25, 0.5, 0.75, 1.0
+        tl.to(
+          node,
+          {
+            onStart: () => node.classList.add("flow-node-active"),
+            onReverseStart: () => node.classList.remove("flow-node-active"),
+            duration: 0.001,
+          },
+          activateAt
+        );
+      });
+    }, flowSectionRef);
+
+    return () => ctx.revert();
+  }, [pageReady]);
+
   return (
     <section
       id="process"
       className="relative py-12 md:py-20 bg-transparent border-t border-slate-100 overflow-hidden select-none scroll-mt-24"
     >
-      {/* Static ambient background (no blur, no animation) */}
+      {/* Static ambient background */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div
           className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] rounded-full"
@@ -205,22 +298,91 @@ export default function Flowchart() {
           </p>
         </div>
 
-        {/* ═══ FLOW GRID ═══
-            4 cards connected by a flow line with an animated dot.
-            Each card has a unique accent color that progresses:
-            navy → gold → blue → green (start → complete). */}
-        <div className="relative">
-          {/* Flow connector line (desktop) — sits behind the cards */}
-          <div
-            className="hidden lg:block absolute top-[4rem] left-[12.5%] right-[12.5%] pointer-events-none z-0"
+        {/* ═══ FLOW GRID ═══ */}
+        <div ref={flowSectionRef} className="relative">
+          {/* ═══ SVG FLOW CONNECTOR (desktop only) ═══
+              An SVG line with 4 nodes sits behind the cards. As the user
+              scrolls, GSAP ScrollTrigger (scrub) drives:
+              1. The progress line drawing from left→right (stroke-dashoffset)
+              2. The gold dot traveling left→right (cx animation)
+              3. Each node lighting up sequentially when the dot reaches it
+              All scroll-linked — strictly one-directional, no loop. */}
+          <svg
+            ref={flowSvgRef}
+            className="hidden lg:block absolute top-[4rem] left-0 right-0 w-full pointer-events-none z-0"
+            height="40"
+            viewBox="0 0 800 40"
+            preserveAspectRatio="none"
             aria-hidden="true"
           >
-            {/* Base line */}
-            <div className="relative h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent">
-              {/* Animated flow dot — CSS-only, GPU-composited, paused when offscreen */}
-              <div className="flow-dot absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-gold shadow-[0_0_8px_var(--color-gold)]" />
-            </div>
-          </div>
+            {/* Background track line */}
+            <line
+              x1="60"
+              y1="20"
+              x2="740"
+              y2="20"
+              stroke="rgba(203, 213, 225, 0.4)"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            {/* Progress line (draws itself via stroke-dashoffset) */}
+            <line
+              className="flow-progress-line"
+              x1="60"
+              y1="20"
+              x2="740"
+              y2="20"
+              stroke="var(--color-gold)"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              style={{ filter: "drop-shadow(0 0 4px rgba(184,146,78,0.4))" }}
+            />
+            {/* 4 nodes — one per card position (200px intervals) */}
+            {steps.map((step, idx) => {
+              const x = 60 + idx * ((740 - 60) / 3);
+              return (
+                <circle
+                  key={step.step}
+                  className={`flow-node flow-node-${step.step}`}
+                  cx={x}
+                  cy={20}
+                  r="6"
+                  fill="white"
+                  stroke="rgba(203, 213, 225, 0.6)"
+                  strokeWidth="2"
+                  style={{
+                    transition:
+                      "fill 0.4s ease, stroke 0.4s ease, r 0.4s ease",
+                  }}
+                />
+              );
+            })}
+            {/* Traveling dot (glows gold, moves left→right) */}
+            <circle
+              className="flow-dot-circle"
+              cx="60"
+              cy="20"
+              r="5"
+              fill="var(--color-gold)"
+              style={{
+                filter: "drop-shadow(0 0 6px rgba(184,146,78,0.8))",
+                opacity: 0,
+              }}
+            />
+          </svg>
+
+          {/* Node activation styles */}
+          <style>{`
+            .flow-node-active {
+              fill: var(--color-gold) !important;
+              stroke: var(--color-gold) !important;
+              r: 8 !important;
+            }
+            .flow-node-1.flow-node-active { fill: var(--color-navy-soft) !important; stroke: var(--color-navy-soft) !important; }
+            .flow-node-2.flow-node-active { fill: var(--color-gold) !important; stroke: var(--color-gold) !important; }
+            .flow-node-3.flow-node-active { fill: var(--color-info) !important; stroke: var(--color-info) !important; }
+            .flow-node-4.flow-node-active { fill: var(--color-success) !important; stroke: var(--color-success) !important; }
+          `}</style>
 
           <div
             ref={gridRef}
@@ -228,14 +390,14 @@ export default function Flowchart() {
           >
             {steps.map((step, idx) => {
               const isExpanded = expandedCard === idx;
-              const progress = ((step.step - 1) / 3) * 100; // 0%, 33%, 66%, 100%
+              const progress = ((step.step - 1) / 3) * 100;
 
               return (
                 <div
                   key={step.step}
                   className="flow-card group relative flex flex-col bg-gradient-to-br from-white to-slate-50 rounded-[1.75rem] p-5 sm:p-6 overflow-hidden transition-all duration-500 ease-out-expo hover:-translate-y-1.5 hover:shadow-[0_20px_50px_-15px_rgba(11,27,46,0.12)] border border-slate-100"
                 >
-                  {/* Progress bar at top — fills 0→100% across the 4 steps */}
+                  {/* Progress bar at top */}
                   <div className="absolute top-0 left-0 right-0 h-0.5 bg-slate-100">
                     <div
                       className="h-full transition-all duration-700"
@@ -243,23 +405,17 @@ export default function Flowchart() {
                     />
                   </div>
 
-                  {/* Step number + arrow (desktop) */}
+                  {/* Step number */}
                   <div className="flex items-center justify-between mb-5 mt-2">
                     <div
                       className="flex items-center justify-center w-8 h-8 rounded-full font-mono text-xs font-black shadow-sm transition-transform duration-300 group-hover:scale-110"
-                      style={{
-                        backgroundColor: step.accent,
-                        color: "white",
-                      }}
+                      style={{ backgroundColor: step.accent, color: "white" }}
                     >
                       {step.step}
                     </div>
-                    {idx < 3 && (
-                      <ArrowRight className="hidden lg:block w-4 h-4 text-slate-300" />
-                    )}
                   </div>
 
-                  {/* Icon badge */}
+                  {/* Icon */}
                   <div className="flex justify-center mb-5">
                     <div
                       className="flex items-center justify-center w-14 h-14 rounded-2xl border bg-white shadow-sm transition-all duration-500 group-hover:scale-110"
@@ -339,13 +495,13 @@ export default function Flowchart() {
                     <div
                       className="rounded-2xl p-4 flex gap-3 items-start text-left border transition-all duration-300"
                       style={{
-                        backgroundColor: `${step.accent}0d`, // 5% opacity
-                        borderColor: `${step.accent}26`, // 15% opacity
+                        backgroundColor: `rgba(${step.accentRgb}, 0.05)`,
+                        borderColor: `rgba(${step.accentRgb}, 0.15)`,
                       }}
                     >
                       <div
                         className="p-1.5 bg-white rounded-lg shrink-0 shadow-sm border"
-                        style={{ borderColor: `${step.accent}33` }}
+                        style={{ borderColor: `rgba(${step.accentRgb}, 0.2)` }}
                       >
                         <div style={{ color: step.accent }}>{step.outputIcon}</div>
                       </div>
@@ -418,23 +574,6 @@ export default function Flowchart() {
           </div>
         </div>
       </div>
-
-      {/* CSS for the flow dot — GPU-composited, paused when offscreen */}
-      <style>{`
-        @keyframes flow-travel {
-          0% { left: 0%; opacity: 0; }
-          10%, 90% { opacity: 1; }
-          100% { left: 100%; opacity: 0; }
-        }
-        .flow-dot {
-          animation: flow-travel 6s ease-in-out infinite;
-          will-change: transform, left;
-        }
-        /* Pause when offscreen (performance) */
-        @media (prefers-reduced-motion: reduce) {
-          .flow-dot { animation: none; opacity: 0; }
-        }
-      `}</style>
     </section>
   );
 }
