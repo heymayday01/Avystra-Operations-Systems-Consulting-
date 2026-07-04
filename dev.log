@@ -4,8 +4,28 @@
 - Environments: .env
 
 ✓ Starting...
-✓ Ready in 940ms
- GET / 200 in 2.9s (compile: 2.4s, render: 412ms)
- GET / 200 in 87ms (compile: 4ms, render: 83ms)
- GET / 200 in 182ms (compile: 4ms, render: 178ms)
- GET / 200 in 106ms (compile: 4ms, render: 102ms)
+✓ Ready in 1221ms
+ GET / 200 in 1104ms (compile: 506ms, render: 599ms)
+ GET / 200 in 2.5s (compile: 1935ms, render: 536ms)
+[email] SMTP connection verified — host=smtp.gmail.com port=465 user=info.avystra@gmail.com
+[email] sent: {
+  messageId: '<f30c0a57-d2f7-2334-b583-ffab8646d16f@gmail.com>',
+  to: 'final@firm.com',
+  subject: 'Your AVYSTRA OGI Result'
+}
+[email] sent: {
+  messageId: '<ca26f9c1-c6a5-8da6-d44c-addf0380321f@gmail.com>',
+  to: 'info.avystra@gmail.com',
+  subject: 'New OGI Submission — Final Email Test (Founder)'
+}
+[ogi/submit] outcome: {
+  submissionId: 'cmr62zvt90000w4q71wtij1kz',
+  smtpConfigured: true,
+  ownerNotified: true,
+  userEmailSent: true,
+  excelExported: true,
+  ownerError: undefined,
+  userError: undefined
+}
+ POST /api/ogi/submit 200 in 6.3s (compile: 2.4s, render: 3.9s)
+in 6.3s (compile: 2.4s, render: 3.9s)
