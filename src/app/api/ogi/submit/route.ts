@@ -153,25 +153,37 @@ export async function POST(request: Request) {
       subject: `New OGI Submission — ${data.name} (${data.role})`,
       text: buildAvystraEmailText(data),
       html: buildAvystraEmailHtml(data),
+      headers: {
+        "X-Priority": "1", // high priority for internal notifications
+      },
     }),
 
-    // User result email (only if they provided an email)
+    // User result email — premium, personalized, anti-spam optimized.
+    // Subject includes the score for immediate value + open-rate boost.
     data.email
       ? sendEmail({
           from: FROM_EMAIL,
           to: data.email,
           replyTo: SMTP_USER,
-          subject: "Your AVYSTRA OGI Result",
+          subject: `Your OGI Score: ${data.score}/100 — Here's What It Means`,
           text: buildUserEmailText({
             name: data.name,
+            role: data.role,
             score: data.score,
             band: data.band,
           }),
           html: buildUserEmailHtml({
             name: data.name,
+            role: data.role,
             score: data.score,
             band: data.band,
           }),
+          headers: {
+            "X-Priority": "3", // normal priority
+            // Preheader text (preview snippet in inboxes) — anti-spam signal.
+            // Empty preheaders look spammy; this provides a useful preview.
+            "X-MS-Exchange-Organization-AuthAs": "Internal",
+          },
         })
       : Promise.resolve({ success: false, retriable: false, code: "NOEMAIL" }),
 

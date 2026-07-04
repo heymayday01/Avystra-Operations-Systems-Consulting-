@@ -174,13 +174,20 @@ export async function sendEmail(
     try {
       const info = await transporter.sendMail({
         ...options,
-        // Common headers that improve deliverability
+        // Common headers that improve deliverability + signal legitimacy.
+        // These tell Gmail/Outlook that this is a legitimate transactional
+        // email (not spam) from a real business.
         headers: {
-          "X-Mailer": "AVYSTRA Website (nodemailer)",
+          "X-Mailer": "AVYSTRA Consulting (nodemailer)",
           "X-Priority": "3",
           "X-Auto-Response-Suppress": "All",
+          // List-Unsubscribe — required for bulk/transactional email best
+          // practices. Gmail shows "Unsubscribe" in the UI when this is set,
+          // which IMPROVES deliverability (signals legitimate sender).
           "List-Unsubscribe": `<mailto:${AVYSTRA_NOTIFY_EMAIL}?subject=Unsubscribe>`,
           "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+          // Organization header — helps email clients categorize the email
+          "Organization": "AVYSTRA Consulting Private Limited",
           ...(options.headers || {}),
         },
       });
