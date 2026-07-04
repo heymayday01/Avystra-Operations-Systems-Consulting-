@@ -246,13 +246,31 @@
   }
 
   body {
-    background-color: #F7F4ED;
+    /* NAVY during loading (matches the loading screen so there's no white
+       flash before paint). Switches to CREAM via html.page-ready below once
+       the loading screen exits — so the body never shows navy behind content
+       during mobile scroll (which caused the glitch screen).
+       The transition is SYNCHRONIZED with the page wrapper's opacity fade
+       (0.25s) so the background color change happens in lockstep with the
+       content fade-in — no gray flash in between. */
+    background-color: var(--color-navy-deep);
     color: #4A5568;
     font-family: var(--font-sans);
     position: relative;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* Smooth transition from navy → cream, matching the page wrapper fade.
+       Duration matches the 0.25s opacity transition on the page wrapper. */
+    transition: background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* After page-ready (loading screen gone), body becomes cream to match the
+     page content. This eliminates the navy flash that appeared on mobile when
+     scrolling fast and the content hadn't repainted yet. The transition on
+     `body` (above) makes this change smooth instead of a hard snap. */
+  html.page-ready body {
+    background-color: #F7F4ED;
   }
 
   /* Typographic defaults for better readability */
@@ -373,17 +391,22 @@ body::-webkit-scrollbar {
    Gated behind .page-ready — starts AFTER loading screen fades.
    All other Hero elements (eyebrow, chips, card, CTAs) use GSAP useGsapReveal. */
 @keyframes hero-line-reveal {
-  from { opacity: 0; transform: translateY(24px); }
+  from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 /* Before page-ready: H1 lines hidden, no animation */
 .hero-line-1, .hero-line-2, .hero-line-3 { opacity: 0; }
 
-/* After page-ready: H1 lines stagger in (0.1/0.25/0.4s delays) */
-.page-ready .hero-line-1 { animation: hero-line-reveal 0.5s var(--ease-out) 0.1s forwards; }
-.page-ready .hero-line-2 { animation: hero-line-reveal 0.5s var(--ease-out) 0.25s forwards; }
-.page-ready .hero-line-3 { animation: hero-line-reveal 0.5s var(--ease-out) 0.4s forwards; }
+/* After page-ready: H1 lines stagger in.
+   Delays synced with GSAP element delays:
+   - Line 1: 0.05s (fires just after eyebrow at 0s)
+   - Line 2: 0.18s (overlaps with chips starting at 0.3s)
+   - Line 3: 0.32s (finishes at ~0.82s, overlapping with card at 0.45s)
+   - Duration 0.5s — matches GSAP fade durations for visual consistency */
+.page-ready .hero-line-1 { animation: hero-line-reveal 0.4s var(--ease-out) 0.05s forwards; }
+.page-ready .hero-line-2 { animation: hero-line-reveal 0.4s var(--ease-out) 0.18s forwards; }
+.page-ready .hero-line-3 { animation: hero-line-reveal 0.4s var(--ease-out) 0.32s forwards; }
 
 /* ═══ HERO HOVER STYLES ONLY (entrance animations via GSAP) ═══ */
 
@@ -422,6 +445,7 @@ body::-webkit-scrollbar {
 .hero-btn-primary.hero-btn-primary {
   background: var(--color-navy-deep);
   position: relative;
+  box-shadow: 0 4px 16px -4px rgba(var(--navy-rgb), 0.3);
   transition: transform var(--dur-standard) var(--ease-out),
               background-color var(--dur-standard) var(--ease-sine),
               box-shadow var(--dur-standard) var(--ease-out);
@@ -614,24 +638,15 @@ body::-webkit-scrollbar {
     animation: none !important;
   }
   /* Force every reveal-style element visible so content is never hidden. */
-  .hero-fade-in,
   .hero-line-1,
   .hero-line-2,
   .hero-line-3,
-  .hero-chip,
   .hero-card-premium,
   .hero-divider,
   .ogi-field-check {
     opacity: 1 !important;
     transform: none !important;
   }
-}
-
-/* Smooth focus ring for accessibility */
-*:focus-visible {
-  outline: 2px solid rgba(184, 146, 78, 0.65);
-  outline-offset: 2px;
-  border-radius: 4px;
 }
 
 /* ─── TEXT BALANCING FOR HEADINGS ──────────────────────────── */
@@ -859,8 +874,6 @@ html, body {
    height shifted and the scroll landed at the wrong position. The GPU
    layer promotions below provide enough scroll perf without content-visibility. */
 
-/* GPU-promote elements that animate during scroll to their own layer. */
-.program-carousel-card {
-  will-change: transform;
-  backface-visibility: hidden;
-}
+/* Touch device illumination is handled via JS inline styles in FourPillars.tsx
+   (isTouch state + style props) because Tailwind v4 strips @media (hover: none)
+   blocks with custom class selectors from the compiled output. */
