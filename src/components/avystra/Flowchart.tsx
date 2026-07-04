@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import {
   Search,
   Lightbulb,
@@ -14,10 +14,10 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { DoodleSparkle, UnderlineSquiggle } from "./DoodleWidgets";
 import { useGsapReveal } from "@/lib/useGsapReveal";
+import { useGsapCards } from "@/lib/useGsapCards";
 import { EASE } from "@/lib/motion";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { usePageReady } from "@/lib/pageReady";
 
 interface StepData {
   step: number;
@@ -25,56 +25,34 @@ interface StepData {
   subtitle: string;
   description: string;
   icon: React.ReactNode;
+  iconClassName: string;
   outputIcon: React.ReactNode;
   outputLabel: string;
   outputDetails: string;
   activities: string[];
-  accent: string;
-  accentRgb: string;
 }
 
-/**
- * Flowchart — $10K premium flow showcase.
- *
- * DESIGN PHILOSOPHY (award-winning agency aesthetic):
- * 1. SCROLL-LINKED PROGRESS STEPPER: a thin line at the top with 4 step
- *    indicators. The line FILLS based on scroll position (GSAP ScrollTrigger
- *    scrub) — so the flow is tied to the user's progression, not a loop.
- *    Each step activates (color + scale + glow) when its card enters view.
- * 2. EDITORIAL BACKGROUND NUMBERS: huge "01-04" behind each card — a design
- *    element, not just a badge. Low opacity, display font, creates depth.
- * 3. CURSOR SPOTLIGHT: each card has a radial gold gradient that follows the
- *    mouse (rAF-throttled, GPU-cheap). Premium micro-interaction.
- * 4. SPRING HOVER: cards lift with spring physics (motion/react), not flat
- *    CSS transitions. Feels organic, not mechanical.
- * 5. REFINED GLASSMORPHISM: subtle backdrop-blur on cards + output subcards.
- *    Used sparingly — not the heavy 2020 glassmorphism trend.
- * 6. NO GIMMICKS: no comets, no bouncing dots, no infinite loops. The
- *    scroll-linked progress IS the flow animation — intentional, premium.
- */
 export default function Flowchart() {
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
-  const [activeStep, setActiveStep] = useState(0);
-  const pageReady = usePageReady();
 
-  const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { duration: 0.6 });
-  const headingRef = useGsapReveal<HTMLHeadingElement>("fade", {
-    delay: 0.1,
+  const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", {
     duration: 0.6,
   });
+  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
   const descriptionRef = useGsapReveal<HTMLParagraphElement>("fade", {
     delay: 0.2,
-    duration: 0.6,
+    duration: 0.75,
   });
+  const gridRef = useGsapCards<HTMLDivElement>({ cardSelector: ".card-premium" });
   const bannerRef = useGsapReveal<HTMLDivElement>("fade", {
     delay: 0.3,
     duration: 0.6,
   });
 
-  const sectionRef = useRef<HTMLElement>(null);
-  const stepperRef = useRef<HTMLDivElement>(null);
-  const progressLineRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  // The flowing pulses and pulse ring/dot remain as motion.div since they
+  // are decorative infinite loops now gated behind whileInView (pause when
+  // offscreen), not scroll reveals.
 
   const steps: StepData[] = [
     {
@@ -82,9 +60,12 @@ export default function Flowchart() {
       title: "ASSESS",
       subtitle: "Find The Real Bottleneck",
       description:
-        "We identify exactly where performance is breaking down — using a structured assessment, not assumptions.",
-      icon: <Search className="w-6 h-6" />,
-      outputIcon: <Users className="w-4 h-4" />,
+        "We start by identifying exactly where and how performance is breaking down in your organization — using a structured assessment, not assumptions or guesswork.",
+      icon: (
+        <Search className="w-6 h-6 transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110" />
+      ),
+      iconClassName: "group-hover:bg-gold/10 group-hover:border-gold/30",
+      outputIcon: <Users className="w-4 h-4 text-gold" />,
       outputLabel: "OUTPUT",
       outputDetails: "Assessment Report & Root Cause Insights",
       activities: [
@@ -92,17 +73,18 @@ export default function Flowchart() {
         "Comprehensive leadership alignment review & interviews",
         "Visual mapping of operational and delegation gaps",
       ],
-      accent: "#16263D",
-      accentRgb: "22, 38, 61",
     },
     {
       step: 2,
       title: "DESIGN",
       subtitle: "Build The Right System",
       description:
-        "We design a focused plan built specifically for your organization's gaps — not a generic relabeled module.",
-      icon: <Lightbulb className="w-6 h-6" />,
-      outputIcon: <ClipboardCheck className="w-4 h-4" />,
+        "Based on what we find, we design a focused plan built specifically for your organization's gaps — not a generic module relabeled with your company name.",
+      icon: (
+        <Lightbulb className="w-6 h-6 transition-transform duration-500 group-hover:scale-110" />
+      ),
+      iconClassName: "group-hover:bg-gold/10 group-hover:border-gold/30",
+      outputIcon: <ClipboardCheck className="w-4 h-4 text-gold" />,
       outputLabel: "OUTPUT",
       outputDetails: "Custom Action Plan & Frameworks",
       activities: [
@@ -110,17 +92,18 @@ export default function Flowchart() {
         "SOP design custom-built for company bottlenecks",
         "Middle-management delegation blueprint structures",
       ],
-      accent: "#B8924E",
-      accentRgb: "184, 146, 78",
     },
     {
       step: 3,
       title: "DELIVER",
       subtitle: "Embed New Behaviours",
       description:
-        "Structured sessions with proprietary frameworks, workbooks, and tools your team applies the same week.",
-      icon: <Settings className="w-6 h-6" />,
-      outputIcon: <GraduationCap className="w-4 h-4" />,
+        "Structured, facilitated sessions with proprietary named frameworks, participant workbooks, and implementation tools your team applies the same week.",
+      icon: (
+        <Settings className="w-6 h-6 transition-transform duration-1000 group-hover:rotate-90" />
+      ),
+      iconClassName: "group-hover:bg-gold/10 group-hover:border-gold/30",
+      outputIcon: <GraduationCap className="w-4 h-4 text-gold" />,
       outputLabel: "OUTPUT",
       outputDetails: "Trained Team & Implementation Tools",
       activities: [
@@ -128,26 +111,25 @@ export default function Flowchart() {
         "Accountability coaching & direct SOP roll-outs",
         "Practical application frameworks applied in same week",
       ],
-      accent: "#547A95",
-      accentRgb: "84, 122, 149",
     },
     {
       step: 4,
       title: "MEASURE",
       subtitle: "Verify Real Improvement",
       description:
-        "30-day follow-up checkpoint and a written impact report — so leadership sees measurable outcomes.",
-      icon: <TrendingUp className="w-6 h-6" />,
-      outputIcon: <TrendingUp className="w-4 h-4" />,
+        "30-day follow-up checkpoint and a written impact report — so leadership can see measurable outcomes, not just participant satisfaction scores from the day.",
+      icon: (
+        <TrendingUp className="w-6 h-6 transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+      ),
+      iconClassName: "group-hover:bg-gold/10 group-hover:border-gold/30",
+      outputIcon: <TrendingUp className="w-4 h-4 text-gold" />,
       outputLabel: "OUTPUT",
       outputDetails: "Impact Report & Next Steps",
       activities: [
         "Post-program audit measuring operational behavioral shifts",
-        "Comprehensive written impact report delivered to leadership",
+        "Comprehensive written impact report delivered directly to leadership",
         "Sustained accountability checks & quarterly system updates",
       ],
-      accent: "#10B981",
-      accentRgb: "16, 185, 129",
     },
   ];
 
@@ -155,104 +137,62 @@ export default function Flowchart() {
     setExpandedCard(expandedCard === index ? null : index);
   };
 
-  // ── Scroll-linked progress line + step activation ──────────────────────────
-  // The progress line at the top FILLS based on scroll position through the
-  // section. Each step activates when its card enters the viewport center.
-  useEffect(() => {
-    if (!pageReady) return;
-
-    const section = sectionRef.current;
-    const progressLine = progressLineRef.current;
-    if (!section || !progressLine) return;
-
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    if (reducedMotion) {
-      progressLine.style.transform = "scaleX(1)";
-      return;
-    }
-
-    const ctx = gsap.context(() => {
-      // 1. Progress line fills with scroll (scaleX 0→1)
-      gsap.fromTo(
-        progressLine,
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 60%",
-            end: "bottom 70%",
-            scrub: 1,
-          },
-        }
-      );
-
-      // 2. Each card activates its step when it enters view
-      cardRefs.current.forEach((card, idx) => {
-        if (!card) return;
-        ScrollTrigger.create({
-          trigger: card,
-          start: "top 60%",
-          end: "bottom 40%",
-          onToggle: (self) => {
-            if (self.isActive) setActiveStep(idx);
-          },
-        });
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, [pageReady]);
-
-  // ── Cursor spotlight tracking (rAF-throttled, GPU-cheap) ───────────────────
-  const handleCardMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>, cardIdx: number) => {
-      const card = cardRefs.current[cardIdx];
-      if (!card) return;
-      const rect = card.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      card.style.setProperty("--spotlight-x", `${x}%`);
-      card.style.setProperty("--spotlight-y", `${y}%`);
-    },
-    []
-  );
-
   return (
     <section
       id="process"
-      ref={sectionRef}
-      className="relative py-16 md:py-24 bg-transparent border-t border-slate-100 overflow-hidden select-none scroll-mt-24"
+      className="relative py-8 md:py-12 bg-transparent border-t border-slate-100 overflow-hidden select-none scroll-mt-24"
     >
+      {/* Dynamic Background Spotlights */}
+      <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
+        <div
+          className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] rounded-full"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(var(--gold-rgb), 0.03) 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute bottom-[10%] left-[-15%] w-[550px] h-[550px] rounded-full"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(var(--info-rgb), 0.02) 0%, transparent 70%)",
+          }}
+        />
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16">
+        {/* Section Header */}
+        <div
+          className="text-center max-w-2xl mx-auto mb-8 sm:mb-10"
+        >
           <div
             ref={eyebrowRef}
-            className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/60 border border-slate-200/50 rounded-full mb-4 shadow-sm"
+            className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/60 border border-slate-200/50 rounded-full mb-3.5 relative shadow-sm"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
             <span className="text-[10.5px] text-navy-deep font-mono tracking-widest font-bold uppercase">
               Our Implementation Methodology
             </span>
+            <DoodleSparkle className="-top-4 -right-4 text-gold/30" />
           </div>
 
           <h2
             ref={headingRef}
-            className="font-display font-bold text-3xl sm:text-5xl text-navy-deep tracking-tight leading-tight uppercase mb-4"
+            className="font-display font-bold text-3xl sm:text-5xl text-navy-deep tracking-tight leading-tight uppercase"
           >
             Our Four-Step{" "}
-            <span className="font-serif italic font-light text-gold">
+            <span className="font-serif italic font-light text-gold relative inline-block px-1">
               Performance System
+              <UnderlineSquiggle
+                className="text-gold"
+                duration={1.5}
+                delay={0.4}
+              />
             </span>
           </h2>
           <p
             ref={descriptionRef}
-            className="text-slate-500 text-sm sm:text-base font-sans font-light leading-relaxed"
+            className="text-slate-500 text-xs sm:text-sm font-sans font-light mt-4"
           >
             We don&apos;t run isolated motivational sessions. We design, deliver,
             and verify bespoke organizational systems that build true operational
@@ -260,171 +200,108 @@ export default function Flowchart() {
           </p>
         </div>
 
-        {/* ═══ PREMIUM SCROLL-LINKED PROGRESS STEPPER ═══
-            A thin line with 4 step indicators. The line FILLS as you scroll
-            through the section (GSAP scrub). Each step activates when its card
-            enters view — color changes, scale + glow. This is the flow
-            indicator — no comets, no loops, just intentional scroll-linked
-            progress. */}
+        {/* The Steps Grid */}
         <div
-          ref={stepperRef}
-          className="hidden lg:flex items-center justify-center mb-14 px-[10%]"
+          ref={gridRef}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 lg:gap-8 relative items-stretch"
         >
-          <div className="relative w-full max-w-4xl">
-            {/* Base track */}
-            <div className="absolute top-1/2 left-0 right-0 h-px bg-slate-200/60 -translate-y-1/2" />
-            {/* Progress fill (scaleX driven by scroll) */}
-            <div
-              ref={progressLineRef}
-              className="absolute top-1/2 left-0 right-0 h-px -translate-y-1/2 origin-left"
-              style={{
-                background:
-                  "linear-gradient(90deg, #16263D 0%, #B8924E 33%, #547A95 66%, #10B981 100%)",
-                transform: "scaleX(0)",
+          {/* Connecting Arrows / Flowing Pulses for Desktop */}
+          <div className="absolute top-[90px] left-[12.5%] right-[12.5%] h-px bg-slate-200 pointer-events-none hidden lg:block z-0">
+            <motion.div
+              className="absolute top-[-2px] h-[5px] w-12 bg-gradient-to-r from-transparent via-gold to-transparent rounded-full shadow-[0_0_10px_var(--color-gold)]"
+              whileInView={{ x: ["0vw", "calc(75vw - 48px)"] }}
+              viewport={{ once: false }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            />
+            <motion.div
+              className="absolute top-[-2px] h-[5px] w-12 bg-gradient-to-r from-transparent via-emerald-400 to-transparent rounded-full shadow-[0_0_10px_var(--color-success)]"
+              whileInView={{ x: ["0vw", "calc(75vw - 48px)"] }}
+              viewport={{ once: false }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "linear",
+                delay: 1.5,
               }}
             />
-            {/* Step indicators */}
-            <div className="relative flex justify-between">
-              {steps.map((step, idx) => {
-                const isActive = activeStep >= idx;
-                return (
-                  <div
-                    key={step.step}
-                    className="flex flex-col items-center"
-                    style={{ transition: "all 0.5s cubic-bezier(0.16,1,0.3,1)" }}
-                  >
-                    <div
-                      className="flex items-center justify-center w-10 h-10 rounded-full font-display font-black text-sm transition-all duration-500 ease-out-expo relative z-10"
-                      style={{
-                        backgroundColor: isActive
-                          ? step.accent
-                          : "white",
-                        color: isActive ? "white" : "#94a3b8",
-                        border: `2px solid ${
-                          isActive ? step.accent : "#cbd5e1"
-                        }`,
-                        transform: isActive
-                          ? "scale(1.15)"
-                          : "scale(1)",
-                        boxShadow: isActive
-                          ? `0 0 0 6px white, 0 8px 24px rgba(${step.accentRgb}, 0.35)`
-                          : "0 0 0 6px white, 0 2px 8px rgba(0,0,0,0.06)",
-                      }}
-                    >
-                      {step.step}
-                    </div>
-                    <span
-                      className="text-[9px] font-mono font-bold uppercase tracking-[0.18em] mt-3 transition-colors duration-500"
-                      style={{
-                        color: isActive ? step.accent : "#94a3b8",
-                      }}
-                    >
-                      {step.title}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
           </div>
-        </div>
 
-        {/* ═══ PREMIUM CARDS ═══ */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 lg:gap-6 relative z-10 items-stretch">
           {steps.map((step, idx) => {
+            const isHovered = hoveredCard === idx;
             const isExpanded = expandedCard === idx;
 
             return (
-              <motion.div
+              <div
                 key={step.step}
-                ref={(el) => { cardRefs.current[idx] = el; }}
-                onMouseMove={(e) => handleCardMouseMove(e, idx)}
-                className="flow-card-premium group relative flex flex-col rounded-[1.75rem] overflow-hidden border backdrop-blur-sm cursor-default"
-                style={{
-                  backgroundColor: "rgba(255,255,255,0.7)",
-                  borderColor: "rgba(226,232,240,0.8)",
-                  // Cursor spotlight — radial gradient follows mouse
-                  backgroundImage: `radial-gradient(400px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%), rgba(${step.accentRgb}, 0.06), transparent 50%)`,
-                }}
-                whileHover={{
-                  y: -8,
-                  transition: { type: "spring", stiffness: 300, damping: 25 },
-                }}
+                onMouseEnter={() => setHoveredCard(idx)}
+                onMouseLeave={() => setHoveredCard(null)}
+                className="card-premium group relative flex flex-col justify-between bg-gradient-to-br from-white to-slate-50 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-6 z-10 overflow-hidden"
               >
-                {/* Editorial background number — huge, low-opacity */}
-                <span
-                  className="absolute -top-4 -right-2 font-display font-black text-[7rem] leading-none select-none pointer-events-none z-0 transition-all duration-700 ease-out-expo group-hover:scale-110 group-hover:opacity-100"
-                  style={{
-                    color: `rgba(${step.accentRgb}, 0.08)`,
-                  }}
-                >
-                  {String(step.step).padStart(2, "0")}
-                </span>
+                {/* Gold gradient sweep on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-gold/0 via-gold/5 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                {/* Card content */}
-                <div className="relative z-10 flex flex-col h-full p-6 sm:p-7">
-                  {/* Step number badge */}
-                  <div className="flex items-center mb-6">
-                    <div
-                      className="flex items-center justify-center w-9 h-9 rounded-full font-mono text-xs font-black shadow-sm"
-                      style={{
-                        backgroundColor: step.accent,
-                        color: "white",
-                      }}
-                    >
-                      {step.step}
+                <div className="relative z-10">
+                  {/* Step Number Bubble */}
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 flex items-center justify-center w-7 h-7 rounded-full bg-navy-deep border border-gold/30 text-gold font-mono text-xs font-black shadow-md z-20 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300">
+                    {step.step}
+                  </div>
+
+                  {/* Main Icon Badge */}
+                  <div className="flex justify-center mb-6 mt-2">
+                    <div className="relative p-1.5 rounded-full border border-slate-100 bg-slate-50/50">
+                      <div
+                        className={`flex items-center justify-center w-14 h-14 rounded-full bg-white border border-slate-200 text-navy-deep shadow-sm transition-all duration-500 ${step.iconClassName}`}
+                      >
+                        {step.icon}
+
+                        {idx === 0 && (
+                          <motion.div
+                            className="absolute inset-0 rounded-full border border-gold/20 pointer-events-none"
+                            whileInView={{ scale: [1, 1.25, 1], opacity: [0.8, 0, 0.8] }}
+                            viewport={{ once: false }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                          />
+                        )}
+                        {idx === 1 && isHovered && (
+                          <motion.div
+                            className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-gold rounded-full flex items-center justify-center"
+                            whileInView={{ scale: [1, 1.4, 1] }}
+                            viewport={{ once: false }}
+                            transition={{ duration: 1, repeat: Infinity }}
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
 
-                  {/* Icon with parallax depth */}
-                  <div className="flex justify-center mb-6">
-                    <motion.div
-                      className="flex items-center justify-center w-16 h-16 rounded-2xl border bg-white shadow-sm"
-                      style={{
-                        color: step.accent,
-                        borderColor: `rgba(${step.accentRgb}, 0.15)`,
-                      }}
-                      whileHover={{
-                        scale: 1.1,
-                        rotate: 3,
-                        transition: { type: "spring", stiffness: 300, damping: 15 },
-                      }}
-                    >
-                      {step.icon}
-                    </motion.div>
-                  </div>
-
-                  {/* Title + subtitle */}
+                  {/* Headers */}
                   <div className="text-center mb-4">
                     <h3 className="font-display font-black text-lg text-navy-deep tracking-wide mb-1">
                       {step.title}
                     </h3>
-                    <p
-                      className="font-serif italic text-xs font-light"
-                      style={{ color: step.accent }}
-                    >
+                    <p className="text-gold font-serif italic text-xs font-light">
                       {step.subtitle}
                     </p>
                   </div>
 
                   {/* Description */}
-                  <p className="text-slate-500 font-sans text-[13px] leading-relaxed text-center font-light mb-5">
+                  <p className="text-slate-500 font-sans text-[14px] leading-relaxed text-center font-light mb-5 break-words">
                     {step.description}
                   </p>
 
-                  {/* Activities accordion */}
-                  <div className="mb-4 border-t border-slate-100/80 pt-3">
+                  {/* Interactive Details Accordion */}
+                  <div className="mb-5 border-t border-slate-100 pt-3">
                     <button
                       onClick={() => toggleExpand(idx)}
                       aria-label={`Toggle key activities for ${step.title} step`}
                       aria-expanded={isExpanded}
-                      className="w-full flex items-center justify-between min-h-[44px] py-2 px-2 rounded-lg hover:bg-white/60 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 hover:text-navy-deep transition-all duration-300 focus-ring"
+                      className="w-full flex items-center justify-between min-h-[44px] py-3 px-3 rounded-lg hover:bg-slate-50 text-[11.5px] font-mono font-bold uppercase tracking-wider text-slate-500 hover:text-navy-deep transition-all duration-300 focus-ring"
                     >
                       <span>Key Activities</span>
                       <ChevronDown
                         className={`w-3.5 h-3.5 transition-transform duration-300 ${
-                          isExpanded ? "rotate-180" : ""
+                          isExpanded ? "rotate-180 text-gold" : ""
                         }`}
-                        style={isExpanded ? { color: step.accent } : {}}
                       />
                     </button>
 
@@ -435,7 +312,7 @@ export default function Flowchart() {
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.3, ease: EASE }}
-                          className="overflow-hidden mt-1"
+                          className="overflow-hidden mt-2"
                         >
                           <ul className="space-y-2 py-1 pl-1">
                             {step.activities.map((activity, aIdx) => (
@@ -443,11 +320,8 @@ export default function Flowchart() {
                                 key={aIdx}
                                 className="flex items-start gap-1.5 text-left text-slate-600"
                               >
-                                <CheckCircle2
-                                  className="w-3.5 h-3.5 shrink-0 mt-0.5"
-                                  style={{ color: step.accent }}
-                                />
-                                <span className="font-sans text-[12px] leading-relaxed font-light">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-gold shrink-0 mt-0.5" />
+                                <span className="font-sans text-[12.5px] leading-relaxed font-light">
                                   {activity}
                                 </span>
                               </li>
@@ -457,45 +331,33 @@ export default function Flowchart() {
                       )}
                     </AnimatePresence>
                   </div>
+                </div>
 
-                  {/* Output subcard — glassmorphism */}
-                  <div className="relative mt-auto pt-1">
-                    <div
-                      className="rounded-2xl p-4 flex gap-3 items-start text-left border backdrop-blur-sm transition-all duration-300"
-                      style={{
-                        backgroundColor: `rgba(${step.accentRgb}, 0.05)`,
-                        borderColor: `rgba(${step.accentRgb}, 0.15)`,
-                      }}
-                    >
-                      <div
-                        className="p-1.5 bg-white rounded-lg shrink-0 shadow-sm border"
-                        style={{ borderColor: `rgba(${step.accentRgb}, 0.2)` }}
-                      >
-                        <div style={{ color: step.accent }}>{step.outputIcon}</div>
-                      </div>
-                      <div>
-                        <span
-                          className="text-[9.5px] font-mono font-bold tracking-widest uppercase block leading-none mb-1"
-                          style={{ color: step.accent }}
-                        >
-                          {step.outputLabel}
-                        </span>
-                        <p className="text-navy-deep font-sans text-[12px] font-semibold leading-normal">
-                          {step.outputDetails}
-                        </p>
-                      </div>
+                {/* Golden Output Subcard */}
+                <div className="relative mt-auto pt-1">
+                  <div className="bg-gold/5 border border-gold/15 rounded-2xl p-4 flex gap-3 items-start text-left hover:bg-gold/10 hover:border-gold/30 transition-all duration-300">
+                    <div className="p-1.5 bg-white border border-gold/20 rounded-lg shrink-0 shadow-sm">
+                      {step.outputIcon}
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-mono font-bold tracking-widest text-gold uppercase block leading-none mb-1">
+                        {step.outputLabel}
+                      </span>
+                      <p className="text-navy-deep font-sans text-[12.5px] font-semibold leading-normal">
+                        {step.outputDetails}
+                      </p>
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
 
-        {/* Bottom banner */}
+        {/* Double Banner Message */}
         <div
           ref={bannerRef}
-          className="mt-12 md:mt-16 bg-navy-deep border border-gold/30 rounded-[2rem] overflow-hidden shadow-2xl relative"
+          className="mt-6 bg-navy-deep border border-gold/30 rounded-[2rem] overflow-hidden shadow-2xl relative"
         >
           <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
 
