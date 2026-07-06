@@ -5,7 +5,7 @@ No packages! Deleted empty lockfile
 [9.00ms] done
 [dev-server] Running bun run dev...
 $ node ../../node_modules/.bin/next dev -p 3000
-⨯ Failed to start server
+�⨯ Failed to start server
 Error: listen EADDRINUSE: address already in use :::3000
     at <unknown> (Error: listen EADDRINUSE: address already in use :::3000)
     at new Promise (<anonymous>) {
@@ -14,6 +14,6 @@ Error: listen EADDRINUSE: address already in use :::3000
   syscall: 'listen',
   address: '::',
   port: 3000
-}
-[?25h
+}[?25h
 error: script "dev" exited with code 1
+
