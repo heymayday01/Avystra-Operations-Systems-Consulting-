@@ -1,25 +1,18 @@
 /**
  * Excel export for OGI submissions.
  *
- * Generates a styled .xlsx file from all OgiSubmission records and writes
- * it to `public/ogi-submissions.xlsx` so it's downloadable via the URL
- * `/ogi-submissions.xlsx`. The file is regenerated on every new submission
- * and can also be regenerated on-demand via GET /api/ogi/export.
+ * Generates a styled .xlsx workbook from all OgiSubmission records entirely in
+ * memory and returns it as a Buffer. Nothing is written to disk — the buffer
+ * is streamed straight to the client by GET /api/ogi/export (also reachable at
+ * the static-looking URL /ogi-submissions.xlsx via a rewrite in next.config).
  *
- * No external service, no credentials — just a local file.
+ * Building on-demand from the DB keeps the export always current and works on
+ * read-only serverless filesystems (e.g. Vercel), where writing to /public
+ * would fail.
  */
 
 import ExcelJS from "exceljs";
-import path from "path";
-import fs from "fs/promises";
 import { db } from "@/lib/db";
-
-/** Path where the generated Excel file is written to (and served from via /public). */
-const EXCEL_FILE_PATH = path.join(
-  process.cwd(),
-  "public",
-  "ogi-submissions.xlsx"
-);
 
 /** Column definitions — order here determines column order in the sheet. */
 interface ExportColumn {
@@ -68,20 +61,16 @@ function formatTimestamp(date: Date): string {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
-  })
-    .format(date)
-    .replace(",", ",") + " IST";
+  }).format(date) + " IST";
 }
 
 /**
- * Generate (or regenerate) the OGI submissions Excel file in /public.
+ * Generate the OGI submissions Excel workbook in memory.
  *
- * @returns The absolute file path of the generated file.
- * @throws If the filesystem write or DB query fails. Callers should
- *         wrap in try/catch — Excel generation is best-effort and must
- *         never block the DB save or email sends.
+ * @returns The .xlsx file as a Buffer, ready to stream as a download.
+ * @throws If the DB query or workbook generation fails.
  */
-export async function exportOgiSubmissionsToExcel(): Promise<string> {
+export async function generateOgiSubmissionsExcel(): Promise<Buffer> {
   // Fetch all submissions, newest first.
   const submissions = await db.ogiSubmission.findMany({
     orderBy: { createdAt: "desc" },
@@ -190,11 +179,7 @@ export async function exportOgiSubmissionsToExcel(): Promise<string> {
     } satisfies RowData);
   }
 
-  // ── Write to /public ──
-  // Ensure the directory exists (it should, but be defensive).
-  await fs.mkdir(path.dirname(EXCEL_FILE_PATH), { recursive: true });
+  // ── Serialize to an in-memory buffer (no disk write) ──
   const buffer = await workbook.xlsx.writeBuffer();
-  await fs.writeFile(EXCEL_FILE_PATH, Buffer.from(buffer));
-
-  return EXCEL_FILE_PATH;
+  return Buffer.from(buffer);
 }

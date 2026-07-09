@@ -71,3 +71,9 @@ public/ogi-submissions.xlsx
 # z.ai deployment artifacts (scripts are tracked, logs/pids are not)
 .zscripts/dev.pid
 .zscripts/dev.log
+
+# Runtime logs (tee'd by dev/start scripts)
+dev.log
+server.log
+# This repo uses Bun (bun.lock); ignore npm's lockfile
+package-lock.json
