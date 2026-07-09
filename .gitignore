@@ -50,6 +50,19 @@ worklog.md
 tool-results/
 upload/
 
+# AI reference screenshots (not part of the website)
+*.png
+!public/**/*.png
+
+# Z.ai skill SDK (not part of the website)
+/skills/
+
+# Examples (not used by the site)
+/examples/
+
+# Download directory (placeholder)
+/download/
+
 # Runtime database (each deployment creates its own)
 
 # Generated Excel file
