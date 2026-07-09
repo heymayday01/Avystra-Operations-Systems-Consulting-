@@ -1,13 +1,12 @@
 // This is your Prisma schema file
-// For Vercel deployment: change provider to "postgresql" and set
-// DATABASE_URL to your Supabase connection string in Vercel env vars.
+// Uses PostgreSQL (Supabase) — works on both Vercel (production) and local dev.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
