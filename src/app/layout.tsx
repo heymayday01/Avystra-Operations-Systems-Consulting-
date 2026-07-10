@@ -17,6 +17,11 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "AVYSTRA Consulting" }],
   metadataBase: new URL("https://avystra.co.in"),
+  icons: {
+    icon: "/avystra-logo-icon.webp",
+    shortcut: "/avystra-logo-icon.webp",
+    apple: "/avystra-logo-icon.webp",
+  },
   openGraph: {
     title: "AVYSTRA | Operations & Systems Consulting",
     description: DESCRIPTION,
@@ -24,11 +29,20 @@ export const metadata: Metadata = {
     siteName: "AVYSTRA",
     type: "website",
     locale: "en_IN",
+    images: [
+      {
+        url: "/avystra-logo-full.webp",
+        width: 512,
+        height: 512,
+        alt: "AVYSTRA Consulting Private Limited",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "AVYSTRA | Operations & Systems Consulting",
     description: DESCRIPTION,
+    images: ["/avystra-logo-full.webp"],
   },
   robots: {
     index: true,
