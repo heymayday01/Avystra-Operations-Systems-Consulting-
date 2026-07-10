@@ -26,7 +26,7 @@ export default function Footer({ leadCount }: FooterProps) {
     {
       name: "LinkedIn",
       icon: Linkedin,
-      href: "https://linkedin.com/in/kirankumar-pandey-841859218",
+      href: "https://www.linkedin.com/company/116793929/admin/page-posts/published/",
     },
     {
       name: "WhatsApp",
@@ -36,12 +36,12 @@ export default function Footer({ leadCount }: FooterProps) {
     {
       name: "Instagram",
       icon: Instagram,
-      href: "https://instagram.com/kp_biobali",
+      href: "https://www.instagram.com/avystraconsulting/",
     },
     {
       name: "Facebook",
       icon: Facebook,
-      href: "https://facebook.com/share/1FpxeyvRHF/",
+      href: "https://www.facebook.com/profile.php?id=61591387487866",
     },
   ];
 

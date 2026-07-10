@@ -18,9 +18,9 @@ export const metadata: Metadata = {
   authors: [{ name: "AVYSTRA Consulting" }],
   metadataBase: new URL("https://avystra.co.in"),
   icons: {
-    icon: "/avystra-logo-icon.webp",
-    shortcut: "/avystra-logo-icon.webp",
-    apple: "/avystra-logo-icon.webp",
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     title: "AVYSTRA | Operations & Systems Consulting",
