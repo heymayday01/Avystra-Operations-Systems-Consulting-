@@ -144,8 +144,10 @@ export default function Hero() {
             </span>
           </h1>
 
-          {/* Feature chips — single column on mobile, wrap on desktop */}
-          <div ref={chipsRef} className="flex flex-col items-center gap-2.5 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3 mb-12 sm:mb-14 max-w-3xl mx-auto">
+          {/* Feature chips — single column on mobile with generous spacing,
+              wrap on desktop. Mobile gap increased from 2.5 to 3 for
+              better touch separation + visual breathing room. */}
+          <div ref={chipsRef} className="flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3 mb-12 sm:mb-14 max-w-3xl mx-auto">
             {[
               { label: "Hired experienced people", Icon: UserPlus },
               { label: "Promoted managers", Icon: TrendingUp },
@@ -155,7 +157,7 @@ export default function Hero() {
             ].map(({ label, Icon }, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200/70 bg-white/50 hover:border-gold/35 hover:bg-white/80 transition-[border-color,background-color] duration-500 ease-out-expo"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-slate-200/70 bg-white/50 hover:border-gold/35 hover:bg-white/80 transition-[border-color,background-color] duration-500 ease-out-expo"
               >
                 <Icon className="w-3.5 h-3.5 text-gold/60 shrink-0" />
                 <span className="text-navy-deep/70 font-sans text-[11px] sm:text-[12px] font-medium whitespace-nowrap">
@@ -171,7 +173,7 @@ export default function Hero() {
               weight jumps (which looked mismatched: semibold→regular→light→bold). */}
           <div
             ref={cardRef}
-            className="hero-card-premium mb-12 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-8 py-8 sm:px-12 sm:py-10 text-center"
+            className="hero-card-premium mb-12 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-5 py-7 sm:px-12 sm:py-10 text-center"
           >
             <p className="text-navy-deep font-sans text-lg sm:text-xl font-medium leading-relaxed mb-5" style={{ lineHeight: 1.5 }}>
               So why does it still feel like the company slows down whenever you step away?
@@ -190,14 +192,14 @@ export default function Hero() {
             </p>
           </div>
 
-          {/* CTAs — smooth premium hover */}
+          {/* CTAs — smooth premium hover. Mobile: full-width for max tap target. */}
           <div
             ref={ctaRef}
-            className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 mb-14 sm:mb-16"
+            className="flex flex-col items-stretch w-full max-w-xs sm:max-w-none sm:flex-row sm:items-center gap-3 sm:gap-5 mb-14 sm:mb-16 mx-auto"
           >
             <button
               onClick={handleScrollToForm}
-              className="hero-btn-primary btn-premium group relative cursor-pointer rounded-full px-9 py-4 flex items-center gap-3 focus-ring shadow-lg overflow-hidden"
+              className="hero-btn-primary btn-premium group relative cursor-pointer rounded-full px-9 py-4 flex items-center justify-center gap-3 focus-ring shadow-lg overflow-hidden"
             >
               <span className="relative z-10 text-white font-mono text-[12px] font-bold tracking-[0.2em] uppercase">
                 Talk To Us
@@ -207,7 +209,7 @@ export default function Hero() {
 
             <button
               onClick={handleScrollToBento}
-              className="hero-btn-secondary btn-premium group relative cursor-pointer rounded-full px-9 py-4 focus-ring shadow-sm overflow-hidden"
+              className="hero-btn-secondary btn-premium group relative cursor-pointer rounded-full px-9 py-4 flex items-center justify-center focus-ring shadow-sm overflow-hidden"
             >
               <span className="relative z-10 text-navy-deep font-mono text-[12px] font-bold tracking-[0.2em] uppercase">
                 See The Problem
