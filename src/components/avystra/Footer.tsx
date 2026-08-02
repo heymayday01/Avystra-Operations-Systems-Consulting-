@@ -151,7 +151,7 @@ export default function Footer({ leadCount }: FooterProps) {
               Follow our work for insights on leadership, execution, and
               organizational performance.
             </p>
-            <div className="grid grid-cols-4 gap-2 max-w-[200px]">
+            <div className="grid grid-cols-4 gap-3 max-w-[220px]">
               {socialLinks.map((link) => (
                 <a
                   key={link.name}
