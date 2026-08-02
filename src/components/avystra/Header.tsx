@@ -257,7 +257,7 @@ export default function Header() {
                   href={item.href}
                   onClick={(e) => handleScrollTo(e, item.href.substring(1))}
                   key={item.name}
-                  className="flex items-center gap-3 px-4 py-3 min-h-[48px] rounded-xl bg-transparent hover:bg-navy-deep/[0.06] active:bg-navy-deep/[0.1] border border-transparent hover:border-navy-deep/[0.04] transition-[background-color,border-color] duration-300 font-sans group cursor-pointer focus-ring"
+                  className="flex items-center gap-3 px-4 py-3.5 min-h-[52px] rounded-xl bg-transparent hover:bg-navy-deep/[0.06] active:bg-navy-deep/[0.12] active:scale-[0.98] border border-transparent hover:border-navy-deep/[0.04] transition-all duration-300 font-sans group cursor-pointer focus-ring"
                   style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
                 >
                   <span className="font-mono text-[10.5px] font-bold text-gold tracking-widest opacity-90 shrink-0">

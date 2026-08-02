@@ -932,6 +932,38 @@ html {
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
+
+  /* Larger tap targets for all card-like interactive elements */
+  .card-premium, .flow-card, .pillar-card {
+    min-height: 0;
+  }
+
+  /* Better scroll momentum for overflow containers */
+  .overflow-y-auto, .overflow-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent layout shift on input focus (iOS zooms if font-size < 16px) */
+  input[type="text"], input[type="email"], input[type="tel"], input[type="number"],
+  textarea, select {
+    font-size: 16px !important;
+  }
+
+  /* Smooth font size transitions on orientation change */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Reduce motion for users who prefer it (accessibility) */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 /* ═══ SCROLL PERFORMANCE OPTIMIZATIONS ═══
