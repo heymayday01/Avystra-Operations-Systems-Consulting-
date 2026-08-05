@@ -31,7 +31,7 @@ function prefersReducedMotion(): boolean {
 
 export function useGsapCards<T extends HTMLElement = HTMLDivElement>(
   options: GsapCardsOptions = {}
-): RefObject<T> {
+): RefObject<T | null> {
   const ref = useRef<T>(null);
   const pageReady = usePageReady();
   const { y = 24, cardSelector } = options;

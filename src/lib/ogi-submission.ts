@@ -15,7 +15,6 @@
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { computeOgiScore, getResultBand } from "@/lib/ogi-data";
-import { appendSubmissionToSheet } from "@/lib/sheets";
 import type { OgiSubmission } from "@prisma/client";
 
 /** How long after creation a submission counts as "the same session". */
@@ -119,19 +118,6 @@ export async function findOrCreateSubmission(
       band: band.badge,
       answersJson: JSON.stringify(data.answers),
     },
-  });
-
-  // Mirror only NEW rows to Google Sheets — reusing the DB's dedupe means the
-  // Sheet never gets duplicates, regardless of which route created the row.
-  // Best-effort: appendSubmissionToSheet never throws.
-  await appendSubmissionToSheet({
-    name: data.name,
-    role: data.role,
-    contact: data.contact,
-    email: data.email,
-    score,
-    band: band.badge,
-    answers: data.answers,
   });
 
   return { submission, score, band, created: true };

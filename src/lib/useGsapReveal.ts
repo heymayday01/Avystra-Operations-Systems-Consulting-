@@ -76,7 +76,7 @@ function splitWords(el: HTMLElement): HTMLElement[] {
 export function useGsapReveal<T extends HTMLElement = HTMLElement>(
   mode: RevealMode = "fade",
   options: GsapRevealOptions = {}
-): RefObject<T> {
+): RefObject<T | null> {
   const ref = useRef<T>(null);
   const pageReady = usePageReady();
 
