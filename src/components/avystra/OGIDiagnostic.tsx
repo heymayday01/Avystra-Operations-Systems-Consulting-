@@ -398,11 +398,11 @@ export default function OGIDiagnostic() {
                   </div>
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-4 flex justify-center">
                   <button
                     onClick={() => setScreen("INFO_CAPTURE")}
                     aria-label="Begin OGI assessment"
-                    className="btn-premium group inline-flex items-center gap-3 bg-navy-soft hover:bg-gold text-white font-display text-sm font-semibold tracking-wider uppercase px-10 py-4 rounded-xl shadow-lg focus-ring cursor-pointer"
+                    className="btn-premium group inline-flex items-center justify-center gap-3 bg-navy-soft hover:bg-gold text-white font-display text-sm font-semibold tracking-wider uppercase px-10 py-4 rounded-xl shadow-lg focus-ring cursor-pointer w-full sm:w-auto"
                     id="ogi-btn-start"
                   >
                     <span>Begin Assessment</span>
@@ -605,11 +605,11 @@ export default function OGIDiagnostic() {
                   </form>
                 </div>
 
-                <div className="flex justify-end pt-8 mt-6 border-t border-slate-100">
+                <div className="flex justify-center sm:justify-end pt-8 mt-6 border-t border-slate-100">
                   <button
                     onClick={() => validateAndNextInfo()}
                     aria-label="Continue to questions"
-                    className="btn-premium group inline-flex items-center gap-2.5 bg-navy-deep hover:bg-gold text-white font-display text-xs font-bold tracking-wider uppercase px-7 py-3.5 rounded-xl shadow-md focus-ring cursor-pointer"
+                    className="btn-premium group inline-flex items-center justify-center gap-2.5 bg-navy-deep hover:bg-gold text-white font-display text-xs font-bold tracking-wider uppercase px-7 py-3.5 rounded-xl shadow-md focus-ring cursor-pointer w-full sm:w-auto"
                     id="ogi-btn-info-continue"
                   >
                     <span>Continue to Questions</span>
