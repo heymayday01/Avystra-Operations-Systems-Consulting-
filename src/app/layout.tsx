@@ -5,7 +5,7 @@ const DESCRIPTION =
   "AVYSTRA helps Indian organizations close the gap between knowing and doing — through leadership development, manager effectiveness, and execution systems";
 
 export const metadata: Metadata = {
-  title: "AVYSTRA | Operations & Systems Consulting",
+  title: "AVYSTRA | Leadership & Performance Consulting",
   description: DESCRIPTION,
   keywords: [
     "AVYSTRA",
@@ -17,18 +17,32 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "AVYSTRA Consulting" }],
   metadataBase: new URL("https://avystra.co.in"),
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
-    title: "AVYSTRA | Operations & Systems Consulting",
+    title: "AVYSTRA | Leadership & Performance Consulting",
     description: DESCRIPTION,
     url: "https://avystra.co.in/",
     siteName: "AVYSTRA",
     type: "website",
     locale: "en_IN",
+    images: [
+      {
+        url: "/avystra-logo-full.webp",
+        width: 512,
+        height: 512,
+        alt: "AVYSTRA Consulting Private Limited",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AVYSTRA | Operations & Systems Consulting",
+    title: "AVYSTRA | Leadership & Performance Consulting",
     description: DESCRIPTION,
+    images: ["/avystra-logo-full.webp"],
   },
   robots: {
     index: true,

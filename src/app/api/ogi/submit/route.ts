@@ -3,6 +3,7 @@ import { rateLimit } from "@/lib/rate-limit";
 import {
   SubmissionSchema,
   findOrCreateSubmission,
+  scoreForAnswers,
 } from "@/lib/ogi-submission";
 import {
   sendEmail,
@@ -71,6 +72,8 @@ export async function POST(request: Request) {
   const data = parsed.data;
 
   // 1. Save (or reuse the row /api/ogi/save created for this session).
+  // Graceful degradation: if the DB is unreachable, we still send emails
+  // with a temp ID (the submission data is included in the email body).
   let submissionId: string;
   let score: number;
   let bandBadge: string;
@@ -80,11 +83,13 @@ export async function POST(request: Request) {
     score = result.score;
     bandBadge = result.band.badge;
   } catch (err) {
-    console.error("[ogi/submit] DB insert failed:", err);
-    return NextResponse.json(
-      { success: false, error: "Failed to save submission" },
-      { status: 500 }
-    );
+    console.error("[ogi/submit] DB insert failed, continuing with email-only:", err);
+    submissionId = `temp_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+    // Compute score server-side from the raw answers (same function the DB
+    // path uses). Never trust client-provided score/band — Zod strips them.
+    const computed = scoreForAnswers(data.answers);
+    score = computed.score;
+    bandBadge = computed.band.badge;
   }
 
   // 2. Send both emails in parallel. Each is independent — one failing never

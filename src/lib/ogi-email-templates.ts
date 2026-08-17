@@ -35,8 +35,9 @@ import {
 } from "@/lib/ogi-data";
 
 /** Minimal HTML escaper to prevent injection in email bodies. */
-export function escapeHtml(s: string): string {
-  return s
+export function escapeHtml(s: string | undefined | null): string {
+  if (s == null) return "";
+  return String(s)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")

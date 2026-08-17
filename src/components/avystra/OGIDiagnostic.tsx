@@ -692,12 +692,12 @@ export default function OGIDiagnostic() {
                           onClick={() => handleAnswerSelect(opt.value)}
                           aria-pressed={isSelected}
                           aria-label={`${opt.label} — ${currentQ.text.substring(0, 60)}`}
-                          whileTap={{ scale: 0.95 }}
+                          whileTap={{ scale: 0.92 }}
                           transition={{ duration: 0.15, ease: EASE }}
-                          className={`relative py-4 px-3 text-xs sm:text-sm text-center rounded-xl font-display font-semibold transition-all duration-300 border cursor-pointer select-none focus-ring ${
+                          className={`relative py-5 px-3 text-xs sm:text-sm text-center rounded-xl font-display font-semibold transition-all duration-300 border cursor-pointer select-none focus-ring min-h-[52px] ${
                             isSelected
                               ? "bg-navy-deep border-navy-deep text-white shadow-md shadow-slate-900/10"
-                              : "bg-slate-50 border-slate-200/80 hover:border-gold hover:bg-white text-slate-600 hover:text-navy-deep"
+                              : "bg-slate-50 border-slate-200/80 hover:border-gold hover:bg-white text-slate-600 hover:text-navy-deep active:bg-slate-100"
                           }`}
                           id={`ogi-q-${currentQ.id}-opt-${opt.label}`}
                         >

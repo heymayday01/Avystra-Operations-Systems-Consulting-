@@ -267,13 +267,16 @@ export default function Home() {
               2. WhatsApp circle button — navy with gold glyph
               Positioned so they never overlap each other or page content. */}
 
-          {/* OGI Score CTA — gold pill, sits above the WhatsApp button */}
+          {/* OGI Score CTA — gold pill, sits above the WhatsApp button.
+              Mobile: positioned higher + safe-area-aware to avoid overlap
+              with the WhatsApp button and iOS home indicator. */}
           <motion.button
             onClick={() => smoothScrollTo("consult")}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.0, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed right-4 sm:right-6 bottom-20 sm:bottom-24 z-[9998] inline-flex items-center gap-2 bg-gold text-navy-deep font-display font-bold text-[10px] sm:text-[11px] uppercase tracking-[0.14em] px-4 sm:px-5 py-3 sm:py-3.5 rounded-full cursor-pointer float-btn-glow border border-gold/40 group hover:bg-gold-light transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] whitespace-nowrap"
+            className="fixed right-4 sm:right-6 z-[9998] inline-flex items-center gap-2 bg-gold text-navy-deep font-display font-bold text-[10px] sm:text-[11px] uppercase tracking-[0.14em] px-4 sm:px-5 py-3 sm:py-3.5 rounded-full cursor-pointer float-btn-glow border border-gold/40 group hover:bg-gold-light transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] whitespace-nowrap shadow-lg"
+            style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 5rem)" }}
             aria-label="Check your OGI Score"
           >
             {/* Zap icon for energy/urgency */}
@@ -292,7 +295,8 @@ export default function Home() {
             <span className="xs:hidden sm:hidden">OGI Score</span>
           </motion.button>
 
-          {/* WhatsApp circle button — below the OGI button */}
+          {/* WhatsApp circle button — below the OGI button.
+              Mobile: 48px (meets 44px touch target minimum), safe-area-aware. */}
           <motion.a
             href={`https://wa.me/918596059607?text=${encodeURIComponent("Hi AVYSTRA, I visited your website and would like to know more. Can we connect?")}`}
             target="_blank"
@@ -300,7 +304,8 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed right-4 sm:right-6 bottom-4 sm:bottom-6 z-[9999] w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-navy-deep text-gold flex items-center justify-center cursor-pointer float-btn-glow border border-gold/25 group"
+            className="fixed right-4 sm:right-6 z-[9999] w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-navy-deep text-gold flex items-center justify-center cursor-pointer float-btn-glow border border-gold/25 group"
+            style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)" }}
             aria-label="Consult now on WhatsApp"
           >
             {/* Subtle gold ring glow on hover */}

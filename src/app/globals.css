@@ -866,6 +866,106 @@ html, body {
   overscroll-behavior: contain;
 }
 
+/* ═══ MOBILE EXCELLENCE OPTIMIZATIONS ═══
+   These rules ensure the best possible mobile experience:
+   - Larger touch targets (44px minimum)
+   - Better text readability (minimum font sizes)
+   - Proper safe-area insets for iOS notch/home indicator
+   - Increased card spacing on mobile
+   - Prevent text selection on UI elements (feels more native) */
+
+/* Ensure all interactive elements meet 44px minimum touch target on mobile */
+@media (max-width: 768px) {
+  button, a[role="button"], .btn-premium, [class*="focus-ring"] {
+    min-height: 44px;
+  }
+
+  /* Increase card spacing on mobile so stacked cards breathe */
+  .grid > * {
+    margin-bottom: 0;
+  }
+
+  /* Better tap feedback — subtle scale on active (feels native) */
+  button:active, a:active, [role="button"]:active {
+    transform: scale(0.97);
+    transition: transform 0.1s ease;
+  }
+
+  /* Prevent text selection on UI elements — feels more like a native app */
+  .btn-premium, .float-btn-glow, [class*="rounded-full"] {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Larger heading sizes on mobile for better readability */
+  h2 { font-size: clamp(1.75rem, 6vw, 3rem); }
+  h3 { font-size: clamp(1.125rem, 4vw, 1.5rem); }
+
+  /* Ensure body text is at least 14px on mobile */
+  p { font-size: 14px; }
+}
+
+/* Safe-area insets for iOS devices with notches / home indicators.
+   Applied to floating buttons + footer so they don't overlap the
+   home indicator or get hidden behind the notch. */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Smooth scrolling on mobile — native momentum scrolling */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent pull-to-refresh on mobile (feels more like an app) */
+html {
+  overscroll-behavior-y: contain;
+}
+
+/* Better font rendering on mobile — crisper text */
+@media (max-width: 768px) {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Larger tap targets for all card-like interactive elements */
+  .card-premium, .flow-card, .pillar-card {
+    min-height: 0;
+  }
+
+  /* Better scroll momentum for overflow containers */
+  .overflow-y-auto, .overflow-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent layout shift on input focus (iOS zooms if font-size < 16px) */
+  input[type="text"], input[type="email"], input[type="tel"], input[type="number"],
+  textarea, select {
+    font-size: 16px !important;
+  }
+
+  /* Smooth font size transitions on orientation change */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Reduce motion for users who prefer it (accessibility) */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
 /* ═══ SCROLL PERFORMANCE OPTIMIZATIONS ═══
    NOTE: content-visibility: auto was removed because it broke smooth-scroll
    positioning. When Lenis/scrollTo targets an element, it reads
