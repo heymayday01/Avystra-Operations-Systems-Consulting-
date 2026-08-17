@@ -13,6 +13,8 @@
  * Required env:
  *   SHEETS_WEBHOOK_URL — the Apps Script Web App /exec URL
  *   SHEETS_SECRET      — shared token; must match SHARED_SECRET in the script
+ *
+ * Apps Script source to deploy: scripts/google-apps-script.gs
  */
 
 export interface SheetSubmission {
