@@ -157,7 +157,7 @@ export default function OGIDiagnostic() {
       } else {
         setScreen("LOADING");
       }
-    }, 300);
+    }, 400);
   };
 
   // Cancel any pending auto-advance timer if the component unmounts.
@@ -623,21 +623,22 @@ export default function OGIDiagnostic() {
             {screen === "QUESTIONS" && (
               <motion.div
                 key={`question-${currentQuestionIndex}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25, ease: EASE }}
-                className="p-6 sm:p-8 md:p-10 flex flex-col justify-between h-full flex-grow"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3, ease: EASE }}
+                className="p-5 sm:p-8 md:p-10 flex flex-col justify-between h-full flex-grow"
                 id={`ogi-screen-q-${currentQuestionIndex + 1}`}
               >
                 <div>
+                  {/* Header: dimension + back button */}
                   <div className="flex items-center justify-between mb-5 pb-3 border-b border-slate-100">
                     <div className="flex items-center gap-2">
                       <span
                         className="w-2.5 h-2.5 rounded-full"
                         style={{ backgroundColor: currentQ.color }}
                       />
-                      <span className="text-[11.5px] font-mono tracking-widest text-navy-deep uppercase font-bold">
+                      <span className="text-[11px] sm:text-[11.5px] font-mono tracking-widest text-navy-deep uppercase font-bold">
                         {currentQ.dimensionName}
                       </span>
                     </div>
@@ -645,23 +646,24 @@ export default function OGIDiagnostic() {
                     <button
                       onClick={handleBack}
                       aria-label="Go back to previous question"
-                      className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-gold font-mono transition-colors group focus-ring cursor-pointer"
+                      className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-gold font-mono transition-colors group focus-ring cursor-pointer min-h-[44px] px-2"
                     >
-                      <ChevronLeft className="w-3.5 h-3.5 transform group-hover:-translate-x-0.5 transition-transform" />
+                      <ChevronLeft className="w-4 h-4 transform group-hover:-translate-x-0.5 transition-transform" />
                       Back
                     </button>
                   </div>
 
+                  {/* Progress bar — taller + with answered indicator */}
                   <div className="mb-6">
-                    <div className="flex items-center justify-between text-[11.5px] font-mono text-slate-400 uppercase tracking-widest mb-2">
-                      <span>Index Integrity Question</span>
-                      <strong className="text-slate-700">
+                    <div className="flex items-center justify-between text-[11px] sm:text-[11.5px] font-mono text-slate-400 uppercase tracking-widest mb-2.5">
+                      <span>Question</span>
+                      <strong className="text-navy-deep">
                         {currentQuestionIndex + 1} of 16
                       </strong>
                     </div>
-                    <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                       <motion.div
-                        className="h-full rounded-full"
+                        className="h-full rounded-full relative"
                         style={{
                           backgroundColor: currentQ.color,
                           transformOrigin: "left",
@@ -669,19 +671,44 @@ export default function OGIDiagnostic() {
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: progressPercent / 100 }}
                         transition={{ duration: 0.5, ease: EASE }}
-                      />
+                      >
+                        {/* Glow effect on the progress fill */}
+                        <div
+                          className="absolute right-0 top-0 bottom-0 w-8 rounded-full opacity-50"
+                          style={{
+                            background: `linear-gradient(90deg, transparent, ${currentQ.color})`,
+                          }}
+                        />
+                      </motion.div>
+                    </div>
+                    {/* Answered dots — show which questions have been answered */}
+                    <div className="flex gap-1 mt-2 justify-center">
+                      {Array.from({ length: 16 }).map((_, i) => (
+                        <div
+                          key={i}
+                          className={`h-1 rounded-full transition-all duration-300 ${
+                            i === currentQuestionIndex
+                              ? "w-4"
+                              : answers[questions[i].id] !== undefined
+                              ? "w-1.5 bg-gold/60"
+                              : "w-1.5 bg-slate-200"
+                          }`}
+                        />
+                      ))}
                     </div>
                   </div>
 
-                  <div className="text-center py-4 px-2 max-w-2xl mx-auto my-3">
-                    <p className="font-display font-medium text-xl sm:text-2xl text-navy-deep leading-snug tracking-tight">
+                  {/* Question text — larger, more readable */}
+                  <div className="text-center py-6 px-2 max-w-2xl mx-auto my-2">
+                    <p className="font-display font-medium text-xl sm:text-2xl md:text-[1.75rem] text-navy-deep leading-snug tracking-tight">
                       &ldquo;{currentQ.text}&rdquo;
                     </p>
                   </div>
                 </div>
 
+                {/* Answer options — 2-column on mobile, 5-column on desktop */}
                 <div>
-                  <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 max-w-3xl mx-auto">
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 sm:gap-3 max-w-3xl mx-auto">
                     {answerOptions.map((opt) => {
                       const isSelected =
                         selectedOptionTemp === opt.value ||
@@ -693,11 +720,12 @@ export default function OGIDiagnostic() {
                           aria-pressed={isSelected}
                           aria-label={`${opt.label} — ${currentQ.text.substring(0, 60)}`}
                           whileTap={{ scale: 0.92 }}
+                          whileHover={{ y: -2 }}
                           transition={{ duration: 0.15, ease: EASE }}
-                          className={`relative py-5 px-3 text-xs sm:text-sm text-center rounded-xl font-display font-semibold transition-all duration-300 border cursor-pointer select-none focus-ring min-h-[52px] ${
+                          className={`relative py-4 sm:py-5 px-2 sm:px-3 text-xs sm:text-sm text-center rounded-xl font-display font-semibold transition-all duration-300 border cursor-pointer select-none focus-ring min-h-[52px] ${
                             isSelected
-                              ? "bg-navy-deep border-navy-deep text-white shadow-md shadow-slate-900/10"
-                              : "bg-slate-50 border-slate-200/80 hover:border-gold hover:bg-white text-slate-600 hover:text-navy-deep active:bg-slate-100"
+                              ? "bg-navy-deep border-navy-deep text-white shadow-md shadow-slate-900/10 scale-[1.02]"
+                              : "bg-slate-50 border-slate-200/80 hover:border-gold hover:bg-white hover:shadow-sm text-slate-600 hover:text-navy-deep active:bg-slate-100"
                           }`}
                           id={`ogi-q-${currentQ.id}-opt-${opt.label}`}
                         >
@@ -707,8 +735,8 @@ export default function OGIDiagnostic() {
                     })}
                   </div>
 
-                  <p className="text-center text-[11.5px] font-mono text-slate-400 mt-5 tracking-wider uppercase">
-                    Selecting auto-advances to the next milestone
+                  <p className="text-center text-[10.5px] sm:text-[11.5px] font-mono text-slate-400 mt-5 tracking-wider uppercase">
+                    Selecting auto-advances to the next question
                   </p>
                 </div>
               </motion.div>
@@ -767,15 +795,16 @@ export default function OGIDiagnostic() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3, ease: EASE }}
-                className="p-8 sm:p-10 md:p-12 flex flex-col items-center justify-center h-full flex-grow text-center bg-navy-deep text-white relative min-h-[380px]"
+                className="p-8 sm:p-10 md:p-12 flex flex-col items-center justify-center h-full flex-grow text-center bg-navy-deep text-white relative min-h-[420px]"
                 id="ogi-screen-loading"
               >
                 <div className="absolute inset-0 opacity-10 bg-[linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:20px_20px]" />
 
                 <div className="relative flex flex-col items-center z-10">
-                  <div className="relative mb-6">
-                    <Loader2 className="w-10 h-10 text-gold animate-spin" />
-                    <div className="absolute inset-0 rounded-full border-2 border-white/5 opacity-25 animate-ping" />
+                  {/* Multi-ring spinner */}
+                  <div className="relative mb-6 w-16 h-16">
+                    <Loader2 className="w-12 h-12 text-gold animate-spin absolute inset-0 m-auto" />
+                    <div className="absolute inset-0 rounded-full border-2 border-gold/20 opacity-40 animate-ping" />
                   </div>
 
                   <h3 className="font-display font-medium text-xl sm:text-2xl text-white tracking-tight mb-2">
@@ -787,9 +816,16 @@ export default function OGIDiagnostic() {
                     execution dependencies, and scanning critical alignments.
                   </p>
 
-                  <div className="flex flex-wrap items-center justify-center gap-3 bg-white/5 border border-white/10 px-4 py-2 rounded-full text-[11.5px] font-mono text-slate-300 uppercase tracking-widest animate-pulse">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>Executing strategic scoring matrices</span>
+                  {/* Animated status pills */}
+                  <div className="flex flex-col items-center gap-2.5">
+                    <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full text-[11.5px] font-mono text-slate-300 uppercase tracking-widest">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span>Scoring 4 growth pillars</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full text-[11.5px] font-mono text-slate-400 uppercase tracking-widest opacity-70">
+                      <span className="w-2 h-2 rounded-full bg-gold/60" />
+                      <span>Detecting friction patterns</span>
+                    </div>
                   </div>
                 </div>
               </motion.div>
