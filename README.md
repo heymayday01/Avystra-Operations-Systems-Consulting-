@@ -16,6 +16,7 @@ A premium, production-ready marketing website for AVYSTRA Consulting Private Lim
 | **Database** | PostgreSQL (Supabase) via Prisma ORM |
 | **Email** | Gmail SMTP via Nodemailer (pooled transport) |
 | **Excel Export** | ExcelJS |
+| **Admin Auth** | Argon2id (hash-wasm) + signed-cookie sessions (Web Crypto) |
 | **Icons** | Lucide React |
 | **Fonts** | Plus Jakarta Sans (display), Inter (body), Playfair Display (serif), JetBrains Mono (mono) |
 
@@ -73,6 +74,18 @@ SMTP_USER=your-email@gmail.com
 SMTP_PASS=your-16-char-app-password    # NOT your regular Gmail password
 SMTP_FROM=AVYSTRA Consulting Pvt Ltd <your-email@gmail.com>
 AVYSTRA_NOTIFY_EMAIL=your-email@gmail.com   # where OGI submission notifications are sent
+
+# ── Google Sheets mirror (optional) ─────────────────────────────────────────
+# Leave SHEETS_WEBHOOK_URL blank to disable. See scripts/google-apps-script.gs
+# for the Apps Script to deploy — SHEETS_SECRET must match SHARED_SECRET there.
+SHEETS_WEBHOOK_URL=https://script.google.com/macros/s/xxx/exec
+SHEETS_SECRET=your-shared-secret
+
+# ── Admin panel ──────────────────────────────────────────────────────────────
+# See "Admin Panel" below for how to generate these.
+ADMIN_EMAIL=admin@avystra.co.in
+ADMIN_PASSWORD_HASH=
+ADMIN_SESSION_SECRET=
 ```
 
 ### Getting the Gmail App Password
@@ -212,12 +225,18 @@ A 16-question self-assessment across 4 dimensions:
 | `POST` | `/api/ogi/submit` | Save + send both emails + export Excel |
 | `GET` | `/api/ogi/export` | Download all submissions as Excel file |
 | `GET` | `/ogi-submissions.xlsx` | Same as export (rewritten in next.config.ts) |
+| `POST` | `/api/admin/login` | Admin sign-in (sets a signed session cookie) |
+| `POST` | `/api/admin/logout` | Clears the admin session cookie |
+| `GET` | `/api/admin/submissions` | List/search/filter/sort submissions (admin only) |
+| `GET` | `/api/admin/submissions/[id]` | Full submission detail (admin only) |
+| `PATCH` | `/api/admin/submissions/[id]` | Update `status`/`adminNotes` (admin only) |
 
 ### Rate Limiting
 
 - `/api/ogi/save`: 10 requests/hour per IP
 - `/api/ogi/submit`: 5 requests/hour per IP
 - `/api/ogi/export`: 10 requests/hour per IP
+- `/api/admin/login`: locked out for 15 minutes after 8 failed attempts per IP (DB-backed — see [Admin Panel](#admin-panel))
 
 ---
 
@@ -233,9 +252,69 @@ model OgiSubmission {
   score       Int
   band        String
   answersJson String
+  status      String   @default("new") // new | reviewed | contacted | archived
+  adminNotes  String?
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AdminLoginAttempt {
+  id          String    @id @default(cuid())
+  ip          String    @unique
+  attempts    Int       @default(0)
+  lockedUntil DateTime?
+  updatedAt   DateTime  @updatedAt
 }
 ```
+
+---
+
+## Admin Panel
+
+A protected `/admin` area for AVYSTRA staff to browse, search, filter, sort, and triage OGI submissions — update a submission's status (`new` / `reviewed` / `contacted` / `archived`) and leave internal notes.
+
+### Setup
+
+1. **Generate a password hash** (Argon2id — never store a plaintext password):
+   ```bash
+   node scripts/hash-admin-password.mjs 'your-new-password'
+   ```
+   This prints an `ADMIN_PASSWORD_HASH=...` line, pre-escaped for `.env` (every `$` is escaped as `\$` — Next's env loader otherwise treats unescaped `$word` sequences as variable expansion and will silently corrupt the hash). Paste it as-is.
+
+2. **Generate a session secret** (used to sign session cookies — rotating it logs out every active session):
+   ```bash
+   node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+   ```
+
+3. Set in `.env` (and in Vercel's env vars for production):
+   ```env
+   ADMIN_EMAIL=admin@avystra.co.in
+   ADMIN_PASSWORD_HASH=\$argon2id\$v=19\$...          # from step 1, escaped
+   ADMIN_SESSION_SECRET=<base64 string from step 2>
+   ```
+
+4. Apply the schema changes (adds `status`/`adminNotes`/`updatedAt` to `OgiSubmission` and the new `AdminLoginAttempt` table):
+   ```bash
+   npx prisma db push
+   ```
+
+5. Sign in at `/admin/login`.
+
+To change the password later, repeat step 1 with the new password and update `ADMIN_PASSWORD_HASH`.
+
+### How authentication works
+
+- **Credentials**: a single admin account, defined entirely by `ADMIN_EMAIL` + `ADMIN_PASSWORD_HASH` env vars — no database user table. Passwords are verified with Argon2id (`hash-wasm`, WASM-based — no native binary, so it runs identically on Vercel serverless and locally).
+- **Sessions**: a stateless, HMAC-SHA256-signed cookie (`avystra_admin_session`, `HttpOnly`, `Secure` in production, `SameSite=Lax`, 8-hour expiry) — no session table. Signing uses Web Crypto (`crypto.subtle`), so the same verification code runs in both the Edge proxy/middleware and Node API routes.
+- **Route protection** is layered: `src/proxy.ts` (Next's middleware, gates `/admin/**` and `/api/admin/**`) → the protected layout re-checks server-side → every `/api/admin/*` route independently re-verifies the session. A gap in any one layer doesn't expose admin data.
+- **Brute-force protection**: failed login attempts are tracked per IP in the `AdminLoginAttempt` table (DB-backed, not in-memory — this app runs on Vercel serverless, where in-memory state doesn't survive cold starts or scale across instances). 8 failed attempts locks that IP out for 15 minutes.
+- **CSRF**: state-changing admin requests (login, logout, status/notes updates) verify the `Origin` header matches the request's own origin, in addition to `SameSite=Lax`.
+- Login failures always return a generic `"Invalid credentials."` — the response never reveals whether the email or the password was wrong.
+
+### Deployment considerations
+
+- Set `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH`, and `ADMIN_SESSION_SECRET` in Vercel's Production env vars — same as the database/email vars, `.env` never reaches Vercel.
+- `/admin/**` and `/api/admin/**` get additional security headers (CSP, `X-Frame-Options: DENY`, etc.) scoped to just those paths — see `headers()` in `next.config.ts`.
 
 ---
 

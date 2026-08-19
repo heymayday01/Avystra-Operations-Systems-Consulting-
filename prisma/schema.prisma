@@ -20,5 +20,19 @@ model OgiSubmission {
   score       Int
   band        String
   answersJson String
+  status      String   @default("new")
+  adminNotes  String?
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/// DB-backed brute-force lockout for /api/admin/login — must be DB-backed
+/// (not in-memory) since the app runs on Vercel serverless, where in-memory
+/// state doesn't survive cold starts or scale across instances.
+model AdminLoginAttempt {
+  id          String    @id @default(cuid())
+  ip          String    @unique
+  attempts    Int       @default(0)
+  lockedUntil DateTime?
+  updatedAt   DateTime  @updatedAt
 }
