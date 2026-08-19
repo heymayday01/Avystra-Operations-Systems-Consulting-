@@ -36,7 +36,7 @@ export default function StatsFounder() {
 
   // GSAP ScrollTrigger reveals (single call per reveal group, never inside .map()).
   const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { duration: 0.6 });
-  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
+  const headingRef = useGsapReveal<HTMLHeadingElement>("fade", { delay: 0.1, duration: 0.6 });
   const subtextRef = useGsapReveal<HTMLParagraphElement>("fade", { delay: 0.2, duration: 0.75 });
   const statsGridRef = useGsapCards<HTMLDivElement>();
   const portraitRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.2, duration: 0.8 });

@@ -44,7 +44,7 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { duration: 0.6 });
-  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
+  const headingRef = useGsapReveal<HTMLHeadingElement>("fade", { delay: 0.1, duration: 0.6 });
   const accordionsRef = useGsapCards<HTMLDivElement>();
 
   const toggleIndex = useCallback((index: number) => {

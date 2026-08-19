@@ -131,7 +131,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
       <div ref={logoRef} className="mb-8 opacity-0">
         <img
           src="/avystra-logo-new-white.webp"
-          alt=""
+          alt="AVYSTRA Consulting logo"
           style={{ height: "90px", width: "auto" }}
         />
       </div>

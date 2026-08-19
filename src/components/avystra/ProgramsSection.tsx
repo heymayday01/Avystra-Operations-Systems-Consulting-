@@ -115,7 +115,7 @@ export default function ProgramsSection() {
   const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", {
     duration: 0.6,
   });
-  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
+  const headingRef = useGsapReveal<HTMLHeadingElement>("fade", { delay: 0.1, duration: 0.6 });
   const descriptionRef = useGsapReveal<HTMLParagraphElement>("fade", {
     delay: 0.2,
     duration: 0.75,

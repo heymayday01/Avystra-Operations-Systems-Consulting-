@@ -20,7 +20,7 @@ export default function TestimonialsSection() {
   const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", {
     duration: 0.6,
   });
-  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
+  const headingRef = useGsapReveal<HTMLHeadingElement>("fade", { delay: 0.1, duration: 0.6 });
   const gridRef = useGsapCards<HTMLDivElement>();
   const pageReady = usePageReady();
 

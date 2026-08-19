@@ -10,7 +10,7 @@ interface FooterProps {
 }
 
 export default function Footer({ leadCount }: FooterProps) {
-  const headingRef = useGsapReveal<HTMLHeadingElement>("words");
+  const headingRef = useGsapReveal<HTMLHeadingElement>("fade", { delay: 0.1, duration: 0.6 });
   const descriptionRef = useGsapReveal<HTMLParagraphElement>("fade", { delay: 0.2, duration: 0.75 });
   const contactLinksRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.3, duration: 0.6 });
   const navLinksRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.35, duration: 0.6 });
