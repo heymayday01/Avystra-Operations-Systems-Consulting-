@@ -192,14 +192,16 @@ export default function Hero() {
             </p>
           </div>
 
-          {/* CTAs — smooth premium hover. Mobile: full-width for max tap target. */}
+          {/* CTAs — smooth premium hover.
+              Mobile: stacked, full-width, centered text — max tap target.
+              Desktop: inline, auto-width, centered as a group. */}
           <div
             ref={ctaRef}
-            className="flex flex-col items-stretch w-full max-w-xs sm:max-w-none sm:flex-row sm:items-center gap-3 sm:gap-5 mb-14 sm:mb-16 mx-auto"
+            className="flex flex-col items-center w-full max-w-[16rem] sm:max-w-none sm:flex-row sm:justify-center gap-3 sm:gap-5 mb-14 sm:mb-16 mx-auto"
           >
             <button
               onClick={handleScrollToForm}
-              className="hero-btn-primary btn-premium group relative cursor-pointer rounded-full px-9 py-4 flex items-center justify-center gap-3 focus-ring shadow-lg overflow-hidden"
+              className="hero-btn-primary btn-premium group relative cursor-pointer rounded-full px-9 py-4 flex w-full sm:w-auto items-center justify-center gap-3 focus-ring shadow-lg overflow-hidden"
             >
               <span className="relative z-10 text-white font-mono text-[12px] font-bold tracking-[0.2em] uppercase">
                 Talk To Us
@@ -209,7 +211,7 @@ export default function Hero() {
 
             <button
               onClick={handleScrollToBento}
-              className="hero-btn-secondary btn-premium group relative cursor-pointer rounded-full px-9 py-4 flex items-center justify-center focus-ring shadow-sm overflow-hidden"
+              className="hero-btn-secondary btn-premium group relative cursor-pointer rounded-full px-9 py-4 flex w-full sm:w-auto items-center justify-center focus-ring shadow-sm overflow-hidden"
             >
               <span className="relative z-10 text-navy-deep font-mono text-[12px] font-bold tracking-[0.2em] uppercase">
                 See The Problem
