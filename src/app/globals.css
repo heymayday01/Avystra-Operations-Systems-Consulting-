@@ -332,11 +332,16 @@ body::-webkit-scrollbar {
               border-color var(--dur-micro) var(--ease-sine),
               box-shadow var(--dur-standard) var(--ease-out);
   border: 1px solid rgba(var(--navy-rgb), 0.08);
+  /* Premium glassmorphism — subtle frosted-glass effect */
+  backdrop-filter: blur(8px) saturate(1.2);
+  -webkit-backdrop-filter: blur(8px) saturate(1.2);
 }
 .card-premium.card-premium:hover {
   transform: translateY(-4px);
   border-color: rgba(var(--gold-rgb), 0.4);
   box-shadow: var(--shadow-card-hover);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
 }
 
 /* Premium card hover — dark section variant (heavier shadow) */

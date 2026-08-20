@@ -9,6 +9,7 @@ import { motion } from "motion/react";
 import { smoothScrollTo } from "@/lib/scroll";
 import { ScrollTrigger } from "@/lib/gsap";
 import LoadingScreen from "@/components/avystra/LoadingScreen";
+import AmbientCanvas from "@/components/avystra/AmbientCanvas";
 import { PageReadyProvider } from "@/lib/pageReady";
 
 // Eager: only Header, Hero, ScrollProgress, LoadingScreen (above the fold)
@@ -127,50 +128,11 @@ export default function Home() {
         style={{ transition: "opacity 0.25s cubic-bezier(0.16,1,0.3,1)" }}
       >
           {/* ═══ AMBIENT BACKGROUND ═══
-              4 drifting orbs with CSS keyframe animations (transform/opacity
-              only — GPU-composited, no layout thrash). Opacities tuned down
-              from 70/60/60/50 to 50/40/45/35 for a quieter, more refined
-              backdrop that doesn't compete with content. Disabled on mobile
-              via CSS (performance). */}
-          <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
-            {/* Warm ivory base wash */}
-            <div className="absolute inset-0 bg-cream-bg" />
-
-            {/* Gold orb — top left, slow drift */}
-            <div
-              className="absolute -top-[10%] -left-[8%] w-[40vw] h-[40vw] rounded-full opacity-50 animate-glow-blob"
-              style={{
-                background:
-                  "radial-gradient(circle, rgba(184,146,78,0.35) 0%, transparent 65%)",
-              }}
-            />
-            {/* Navy orb — bottom right, slow drift (reverse) */}
-            <div
-              className="absolute top-[55%] -right-[10%] w-[38vw] h-[38vw] rounded-full opacity-40 animate-glow-blob-reverse"
-              style={{
-                background:
-                  "radial-gradient(circle, rgba(11,27,46,0.18) 0%, transparent 65%)",
-                animationDelay: "2s",
-              }}
-            />
-            {/* Central warm gold haze — gentle pulse */}
-            <div
-              className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[45vw] h-[30vw] rounded-full opacity-45 animate-pulse-slow"
-              style={{
-                background:
-                  "radial-gradient(ellipse, rgba(212,178,106,0.18) 0%, transparent 70%)",
-              }}
-            />
-            {/* Accent gold orb — mid-right, small, vivid */}
-            <div
-              className="absolute top-[45%] right-[8%] w-[22vw] h-[22vw] rounded-full opacity-35 animate-glow-blob"
-              style={{
-                background:
-                  "radial-gradient(circle, rgba(184,146,78,0.25) 0%, transparent 60%)",
-                animationDelay: "4s",
-              }}
-            />
-          </div>
+              GPU-accelerated WebGL canvas rendering flowing organic gradient
+              blobs — the kind seen on $1M+ award-winning sites (Linear, Vercel).
+              Paused on mobile + reduced-motion (CSS fallback gradient handles it).
+              Runs on the GPU via a fragment shader — zero CPU cost. */}
+          <AmbientCanvas />
 
           {/* Top Banner — slim promo bar, visible on ALL viewports.
               On mobile the text is shortened to fit one line without wrapping. */}
