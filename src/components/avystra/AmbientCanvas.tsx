@@ -53,24 +53,30 @@ void main() {
   vec2 uv = gl_FragCoord.xy / u_resolution.xy;
   uv.x *= u_resolution.x / u_resolution.y; // correct aspect ratio
 
-  // Base ivory background
-  vec3 col = vec3(0.969, 0.957, 0.929); // #F7F4ED
+  // Base background — slightly darker warm ivory for better text contrast.
+  // Was #F7F4ED (0.969, 0.957, 0.929) — too bright, washed out content.
+  // Now #EFE9DC (0.937, 0.913, 0.863) — warmer, richer, content pops.
+  vec3 col = vec3(0.937, 0.913, 0.863);
 
-  // Layer 1: Gold (top-left, warm)
+  // Layer 1: Gold (top-left, warm) — reduced intensity for subtlety
   float b1 = blob(uv, u_blob1_pos, u_blob1_radius);
-  col = mix(col, u_blob1_color, b1 * 0.35);
+  col = mix(col, u_blob1_color, b1 * 0.28);
 
-  // Layer 2: Navy (bottom-right, deep)
+  // Layer 2: Navy (bottom-right, deep) — increased for darker, richer base
   float b2 = blob(uv, u_blob2_pos, u_blob2_radius);
-  col = mix(col, u_blob2_color, b2 * 0.25);
+  col = mix(col, u_blob2_color, b2 * 0.35);
 
-  // Layer 3: Warm gold haze (center, gentle)
+  // Layer 3: Warm gold haze (center, gentle) — reduced for less brightness
   float b3 = blob(uv, u_blob3_pos, u_blob3_radius);
-  col = mix(col, u_blob3_color, b3 * 0.20);
+  col = mix(col, u_blob3_color, b3 * 0.15);
 
-  // Layer 4: Accent gold (mid-right, small vivid)
+  // Layer 4: Accent gold (mid-right, small vivid) — reduced
   float b4 = blob(uv, u_blob4_pos, u_blob4_radius);
-  col = mix(col, u_blob4_color, b4 * 0.30);
+  col = mix(col, u_blob4_color, b4 * 0.22);
+
+  // Subtle vignette — darkens edges slightly to focus attention on center
+  float vignette = 1.0 - smoothstep(0.5, 1.4, distance(uv, vec2(0.5, 0.45)));
+  col *= 0.92 + vignette * 0.08;
 
   gl_FragColor = vec4(col, 1.0);
 }
@@ -261,11 +267,11 @@ export default function AmbientCanvas() {
       className="fixed inset-0 z-0 pointer-events-none"
       aria-hidden="true"
       style={{
-        // CSS fallback background (visible before WebGL loads or on mobile)
+        // CSS fallback background — darker warm ivory matching the WebGL base
         background:
-          "radial-gradient(circle at 15% 15%, rgba(184,146,78,0.12) 0%, transparent 50%), " +
-          "radial-gradient(circle at 85% 70%, rgba(11,27,46,0.06) 0%, transparent 50%), " +
-          "#F7F4ED",
+          "radial-gradient(circle at 15% 15%, rgba(184,146,78,0.10) 0%, transparent 50%), " +
+          "radial-gradient(circle at 85% 70%, rgba(11,27,46,0.12) 0%, transparent 50%), " +
+          "#EFE9DC",
       }}
     />
   );

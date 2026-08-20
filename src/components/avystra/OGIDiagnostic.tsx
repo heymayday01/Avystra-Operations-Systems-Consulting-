@@ -332,7 +332,7 @@ export default function OGIDiagnostic() {
         {/* Content Box */}
         <div
           ref={contentBoxRef}
-          className="card-premium bg-white/60 border border-white/40 rounded-3xl overflow-hidden min-h-[420px] flex flex-col justify-between shadow-[0_8px_32px_-12px_rgba(11,27,46,0.1)]"
+          className="card-premium bg-white/70 border border-white/40 rounded-3xl overflow-hidden min-h-[420px] flex flex-col justify-between shadow-[0_8px_32px_-12px_rgba(11,27,46,0.1)]"
         >
           <AnimatePresence mode="wait">
             {/* INTRO SCREEN */}
@@ -760,7 +760,7 @@ export default function OGIDiagnostic() {
                 className="p-6 sm:p-10 md:p-12 flex flex-col items-center justify-center h-full flex-grow text-center bg-slate-50 relative cursor-pointer group focus-ring min-h-[420px]"
                 id="ogi-screen-nudge"
               >
-                <div className="absolute top-4 right-4 text-[10px] sm:text-[10.5px] font-mono text-slate-400 uppercase tracking-widest px-3 py-1.5 rounded-full bg-white/60 border border-slate-200/50">
+                <div className="absolute top-4 right-4 text-[10px] sm:text-[10.5px] font-mono text-slate-400 uppercase tracking-widest px-3 py-1.5 rounded-full bg-white/70 border border-slate-200/50">
                   Tap to skip
                 </div>
 

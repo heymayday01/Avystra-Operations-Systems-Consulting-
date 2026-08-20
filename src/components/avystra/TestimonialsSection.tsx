@@ -98,7 +98,7 @@ export default function TestimonialsSection() {
           {/* Aesthetic Capsule Badge */}
           <div
             ref={eyebrowRef}
-            className="border border-gold/20 bg-white/50 px-4 py-1.5 rounded-full inline-flex items-center gap-2.5 mb-3 shadow-sm"
+            className="border border-gold/20 bg-white/65 px-4 py-1.5 rounded-full inline-flex items-center gap-2.5 mb-3 shadow-sm"
           >
             <MessageSquare className="w-3.5 h-3.5 text-gold" />
             <span className="text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase">
@@ -125,7 +125,7 @@ export default function TestimonialsSection() {
           {testimonials.map((testimonial) => (
             <div
               key={testimonial.id}
-              className="card-premium group relative bg-white/50 rounded-2xl p-5 sm:p-8 lg:p-10 flex flex-col justify-between overflow-hidden"
+              className="card-premium group relative bg-white/65 rounded-2xl p-5 sm:p-8 lg:p-10 flex flex-col justify-between overflow-hidden"
             >
               {/* Shimmer sweep on hover */}
               <div className="absolute inset-0 bg-gradient-to-br from-gold/0 via-gold/5 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
