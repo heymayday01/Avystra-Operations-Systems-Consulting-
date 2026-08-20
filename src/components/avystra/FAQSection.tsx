@@ -78,7 +78,7 @@ export default function FAQSection() {
           {/* Aesthetic Badge */}
           <div
             ref={eyebrowRef}
-            className="border border-gold/20 bg-gradient-to-br from-white to-slate-50 px-4 py-1.5 rounded-full inline-flex items-center gap-2 mb-3 shadow-sm"
+            className="border border-gold/20 bg-white/50 px-4 py-1.5 rounded-full inline-flex items-center gap-2 mb-3 shadow-sm"
           >
             <HelpCircle className="w-3.5 h-3.5 text-gold" />
             <span className="text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase">
@@ -107,7 +107,7 @@ export default function FAQSection() {
         {/* Accordions Containment Block */}
         <div
           ref={accordionsRef}
-          className="bg-gradient-to-br from-white to-slate-50 border border-slate-100 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-8 lg:p-10 divide-y divide-slate-300/20"
+          className="bg-white/50 border border-white/40 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-8 lg:p-10 divide-y divide-slate-300/20"
         >
           {faqData.map((faq, index) => {
             const isOpen = openIndex === index;

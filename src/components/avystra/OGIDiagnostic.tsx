@@ -332,7 +332,7 @@ export default function OGIDiagnostic() {
         {/* Content Box */}
         <div
           ref={contentBoxRef}
-          className="card-premium bg-gradient-to-br from-white to-slate-50 border border-slate-100 rounded-3xl overflow-hidden min-h-[420px] flex flex-col justify-between"
+          className="card-premium bg-white/60 border border-white/40 rounded-3xl overflow-hidden min-h-[420px] flex flex-col justify-between shadow-[0_8px_32px_-12px_rgba(11,27,46,0.1)]"
         >
           <AnimatePresence mode="wait">
             {/* INTRO SCREEN */}
