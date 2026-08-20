@@ -315,7 +315,7 @@ export default function OGIDiagnostic() {
   return (
     <section
       id="consult"
-      className="relative py-8 bg-transparent border-none overflow-hidden md:py-12 scroll-mt-20"
+      className="relative py-6 bg-transparent border-none overflow-hidden md:py-12 scroll-mt-20"
     >
       {/* Static radial gradient ambiance — replaces the two animated blur orbs
           that caused repaint jank during scroll. Same premium glow, zero
@@ -343,10 +343,10 @@ export default function OGIDiagnostic() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.35, ease: EASE }}
-                className="p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-center items-center h-full flex-grow text-center"
+                className="p-5 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-center items-center h-full flex-grow text-center"
                 id="ogi-screen-intro"
               >
-                <div className="max-w-3xl">
+                <div className="max-w-3xl w-full">
                   <div className="flex justify-center mb-5">
                     <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-gold/5 rounded-full border border-gold/10 text-[12.5px] text-gold font-mono tracking-widest font-bold uppercase relative">
                       <Zap className="w-3.5 h-3.5 text-gold" />
@@ -374,7 +374,7 @@ export default function OGIDiagnostic() {
                     and instantly generates your personalized strategic report.
                   </p>
 
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3 mb-8">
                     {[
                       { name: "Leadership", code: "L", color: "bg-navy-soft" },
                       { name: "Managers", code: "M", color: "bg-gold" },
@@ -383,7 +383,7 @@ export default function OGIDiagnostic() {
                     ].map((item) => (
                       <div
                         key={item.code}
-                        className="p-3 rounded-xl bg-white/50 border border-slate-200/50 flex flex-col items-center group"
+                        className="p-3 sm:p-3.5 rounded-xl bg-white/50 border border-slate-200/50 flex flex-col items-center group hover:border-gold/30 hover:bg-white/80 transition-all duration-300"
                       >
                         <span
                           className={`w-6 h-6 rounded-full ${item.color} mb-2 flex items-center justify-center text-[11.5px] text-white font-mono font-bold`}
@@ -420,7 +420,7 @@ export default function OGIDiagnostic() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3, ease: EASE }}
-                className="p-6 sm:p-8 md:p-10 flex flex-col justify-between h-full flex-grow"
+                className="p-5 sm:p-8 md:p-10 flex flex-col justify-between h-full flex-grow"
                 id="ogi-screen-info"
               >
                 <div>
@@ -441,7 +441,7 @@ export default function OGIDiagnostic() {
                     we customize your index evaluation correctly.
                   </p>
 
-                  <form onSubmit={validateAndNextInfo} className="space-y-5 max-w-xl">
+                  <form onSubmit={validateAndNextInfo} className="space-y-4 sm:space-y-5 max-w-xl">
                     {/* Name Entry */}
                     <div className="space-y-1.5">
                       <label
@@ -746,10 +746,10 @@ export default function OGIDiagnostic() {
             {screen === "NUDGE" && (
               <motion.div
                 key="nudge"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3, ease: EASE }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.05 }}
+                transition={{ duration: 0.4, ease: EASE }}
                 role="status"
                 aria-live="polite"
                 aria-label="Halfway through the assessment. Continuing to Team Accountability questions."
@@ -757,16 +757,21 @@ export default function OGIDiagnostic() {
                   setScreen("QUESTIONS");
                   setCurrentQuestionIndex(8);
                 }}
-                className="p-8 sm:p-10 md:p-12 flex flex-col items-center justify-center h-full flex-grow text-center bg-slate-50 relative cursor-pointer group focus-ring"
+                className="p-6 sm:p-10 md:p-12 flex flex-col items-center justify-center h-full flex-grow text-center bg-slate-50 relative cursor-pointer group focus-ring min-h-[420px]"
                 id="ogi-screen-nudge"
               >
-                <div className="absolute top-4 right-4 text-[10.5px] font-mono text-slate-300 uppercase tracking-widest">
-                  Tap to skip countdown
+                <div className="absolute top-4 right-4 text-[10px] sm:text-[10.5px] font-mono text-slate-400 uppercase tracking-widest px-3 py-1.5 rounded-full bg-white/60 border border-slate-200/50">
+                  Tap to skip
                 </div>
 
-                <div className="w-14 h-14 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center text-gold mb-5">
-                  <TrendingUp className="w-8 h-8 animate-pulse" />
-                </div>
+                <motion.div
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ delay: 0.2, duration: 0.6, type: "spring", stiffness: 200, damping: 15 }}
+                  className="w-16 h-16 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center text-gold mb-5"
+                >
+                  <TrendingUp className="w-8 h-8" />
+                </motion.div>
 
                 <h3 className="font-display font-medium text-xl sm:text-2xl text-navy-deep tracking-tight mb-2">
                   Halfway There
@@ -774,16 +779,20 @@ export default function OGIDiagnostic() {
 
                 <p className="text-slate-500 font-sans text-sm max-w-sm leading-relaxed font-light mb-3 text-center">
                   Outstanding consistency! Diagnosing execution friction is the
-                  single most vital step towards systemic scaling. You are doing
-                  fantastic.
+                  single most vital step towards systemic scaling.
                 </p>
 
-                <div className="w-24 h-[1px] bg-slate-200 my-4" />
+                <div className="w-24 h-px bg-slate-200 my-4" />
 
-                <p className="text-gold font-mono text-[11.5px] tracking-widest uppercase font-bold flex items-center gap-1.5 animate-bounce">
-                  Next Dimension: Team Accountability
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </p>
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5, duration: 0.4 }}
+                  className="text-gold font-mono text-[11px] sm:text-[11.5px] tracking-widest uppercase font-bold flex items-center gap-1.5"
+                >
+                  Next: Team Accountability
+                  <ChevronRight className="w-3.5 h-3.5 animate-pulse" />
+                </motion.p>
               </motion.div>
             )}
 
