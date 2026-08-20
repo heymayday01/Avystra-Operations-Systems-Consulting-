@@ -1000,3 +1000,19 @@ html {
 /* Touch device illumination is handled via JS inline styles in FourPillars.tsx
    (isTouch state + style props) because Tailwind v4 strips @media (hover: none)
    blocks with custom class selectors from the compiled output. */
+
+/* ═══ GLASS CARD INNER GLOW ═══
+   Subtle inner highlight on glass cards — creates a "lit from within"
+   premium effect. Only on desktop (no backdrop-filter cost on mobile). */
+@media (min-width: 769px) {
+  .card-premium.card-premium::before,
+  .hero-card-premium::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+}

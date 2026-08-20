@@ -106,7 +106,7 @@ export default function Hero() {
 
           {/* Eyebrow badge — refined, subtle */}
           <div ref={eyebrowRef} className="mb-10 sm:mb-12">
-            <span className="hero-badge-premium inline-flex items-center gap-2.5 rounded-full border border-gold/25 bg-white/50 backdrop-blur-sm px-5 py-2">
+            <span className="hero-badge-premium inline-flex items-center gap-2.5 rounded-full border border-gold/30 bg-white/70 backdrop-blur-md px-5 py-2">
               <span className="relative flex h-1.5 w-1.5">
                 {!reducedMotion && (
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75" />

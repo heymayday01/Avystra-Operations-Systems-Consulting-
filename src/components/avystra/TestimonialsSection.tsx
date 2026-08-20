@@ -98,7 +98,7 @@ export default function TestimonialsSection() {
           {/* Aesthetic Capsule Badge */}
           <div
             ref={eyebrowRef}
-            className="border border-gold/20 bg-white/65 px-4 py-1.5 rounded-full inline-flex items-center gap-2.5 mb-3 shadow-sm"
+            className="border border-gold/20 bg-white/70 backdrop-blur-md px-4 py-1.5 rounded-full inline-flex items-center gap-2.5 mb-3 shadow-sm"
           >
             <MessageSquare className="w-3.5 h-3.5 text-gold" />
             <span className="text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase">
