@@ -100,7 +100,7 @@ export default function Hero() {
     <section
       id="hero-section"
       ref={sectionRef}
-      className="relative w-full pt-20 sm:pt-28 lg:pt-32 pb-4 sm:pb-6 overflow-x-hidden bg-transparent"
+      className="relative w-full pt-20 sm:pt-28 lg:pt-32 pb-28 sm:pb-6 overflow-x-hidden bg-transparent"
     >
       <div className="relative max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full select-none">
         <div className="flex flex-col items-center text-center w-full">
@@ -146,35 +146,39 @@ export default function Hero() {
             </span>
           </h1>
 
-          {/* Feature chips — 2-column grid on mobile (all visible, no scroll),
-              flex-wrap on desktop. Each chip is compact with icon + short text.
-              The "You " prefix is dropped on mobile to save space. */}
-          <div ref={chipsRef} className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-3 mb-5 sm:mb-14 w-full sm:max-w-3xl mx-auto sm:justify-center">
+          {/* Feature chips — single column stack on mobile (all balanced),
+              flex-wrap on desktop. Each chip has icon + text.
+              Mobile: grid-cols-1 so all 5 pills are full-width + stacked
+              (no orphaned 5th item). Desktop: flex-wrap with full labels. */}
+          <div ref={chipsRef} className="grid grid-cols-1 sm:flex sm:flex-wrap items-center gap-2 sm:gap-3 mb-5 sm:mb-14 w-full sm:max-w-3xl mx-auto sm:justify-center">
             {[
-              { label: "Hired experienced people", short: "Hired people", Icon: UserPlus },
+              { label: "Hired experienced people", short: "Hired experienced people", Icon: UserPlus },
               { label: "Promoted managers", short: "Promoted managers", Icon: TrendingUp },
-              { label: "Created departments", short: "Created depts", Icon: Building2 },
-              { label: "Increased salaries", short: "Raised salaries", Icon: Banknote },
-              { label: "Held meetings & set targets", short: "Set targets", Icon: ClipboardList },
+              { label: "Created departments", short: "Created departments", Icon: Building2 },
+              { label: "Increased salaries", short: "Increased salaries", Icon: Banknote },
+              { label: "Held meetings & set targets", short: "Held meetings & set targets", Icon: ClipboardList },
             ].map(({ label, short, Icon }, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-500 ease-out-expo justify-center sm:justify-start"
+                className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-500 ease-out-expo justify-center sm:justify-start"
                 style={{ boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)" }}
               >
                 <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold shrink-0" />
-                <span className="text-navy-deep/80 font-sans text-[9.5px] sm:text-[12px] font-medium whitespace-nowrap">
-                  <span className="sm:hidden">{short}</span>
+                <span className="text-navy-deep/80 font-sans text-[10px] sm:text-[12px] font-medium whitespace-nowrap">
+                  <span className="sm:hidden">You {short}</span>
                   <span className="hidden sm:inline">You {label}</span>
                 </span>
               </div>
             ))}
           </div>
 
-          {/* Bridging content block — compact on mobile, full on desktop. */}
+          {/* Bridging content block — compact on mobile, full on desktop.
+              On mobile, extra bottom padding (pb-20) ensures the last line
+              of text clears the floating action buttons (which are ~160px
+              tall stacked at the viewport bottom). */}
           <div
             ref={cardRef}
-            className="hero-card-premium mb-5 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-4 py-4 sm:px-12 sm:py-10 text-center"
+            className="hero-card-premium mb-5 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-4 py-4 sm:px-12 sm:py-10 pb-20 sm:pb-10 text-center"
           >
             <p className="text-navy-deep font-sans text-sm sm:text-xl font-medium leading-relaxed mb-3 sm:mb-5" style={{ lineHeight: 1.5 }}>
               So why does it still feel like the company slows down whenever you step away?
