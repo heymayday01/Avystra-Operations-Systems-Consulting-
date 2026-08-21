@@ -246,19 +246,27 @@
   }
 
   body {
-    /* Refined static background — warm ivory base with subtle gold radial
-       glows + a faint grain texture for depth. Replaces the WebGL
-       AmbientCanvas (removed for stability). This is GPU-cheap, instant,
-       and never flickers. The grain is a tiny inline SVG noise (data URI)
-       at 3% opacity — adds tactile depth without distracting. */
+    /* ═══ MILLION-DOLLAR BACKGROUND — Apple-inspired layered mesh ═══
+       A rich, warm, layered background that feels premium and alive:
+         Layer 1 (bottom): warm ivory base #F7F4ED
+         Layer 2: large gold radial glow — top-left quadrant (primary light)
+         Layer 3: soft gold haze — bottom-right (secondary light)
+         Layer 4: navy depth tint — center (grounds the composition)
+         Layer 5: rose-gold accent — top-right (warmth + complexity)
+         Layer 6: subtle SVG grain — tactile depth (Apple's signature)
+       All layers are `background-attachment: fixed` so they stay anchored
+       during scroll — the page content glides over a static light field.
+       Animated floating orbs (Background.tsx) add gentle movement on top. */
     background-color: var(--color-cream-bg);
     background-image:
-      radial-gradient(circle at 12% 18%, rgba(184, 146, 78, 0.10) 0%, transparent 42%),
-      radial-gradient(circle at 88% 78%, rgba(184, 146, 78, 0.07) 0%, transparent 48%),
-      radial-gradient(circle at 50% 50%, rgba(212, 178, 106, 0.04) 0%, transparent 60%),
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-    background-attachment: fixed, fixed, fixed, scroll;
-    background-size: 100% 100%, 100% 100%, 100% 100%, 220px 220px;
+      radial-gradient(ellipse 80% 60% at 15% 18%, rgba(184, 146, 78, 0.20) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 55% at 85% 82%, rgba(212, 178, 106, 0.16) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 45% at 50% 50%, rgba(11, 27, 46, 0.035) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 40% at 82% 12%, rgba(212, 178, 106, 0.12) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    background-attachment: fixed, fixed, fixed, fixed, scroll;
+    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 220px 220px;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat;
     color: #4A5568;
     font-family: var(--font-sans);
     position: relative;
@@ -268,7 +276,7 @@
   }
 
   /* After page-ready (loading screen gone), keep the same warm background.
-     No color transition needed anymore — the background is consistent. */
+     No color transition needed — background is consistent from load. */
   html.page-ready body {
     background-color: var(--color-cream-bg);
   }
@@ -321,44 +329,68 @@ body::-webkit-scrollbar {
    Buttons: 180ms, bg/color + glow.
    Nav links: 150ms, opacity + underline. */
 
-/* Premium card hover — smooth layered interaction.
-   Per the redesign brief: NO card backgrounds. Cards are transparent —
-   the page background (warm ivory + gold glows + grain) shows through.
-   Cards use a subtle border + hover shadow + hover border-gold to
-   define edges without filling them with color.
+/* Premium card — Apple-style frosted glass with proper depth.
+   The "million dollar" aesthetic: subtle white tint + strong blur +
+   saturation boost + layered shadows + inner top highlight line.
+   This is glass done RIGHT — not the flat/weak kind, not the heavy kind.
+   - background: rgba(255,255,255,0.55) — lets the warm mesh show through
+   - backdrop-filter: blur(40px) saturate(1.8) — frosted, color-rich
+   - box-shadow: ambient (soft) + key (directional) + inset (top highlight)
+   - border: white/60 — catches light at the edge (Apple's signature)
    NOTE: Doubled class selector (.card-premium.card-premium) boosts specificity
-   to 0-2-0 so it beats .js .reveal (also 0-2-0) — without this, the reveal
-   system's transition/transform overrides the hover interaction. */
+   to 0-2-0 so it beats .js .reveal (also 0-2-0). */
 .card-premium.card-premium {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.55);
+  --bd-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: var(--bd-filter);
+  backdrop-filter: var(--bd-filter);
+  border: 1px solid rgba(255, 255, 255, 0.60);
+  box-shadow:
+    0 1px 2px rgba(11, 27, 46, 0.04),
+    0 8px 24px -8px rgba(11, 27, 46, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.70);
   transition: transform var(--dur-standard) var(--ease-out),
+              background-color var(--dur-standard) var(--ease-sine),
               border-color var(--dur-micro) var(--ease-sine),
               box-shadow var(--dur-standard) var(--ease-out);
-  border: 1px solid rgba(11, 27, 46, 0.08);
-  box-shadow: none;
 }
 .card-premium.card-premium:hover {
-  transform: translateY(-3px);
-  border-color: rgba(var(--gold-rgb), 0.30);
-  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-4px);
+  background-color: rgba(255, 255, 255, 0.68);
+  border-color: rgba(184, 146, 78, 0.35);
+  box-shadow:
+    0 2px 4px rgba(11, 27, 46, 0.06),
+    0 20px 50px -12px rgba(11, 27, 46, 0.15),
+    0 0 0 1px rgba(184, 146, 78, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 
-/* Premium card hover — dark section variant (heavier shadow) */
+/* Premium card — dark section variant (navy backgrounds).
+   Deeper glass: white tint lower (0.08) since on dark, gold border hint. */
 .card-premium-dark.card-premium-dark {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.06);
+  --bd-filter-dark: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: var(--bd-filter-dark);
+  backdrop-filter: var(--bd-filter-dark);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.20),
+    0 8px 24px -8px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
   transition: transform var(--dur-standard) var(--ease-out),
+              background-color var(--dur-standard) var(--ease-sine),
               border-color var(--dur-micro) var(--ease-sine),
               box-shadow var(--dur-standard) var(--ease-out);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
 }
 .card-premium-dark.card-premium-dark:hover {
   transform: translateY(-4px);
-  border-color: rgba(var(--gold-rgb), 0.40);
-  box-shadow: var(--shadow-card-hover-dark);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: rgba(255, 255, 255, 0.10);
+  border-color: rgba(184, 146, 78, 0.45);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.25),
+    0 20px 50px -12px rgba(0, 0, 0, 0.40),
+    0 0 0 1px rgba(184, 146, 78, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 /* Premium button hover — smooth bg shift + gold glow.
@@ -367,16 +399,17 @@ body::-webkit-scrollbar {
   transition: background-color var(--dur-standard) var(--ease-sine),
               color var(--dur-standard) var(--ease-sine),
               box-shadow var(--dur-standard) var(--ease-out),
-              transform var(--dur-standard) var(--ease-out),
-              backdrop-filter var(--dur-standard) var(--ease-out);
-  backdrop-filter: blur(4px) saturate(1.1);
-  -webkit-backdrop-filter: blur(4px) saturate(1.1);
+              transform var(--dur-standard) var(--ease-out);
+  --bd-filter-btn: blur(4px) saturate(1.1);
+  -webkit-backdrop-filter: var(--bd-filter-btn);
+  backdrop-filter: var(--bd-filter-btn);
 }
 .btn-premium.btn-premium:hover {
   transform: translateY(-1px);
+  --bd-filter-btn-hover: blur(8px) saturate(1.3);
+  -webkit-backdrop-filter: var(--bd-filter-btn-hover);
+  backdrop-filter: var(--bd-filter-btn-hover);
   box-shadow: var(--shadow-btn-glow);
-  backdrop-filter: blur(8px) saturate(1.3);
-  -webkit-backdrop-filter: blur(8px) saturate(1.3);
 }
 
 /* Premium nav link hover — smooth color transition (no underline) */
@@ -434,21 +467,34 @@ body::-webkit-scrollbar {
   box-shadow: 0 0 24px 6px rgba(var(--gold-rgb), 0.12);
 }
 
-/* Premium card — hover only (entrance via GSAP).
-   Redesigned: NO background fill. Transparent so the page's warm
-   background shows through. Defined by a subtle gold-tinted border. */
-.hero-card-premium {
-  background: transparent;
-  border: 1px solid rgba(var(--gold-rgb), 0.18);
-  box-shadow: none;
+/* Premium hero card — Apple-style frosted glass with refined depth.
+   Slightly richer than .card-premium (more blur, gold-tinted border).
+   Doubled selector prevents Lightning CSS from stripping unprefixed backdrop-filter. */
+.hero-card-premium.hero-card-premium {
+  background: rgba(255, 255, 255, 0.58);
+  --bd-filter-hero: blur(44px) saturate(1.9);
+  -webkit-backdrop-filter: var(--bd-filter-hero);
+  backdrop-filter: var(--bd-filter-hero);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 1px 2px rgba(11, 27, 46, 0.05),
+    0 12px 36px -10px rgba(11, 27, 46, 0.10),
+    0 0 0 1px rgba(184, 146, 78, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
   transition: transform var(--dur-standard) var(--ease-out),
+              background-color var(--dur-standard) var(--ease-sine),
               box-shadow var(--dur-standard) var(--ease-out),
               border-color var(--dur-standard) var(--ease-sine);
 }
-.hero-card-premium:hover {
+.hero-card-premium.hero-card-premium:hover {
   transform: translateY(-3px);
-  border-color: rgba(var(--gold-rgb), 0.35);
-  box-shadow: 0 12px 36px -12px rgba(var(--navy-rgb), 0.10);
+  background-color: rgba(255, 255, 255, 0.70);
+  border-color: rgba(184, 146, 78, 0.35);
+  box-shadow:
+    0 2px 4px rgba(11, 27, 46, 0.06),
+    0 20px 50px -12px rgba(11, 27, 46, 0.15),
+    0 0 0 1px rgba(184, 146, 78, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.90);
 }
 
 /* Gold divider — static (entrance via GSAP) */
@@ -997,3 +1043,71 @@ html {
 /* ═══ CARD INNER ACCENT (optional, hover-only) ═══
    Removed the glass-card inner-glow pseudo-element — cards are now
    transparent by design. Hover lift + border-gold is sufficient. */
+
+/* ═══ FLOATING BACKGROUND ORBS — Apple-inspired ambient motion ═══
+   Used by Background.tsx. Large, heavily-blurred radial gradients
+   that drift slowly across the viewport. GPU-composited (transform-only),
+   paused on prefers-reduced-motion, hidden on mobile (perf).
+   These sit BEHIND all content (z-0) and ABOVE the body background. */
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+}
+
+@keyframes orb-drift-1 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33%      { transform: translate3d(60px, -40px, 0) scale(1.08); }
+  66%      { transform: translate3d(-30px, 50px, 0) scale(0.95); }
+}
+
+@keyframes orb-drift-2 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(-50px, 30px, 0) scale(1.1); }
+}
+
+@keyframes orb-drift-3 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  40%      { transform: translate3d(40px, 40px, 0) scale(1.05); }
+  80%      { transform: translate3d(-20px, -30px, 0) scale(0.92); }
+}
+
+.bg-orb-1 { animation: orb-drift-1 28s ease-in-out infinite; }
+.bg-orb-2 { animation: orb-drift-2 32s ease-in-out infinite; }
+.bg-orb-3 { animation: orb-drift-3 36s ease-in-out infinite; }
+
+/* Mobile: hide orbs (perf — backdrop-blur on glass cards is already costly) */
+@media (max-width: 768px) {
+  .bg-orb { display: none !important; }
+}
+
+/* Reduced motion: freeze orbs (no animation) */
+@media (prefers-reduced-motion: reduce) {
+  .bg-orb { animation: none !important; }
+}
+
+/* ═══ EYEBROW BADGE — Apple-style frosted pill ═══
+   Used on section eyebrows across the site. Frosted glass with gold tint.
+   Doubled selector (.eyebrow-premium.eyebrow-premium) prevents Lightning CSS
+   from stripping the unprefixed backdrop-filter (cross-browser compat). */
+.eyebrow-premium.eyebrow-premium {
+  background: rgba(255, 255, 255, 0.50);
+  --bd-filter-eyebrow: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: var(--bd-filter-eyebrow);
+  backdrop-filter: var(--bd-filter-eyebrow);
+  border: 1px solid rgba(255, 255, 255, 0.60);
+  box-shadow:
+    0 1px 2px rgba(11, 27, 46, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.70);
+  transition: border-color var(--dur-standard) var(--ease-sine),
+              box-shadow var(--dur-standard) var(--ease-out);
+}
+.eyebrow-premium.eyebrow-premium:hover {
+  border-color: rgba(184, 146, 78, 0.35);
+  box-shadow:
+    0 2px 8px rgba(184, 146, 78, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}

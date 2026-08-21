@@ -163,7 +163,7 @@ export default function Flowchart() {
         <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
           <div
             ref={eyebrowRef}
-            className="inline-flex items-center gap-1.5 px-3 py-1 border border-gold/20 rounded-full mb-3.5"
+            className="eyebrow-premium inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-3.5"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
             <span className="text-[10.5px] text-navy-deep font-mono tracking-widest font-bold uppercase">
@@ -233,8 +233,8 @@ export default function Flowchart() {
 
                   {/* Main Icon Badge */}
                   <div className="flex justify-center mb-6">
-                    <div className="relative p-1.5 rounded-full border border-slate-200/60">
-                      <div className="flex items-center justify-center w-14 h-14 rounded-full border border-slate-200/80 text-navy-deep transition-all duration-500 group-hover:border-gold/30 group-hover:text-gold">
+                    <div className="relative p-1.5 rounded-full border border-white/60 bg-white/40 backdrop-blur-xl saturate-150" style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.7)" }}>
+                      <div className="flex items-center justify-center w-14 h-14 rounded-full bg-white/70 border border-white/60 text-navy-deep transition-all duration-500 group-hover:border-gold/40 group-hover:text-gold" style={{ boxShadow: "0 2px 8px -2px rgba(11,27,46,0.08)" }}>
                         {step.icon}
                       </div>
                     </div>
@@ -301,8 +301,8 @@ export default function Flowchart() {
 
                 {/* Golden Output Subcard */}
                 <div className="relative mt-auto pt-1">
-                  <div className="border border-gold/20 rounded-2xl p-4 flex gap-3 items-start text-left hover:border-gold/40 transition-all duration-300">
-                    <div className="p-1.5 border border-gold/20 rounded-lg shrink-0">
+                  <div className="rounded-2xl p-4 flex gap-3 items-start text-left transition-all duration-300" style={{ background: "rgba(184,146,78,0.08)", border: "1px solid rgba(184,146,78,0.20)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}>
+                    <div className="p-1.5 border border-gold/25 rounded-lg shrink-0" style={{ background: "rgba(255,255,255,0.5)" }}>
                       {step.outputIcon}
                     </div>
                     <div>

@@ -135,7 +135,7 @@ export default function StatsFounder() {
         {/* SECTION 1: STATS */}
         <div className="mb-8 text-center">
           <div className="mb-8">
-            <div ref={eyebrowRef} className="inline-flex items-center gap-1.5 px-3 py-1 border border-danger/20 rounded-full mb-3">
+            <div ref={eyebrowRef} className="eyebrow-premium inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-3" style={{ borderColor: "rgba(239,68,68,0.25)" }}>
               <AlertTriangle className="w-3.5 h-3.5 text-danger" />
               <span className="text-[10.5px] text-danger font-mono tracking-widest font-bold uppercase">
                 The Numbers Don&apos;t Lie
@@ -200,7 +200,7 @@ export default function StatsFounder() {
                 {/* Decorative offset frame */}
                 <div className="absolute -top-3 -right-3 w-full h-full rounded-2xl border border-gold/20 pointer-events-none" />
 
-                <div className="relative rounded-2xl p-2.5 shadow-[0_20px_50px_-15px_rgba(11,27,46,0.15)] border border-slate-200/60">
+                <div className="relative rounded-2xl p-2.5 border border-white/60" style={{ background: "rgba(255,255,255,0.50)", backdropFilter: "blur(24px) saturate(1.6)", WebkitBackdropFilter: "blur(24px) saturate(1.6)", boxShadow: "0 1px 2px rgba(11,27,46,0.05), 0 12px 36px -10px rgba(11,27,46,0.12), inset 0 1px 0 rgba(255,255,255,0.7)" }}>
                   <div className="relative overflow-hidden rounded-xl aspect-[4/5] bg-slate-50/40 flex items-center justify-center border border-white/40 p-0.5">
                     {!photoFailed ? (
                       <img
@@ -314,7 +314,7 @@ export default function StatsFounder() {
                   className="card-premium p-4 sm:p-5 rounded-2xl flex flex-col"
                 >
                   {/* Icon */}
-                  <div className="p-2 border border-gold/20 rounded-xl w-fit mb-3 shrink-0">
+                  <div className="p-2 border border-gold/25 rounded-xl w-fit mb-3 shrink-0" style={{ background: "rgba(184,146,78,0.08)", backdropFilter: "blur(8px)" }}>
                     {cred.icon}
                   </div>
                   <span className="text-sm sm:text-base font-display font-black text-navy-deep tracking-tight uppercase leading-tight block">
@@ -342,11 +342,11 @@ const StatCard = React.memo(function StatCard({
   stat: StatItemProps;
 }) {
   return (
-    <div className="card-premium relative rounded-2xl p-5 bg-navy-deep border border-danger/15 flex flex-col items-center text-center group overflow-hidden h-full">
+    <div className="card-premium-dark relative rounded-2xl p-5 flex flex-col items-center text-center group overflow-hidden h-full">
       {/* Red warning line at top */}
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-danger/0 via-danger to-danger/0" />
 
-      <div className="p-3 bg-danger/10 rounded-full text-danger mb-4 shrink-0">
+      <div className="p-3 rounded-full text-danger mb-4 shrink-0" style={{ background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.25)" }}>
         {stat.icon}
       </div>
 

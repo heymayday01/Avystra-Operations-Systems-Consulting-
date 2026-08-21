@@ -323,7 +323,7 @@ export default function OGIDiagnostic() {
         {/* Content Box */}
         <div
           ref={contentBoxRef}
-          className="card-premium border border-slate-200/60 rounded-3xl overflow-hidden min-h-[420px] flex flex-col justify-between"
+          className="card-premium rounded-3xl overflow-hidden min-h-[420px] flex flex-col justify-between"
         >
           <AnimatePresence mode="wait">
             {/* INTRO SCREEN */}
@@ -374,7 +374,8 @@ export default function OGIDiagnostic() {
                     ].map((item) => (
                       <div
                         key={item.code}
-                        className="p-3 sm:p-3.5 rounded-xl border border-slate-200/60 flex flex-col items-center group hover:border-gold/30 transition-all duration-300"
+                        className="p-3 sm:p-3.5 rounded-xl border border-white/60 bg-white/40 backdrop-blur-xl saturate-150 flex flex-col items-center group hover:border-gold/35 transition-all duration-300"
+                        style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)" }}
                       >
                         <span
                           className={`w-6 h-6 rounded-full ${item.color} mb-2 flex items-center justify-center text-[11.5px] text-white font-mono font-bold`}

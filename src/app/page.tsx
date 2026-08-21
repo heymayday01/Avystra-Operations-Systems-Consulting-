@@ -9,6 +9,7 @@ import { motion } from "motion/react";
 import { smoothScrollTo } from "@/lib/scroll";
 import { ScrollTrigger } from "@/lib/gsap";
 import LoadingScreen from "@/components/avystra/LoadingScreen";
+import Background from "@/components/avystra/Background";
 import { PageReadyProvider } from "@/lib/pageReady";
 
 // Eager: only Header, Hero, ScrollProgress, LoadingScreen (above the fold)
@@ -127,9 +128,12 @@ export default function Home() {
         style={{ transition: "opacity 0.25s cubic-bezier(0.16,1,0.3,1)" }}
       >
           {/* ═══ AMBIENT BACKGROUND ═══
-              Refined static CSS background (warm ivory + gold radial glows +
-              faint grain) lives on <body> via globals.css. No canvas needed
-              — instant, GPU-cheap, zero runtime bugs. */}
+              A trending, Apple-inspired ambient layer: a fixed CSS mesh
+              gradient on <body> (warm ivory + gold radial glows + grain)
+              PLUS three slowly-drifting blurred orbs (Background.tsx).
+              Together they create depth and life — the "million dollar"
+              aesthetic. Glass cards (.card-premium) frosted-blur over this. */}
+          <Background />
 
           {/* Top Banner — slim promo bar, visible on ALL viewports.
               On mobile the text is shortened to fit one line without wrapping. */}

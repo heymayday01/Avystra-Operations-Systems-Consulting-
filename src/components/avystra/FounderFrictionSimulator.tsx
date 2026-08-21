@@ -188,10 +188,13 @@ export default function FounderFrictionSimulator() {
         {/* ─── PREMIUM TOGGLE — red/green active pill ─── */}
         <div
           ref={toggleRef}
-          className="relative mx-auto mb-14 sm:mb-16 flex items-center h-12 w-full max-w-[380px] rounded-full p-1 backdrop-blur-md"
+          className="relative mx-auto mb-14 sm:mb-16 flex items-center h-12 w-full max-w-[380px] rounded-full p-1"
           style={{
-            background: "rgba(255,255,255,0.05)",
-            border: "1px solid rgba(255,255,255,0.14)",
+            background: "rgba(255,255,255,0.06)",
+            backdropFilter: "blur(20px) saturate(1.6)",
+            WebkitBackdropFilter: "blur(20px) saturate(1.6)",
+            border: "1px solid rgba(255,255,255,0.12)",
+            boxShadow: "0 1px 2px rgba(0,0,0,0.20), 0 8px 24px -8px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.08)",
           }}
         >
           {/* Sliding active pill — color matches active state. This is a
@@ -307,7 +310,6 @@ export default function FounderFrictionSimulator() {
                 className="card-premium-dark absolute w-[200px] md:w-[220px] lg:w-[240px] rounded-2xl p-5 sm:p-6 z-10 overflow-hidden"
                 style={{
                   ...outcome.desktopStyle,
-                  border: `1px solid rgba(255,255,255,0.10)`,
                   borderLeft: `2px solid ${accent}`,
                 }}
               >
@@ -477,7 +479,6 @@ export default function FounderFrictionSimulator() {
                   key={outcome.id}
                   className="card-premium-dark rounded-2xl p-5 sm:p-6"
                   style={{
-                    border: "1px solid rgba(255,255,255,0.10)",
                     borderLeft: `2px solid ${accent}`,
                   }}
                 >
@@ -556,7 +557,14 @@ export default function FounderFrictionSimulator() {
         {/* ─── BOTTOM CTA STRIP ─── */}
         <div
           ref={ctaRef}
-          className="mt-14 sm:mt-16 w-full max-w-[1000px] mx-auto rounded-2xl p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left border border-gold/20"
+          className="mt-14 sm:mt-16 w-full max-w-[1000px] mx-auto rounded-2xl p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left"
+          style={{
+            background: "rgba(255,255,255,0.06)",
+            backdropFilter: "blur(20px) saturate(1.6)",
+            WebkitBackdropFilter: "blur(20px) saturate(1.6)",
+            border: "1px solid rgba(184,146,78,0.25)",
+            boxShadow: "0 1px 2px rgba(0,0,0,0.20), 0 8px 24px -8px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.08)",
+          }}
         >
           <p className="font-serif italic text-white text-lg sm:text-xl" style={{ lineHeight: 1.4 }}>
             Recognise your business in the left state?

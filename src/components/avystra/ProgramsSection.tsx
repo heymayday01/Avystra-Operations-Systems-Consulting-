@@ -38,7 +38,7 @@ function ProgramCard({ prog }: { prog: Program }) {
 
       <div className="relative z-10">
         {/* Category Pill Tag */}
-        <div className="inline-flex px-2.5 sm:px-3 py-1 rounded-md border border-slate-200/60 text-slate-500 text-[9px] sm:text-[11px] font-mono font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase mb-4 sm:mb-6 group-hover:border-gold/30 group-hover:text-gold-hover transition-all duration-500">
+        <div className="inline-flex px-2.5 sm:px-3 py-1 rounded-md border border-white/60 bg-white/40 backdrop-blur-xl saturate-150 text-slate-500 text-[9px] sm:text-[11px] font-mono font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase mb-4 sm:mb-6 group-hover:border-gold/35 group-hover:text-gold-hover transition-all duration-500" style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)" }}>
           {prog.category}
         </div>
 
@@ -59,8 +59,8 @@ function ProgramCard({ prog }: { prog: Program }) {
 
         <div className="flex flex-col gap-2 sm:gap-2.5">
           <div className="flex items-center gap-2.5 text-slate-400">
-            <div className="p-1 sm:p-0 rounded-lg sm:rounded-none">
-              <Users className="w-3.5 h-3.5 text-gold/70 shrink-0" />
+            <div className="p-1 rounded-lg" style={{ background: "rgba(184,146,78,0.08)", border: "1px solid rgba(184,146,78,0.20)" }}>
+              <Users className="w-3.5 h-3.5 text-gold/80 shrink-0" />
             </div>
             <span className="font-mono text-[10px] sm:text-[10.5px] uppercase tracking-wider">
               Audience:{" "}
@@ -70,8 +70,8 @@ function ProgramCard({ prog }: { prog: Program }) {
             </span>
           </div>
           <div className="flex items-center gap-2.5 text-slate-400">
-            <div className="p-1 sm:p-0 rounded-lg sm:rounded-none">
-              <Calendar className="w-3.5 h-3.5 text-gold/70 shrink-0" />
+            <div className="p-1 rounded-lg" style={{ background: "rgba(184,146,78,0.08)", border: "1px solid rgba(184,146,78,0.20)" }}>
+              <Calendar className="w-3.5 h-3.5 text-gold/80 shrink-0" />
             </div>
             <span className="font-mono text-[10px] sm:text-[10.5px] uppercase tracking-wider">
               Duration:{" "}
@@ -357,7 +357,7 @@ export default function ProgramsSection() {
         >
           <div
             ref={eyebrowRef}
-            className="border border-gold/20 px-4 py-1.5 rounded-full inline-flex items-center gap-2 mb-3"
+            className="eyebrow-premium border-gold/25 px-4 py-1.5 rounded-full inline-flex items-center gap-2 mb-3"
           >
             <BookOpen className="w-3.5 h-3.5 text-gold" />
             <span className="text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase">
@@ -395,7 +395,7 @@ export default function ProgramsSection() {
                 className={`min-h-[44px] px-4 sm:px-6 py-3 rounded-2xl font-mono text-[10px] sm:text-[12.5px] font-black uppercase tracking-[0.14em] sm:tracking-[0.2em] border transition-all duration-500 cursor-pointer relative group shrink-0 focus-ring ${
                   isActive
                     ? "bg-navy-deep text-gold border-navy-deep shadow-xl"
-                    : "border border-slate-200/60 text-slate-500 hover:text-navy-deep hover:border-slate-300"
+                    : "border border-white/60 bg-white/40 backdrop-blur-xl saturate-150 text-slate-500 hover:text-navy-deep hover:border-gold/30 hover:bg-white/55"
                 }`}
                 aria-pressed={isActive}
               >

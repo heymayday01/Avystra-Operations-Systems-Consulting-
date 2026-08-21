@@ -113,7 +113,7 @@ export default function FourPillars() {
         <div className="max-w-4xl mb-12 md:mb-16">
           <div
             ref={eyebrowRef}
-            className="inline-flex items-center gap-2 border border-gold/20 px-4 py-2 rounded-full mb-5"
+            className="eyebrow-premium inline-flex items-center gap-2 px-4 py-2 rounded-full mb-5"
           >
             <Award className="w-4 h-4 text-gold" />
             <span className="text-[11.5px] text-slate-600 font-mono tracking-[0.2em] font-black uppercase">
@@ -176,7 +176,7 @@ export default function FourPillars() {
                   {/* Background number — large, low-contrast */}
                   <span
                     className="absolute top-5 right-6 text-6xl font-display font-black select-none z-0 transition-colors duration-500"
-                    style={{ color: "rgba(184, 146, 78, 0.10)" }}
+                    style={{ color: "rgba(184, 146, 78, 0.12)" }}
                   >
                     {pillar.num}
                   </span>
@@ -184,8 +184,8 @@ export default function FourPillars() {
                   <div className="relative z-10">
                     {/* Icon with accent color */}
                     <div
-                      className="inline-flex p-3.5 rounded-2xl border border-slate-200/60 mb-6 transition-all duration-500 group-hover:scale-110"
-                      style={{ color: pillar.accent }}
+                      className="inline-flex p-3.5 rounded-2xl border border-white/60 bg-white/50 backdrop-blur-xl saturate-150 mb-6 transition-all duration-500 group-hover:scale-110"
+                      style={{ color: pillar.accent, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.7)" }}
                     >
                       {pillar.icon}
                     </div>

@@ -101,18 +101,18 @@ export default function CumulativePenalty() {
             </div>
           </div>
 
-          {/* RIGHT PANEL — transparent with penalty list */}
-          <div className="lg:col-span-3 p-6 sm:p-8 lg:p-10 flex flex-col justify-center">
+          {/* RIGHT PANEL — frosted glass with penalty list */}
+          <div className="lg:col-span-3 p-6 sm:p-8 lg:p-10 flex flex-col justify-center" style={{ background: "rgba(255,255,255,0.45)", backdropFilter: "blur(24px) saturate(1.6)", WebkitBackdropFilter: "blur(24px) saturate(1.6)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)" }}>
             <div ref={penaltiesRef} className="space-y-3 sm:space-y-4">
               {penalties.map((item, index) => {
                 const Icon = item.icon;
                 return (
                   <div
                     key={index}
-                    className="flex items-center gap-4 sm:gap-5 p-3 sm:p-4 rounded-2xl hover:bg-navy-deep/[0.03] transition-colors duration-300 group"
+                    className="flex items-center gap-4 sm:gap-5 p-3 sm:p-4 rounded-2xl hover:bg-white/40 transition-colors duration-300 group"
                   >
                     {/* Icon */}
-                    <div className="p-2.5 sm:p-3 rounded-xl border border-gold/20 text-gold shrink-0 group-hover:scale-110 group-hover:border-gold/40 transition-all duration-300">
+                    <div className="p-2.5 sm:p-3 rounded-xl text-gold shrink-0 group-hover:scale-110 transition-all duration-300" style={{ background: "rgba(184,146,78,0.10)", border: "1px solid rgba(184,146,78,0.25)" }}>
                       <Icon className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
                     </div>
 

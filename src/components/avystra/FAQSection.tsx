@@ -78,7 +78,7 @@ export default function FAQSection() {
           {/* Aesthetic Badge */}
           <div
             ref={eyebrowRef}
-            className="border border-gold/20 px-4 py-1.5 rounded-full inline-flex items-center gap-2 mb-3"
+            className="eyebrow-premium border-gold/25 px-4 py-1.5 rounded-full inline-flex items-center gap-2 mb-3"
           >
             <HelpCircle className="w-3.5 h-3.5 text-gold" />
             <span className="text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase">
@@ -107,7 +107,7 @@ export default function FAQSection() {
         {/* Accordions Containment Block */}
         <div
           ref={accordionsRef}
-          className="border border-slate-200/60 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-8 lg:p-10 divide-y divide-slate-200/50"
+          className="card-premium rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-8 lg:p-10 divide-y divide-navy-deep/[0.08]"
         >
           {faqData.map((faq, index) => {
             const isOpen = openIndex === index;
@@ -117,9 +117,10 @@ export default function FAQSection() {
                 key={index}
                 className={`py-4 first:pt-2 last:pb-2 ${
                   isOpen
-                    ? "px-4 -mx-4 rounded-2xl border border-gold/15"
+                    ? "px-4 -mx-4 rounded-2xl border border-gold/20"
                     : "border-transparent"
                 }`}
+                style={isOpen ? { background: "rgba(184,146,78,0.06)" } : undefined}
               >
                 {/* Accordion Toggle Header */}
                 <button
@@ -156,7 +157,7 @@ export default function FAQSection() {
                     className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border transition-all duration-300 ${
                       isOpen
                         ? "border-gold bg-gold text-white rotate-180"
-                        : "border-slate-200/60 text-slate-500 group-hover:border-gold/40 group-hover:bg-gold/5 group-hover:text-gold"
+                        : "border-white/60 bg-white/50 text-slate-500 group-hover:border-gold/40 group-hover:bg-gold/10 group-hover:text-gold"
                     }`}
                   >
                     <ChevronDown className="w-4 h-4" />

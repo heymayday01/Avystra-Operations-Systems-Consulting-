@@ -478,7 +478,7 @@ export default function OGIResults({
         </div>
 
         {/* 2.2 Bar Chart — Score vs Benchmark */}
-        <div className="border border-slate-200/60 rounded-2xl p-6 md:p-8 space-y-6">
+        <div className="card-premium rounded-2xl p-6 md:p-8 space-y-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
             <div>
               <h3 className="font-display font-semibold text-lg text-navy-soft">
@@ -510,7 +510,7 @@ export default function OGIResults({
                 <div key={p.code} className="space-y-2">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      <span className="p-1.5 rounded-lg border border-slate-200/60 text-slate-700">
+                      <span className="p-1.5 rounded-lg border border-white/60 bg-white/40 backdrop-blur-xl saturate-150 text-slate-700" style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)" }}>
                         <PillarIcon className="w-4 h-4" style={{ color: p.color }} />
                       </span>
                       <span className="font-display font-medium text-sm text-navy-soft">
@@ -531,7 +531,7 @@ export default function OGIResults({
                     </div>
                   </div>
 
-                  <div className="relative h-4 bg-navy-deep/[0.04] rounded-full border border-slate-200/60 overflow-visible">
+                  <div className="relative h-4 rounded-full overflow-visible" style={{ background: "rgba(11,27,46,0.06)", border: "1px solid rgba(255,255,255,0.5)" }}>
                     <motion.div
                       className="absolute left-0 top-0 h-full w-full rounded-full"
                       style={{ backgroundColor: p.color, transformOrigin: "left" }}
@@ -579,7 +579,7 @@ export default function OGIResults({
                   <div className="space-y-3">
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <span className="p-2 rounded-xl border border-slate-200/60">
+                        <span className="p-2 rounded-xl border border-white/60 bg-white/40 backdrop-blur-xl saturate-150" style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)" }}>
                           <PillarIcon className="w-5 h-5" style={{ color: p.color }} />
                         </span>
                         <h4 className="font-display font-semibold text-base text-navy-soft">
@@ -612,7 +612,7 @@ export default function OGIResults({
 
         {/* 2.4 & 2.5 Key Findings & Priority Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="border border-slate-200/60 rounded-2xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
+          <div className="card-premium rounded-2xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
             <div className="space-y-4">
               <div>
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-rose-50 rounded-full border border-rose-100 text-[11.5px] text-rose-700 font-mono tracking-wider font-bold uppercase mb-2">
@@ -641,7 +641,7 @@ export default function OGIResults({
             </div>
           </div>
 
-          <div className="border border-slate-200/60 rounded-2xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
+          <div className="card-premium rounded-2xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
             <div className="space-y-4">
               <div>
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-emerald-50 rounded-full border border-emerald-100 text-[11.5px] text-emerald-700 font-mono tracking-wider font-bold uppercase mb-2">
@@ -692,7 +692,7 @@ export default function OGIResults({
               {detectedContradictions.map((item, idx) => (
                 <div
                   key={idx}
-                  className="border border-slate-200/60 rounded-xl p-5 space-y-4"
+                  className="card-premium rounded-xl p-5 space-y-4"
                 >
                   <div className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse" />

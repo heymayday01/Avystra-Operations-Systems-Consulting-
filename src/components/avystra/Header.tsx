@@ -136,9 +136,14 @@ export default function Header() {
         ref={headerRef}
         className={`w-full max-w-6xl pointer-events-auto transition-[background-color,border-color,box-shadow,padding] duration-300 ease-out-expo rounded-[22px] ${
           scrolled || isOpen
-            ? "py-2 px-3 sm:px-4 lg:py-2 lg:px-4 border border-navy-deep/[0.08] bg-cream-bg/80 shadow-[0_2px_16px_-4px_rgba(0,0,0,0.06),0_8px_32px_-8px_rgba(0,0,0,0.04)] backdrop-blur-xl backdrop-saturate-150"
-            : "py-2.5 px-3 sm:px-5 lg:px-6 bg-cream-bg/40 backdrop-blur-lg border border-navy-deep/[0.06]"
+            ? "py-2 px-3 sm:px-4 lg:py-2 lg:px-4 border border-white/70 bg-white/60 backdrop-blur-2xl backdrop-saturate-150"
+            : "py-2.5 px-3 sm:px-5 lg:px-6 bg-white/40 backdrop-blur-xl border border-white/50"
         }`}
+        style={{
+          boxShadow: scrolled || isOpen
+            ? "0 1px 2px rgba(11,27,46,0.05), 0 8px 32px -8px rgba(11,27,46,0.08), inset 0 1px 0 rgba(255,255,255,0.8)"
+            : "inset 0 1px 0 rgba(255,255,255,0.6)",
+        }}
       >
         <div className="flex items-center gap-4 lg:gap-6">
           {/* Logo */}
@@ -158,7 +163,7 @@ export default function Header() {
           <nav
             ref={navRef}
             aria-label="Main navigation"
-            className="hidden lg:flex items-center gap-0.5 relative px-1 py-1 rounded-full border border-navy-deep/[0.06]"
+            className="hidden lg:flex items-center gap-0.5 relative px-1 py-1 rounded-full border border-white/60 bg-white/30 backdrop-blur-xl saturate-150"
             onMouseLeave={() => setHoveredIndex(null)}
           >
             {navItems.map((item, i) => {
@@ -213,8 +218,8 @@ export default function Header() {
           <div className="lg:hidden flex items-center shrink-0">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="relative w-11 h-11 flex items-center justify-center text-navy-deep focus-ring rounded-full border border-navy-deep/[0.08] transition-colors duration-300 hover:border-gold/30 active:bg-navy-deep/[0.03]"
-              style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+              className="relative w-11 h-11 flex items-center justify-center text-navy-deep focus-ring rounded-full border border-white/70 bg-white/50 backdrop-blur-xl saturate-150 transition-colors duration-300 hover:border-gold/30"
+              style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.7)" }}
               aria-label="Toggle Menu"
               aria-expanded={isOpen}
             >
@@ -245,11 +250,12 @@ export default function Header() {
           style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
         >
           <div className="overflow-hidden">
-            <div className="mt-2 pt-2 pb-1.5 space-y-1 backdrop-blur-md rounded-3xl border border-navy-deep/[0.08] p-2"
+            <div className="mt-2 pt-2 pb-1.5 space-y-1 rounded-3xl border border-white/70 bg-white/60 backdrop-blur-2xl backdrop-saturate-150 p-2"
               style={{
                 opacity: isOpen ? 1 : 0,
                 transform: isOpen ? "translateY(0)" : "translateY(-8px)",
                 transition: "opacity 0.3s ease, transform 0.3s cubic-bezier(0.32,0.72,0,1)",
+                boxShadow: "0 8px 32px -8px rgba(11,27,46,0.10), inset 0 1px 0 rgba(255,255,255,0.8)",
               }}
             >
               {navItems.map((item) => (
@@ -257,7 +263,7 @@ export default function Header() {
                   href={item.href}
                   onClick={(e) => handleScrollTo(e, item.href.substring(1))}
                   key={item.name}
-                  className="flex items-center gap-3 px-4 py-3.5 min-h-[52px] rounded-xl bg-transparent hover:bg-navy-deep/[0.06] active:bg-navy-deep/[0.12] active:scale-[0.98] border border-transparent hover:border-navy-deep/[0.04] transition-all duration-300 font-sans group cursor-pointer focus-ring"
+                  className="flex items-center gap-3 px-4 py-3.5 min-h-[52px] rounded-xl bg-transparent hover:bg-white/50 active:bg-white/70 border border-transparent hover:border-gold/20 transition-all duration-300 font-sans group cursor-pointer focus-ring"
                   style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
                 >
                   <span className="font-mono text-[10.5px] font-bold text-gold tracking-widest opacity-90 shrink-0">

@@ -98,7 +98,7 @@ export default function TestimonialsSection() {
           {/* Aesthetic Capsule Badge */}
           <div
             ref={eyebrowRef}
-            className="border border-gold/20 px-4 py-1.5 rounded-full inline-flex items-center gap-2.5 mb-3"
+            className="eyebrow-premium border-gold/25 px-4 py-1.5 rounded-full inline-flex items-center gap-2.5 mb-3"
           >
             <MessageSquare className="w-3.5 h-3.5 text-gold" />
             <span className="text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase">
@@ -132,7 +132,7 @@ export default function TestimonialsSection() {
 
               <div className="relative z-10">
                 {/* Quote Icon Badge */}
-                <div className="w-9 h-9 rounded-full border border-gold/20 flex items-center justify-center mb-6 text-gold group-hover:border-gold/40 transition-colors duration-500">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center mb-6 text-gold group-hover:border-gold/40 transition-colors duration-500" style={{ background: "rgba(184,146,78,0.10)", border: "1px solid rgba(184,146,78,0.25)" }}>
                   <Quote className="w-4 h-4 fill-gold/10" />
                 </div>
 
@@ -155,10 +155,10 @@ export default function TestimonialsSection() {
               </div>
 
               {/* Card Footer Divider & Avatar */}
-              <div className="border-t border-slate-200/60 pt-6 mt-auto">
+              <div className="border-t border-navy-deep/10 pt-6 mt-auto">
                 <div className="flex items-center gap-3.5">
                   {/* Luxury Initials Avatar */}
-                  <div className="w-11 h-11 rounded-full border border-gold/20 text-gold font-serif italic font-bold text-base flex items-center justify-center shrink-0">
+                  <div className="w-11 h-11 rounded-full text-gold font-serif italic font-bold text-base flex items-center justify-center shrink-0" style={{ background: "rgba(184,146,78,0.12)", border: "1px solid rgba(184,146,78,0.30)" }}>
                     {testimonial.initial}
                   </div>
 
