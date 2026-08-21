@@ -339,7 +339,7 @@ export default function OGIDiagnostic() {
               >
                 <div className="max-w-3xl w-full">
                   <div className="flex justify-center mb-5">
-                    <span className="eyebrow-premium inline-flex items-center gap-2 px-4 py-1.5 text-[11px] sm:text-[12.5px] text-gold font-mono tracking-wider sm:tracking-widest font-bold uppercase relative">
+                    <span className="eyebrow-premium inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] sm:text-[12.5px] text-gold font-mono tracking-wider sm:tracking-widest font-bold uppercase relative">
                       <Zap className="w-3.5 h-3.5 text-gold" />
                       Organizational Assessment
                       <DoodleSparkle
