@@ -100,7 +100,7 @@ export default function Hero() {
     <section
       id="hero-section"
       ref={sectionRef}
-      className="relative w-full pt-20 sm:pt-28 lg:pt-32 pb-28 sm:pb-6 overflow-x-hidden bg-transparent"
+      className="relative w-full pt-20 sm:pt-28 lg:pt-32 pb-24 sm:pb-0 overflow-x-hidden bg-transparent"
     >
       <div className="relative max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full select-none">
         <div className="flex flex-col items-center text-center w-full">
@@ -146,10 +146,11 @@ export default function Hero() {
             </span>
           </h1>
 
-          {/* Feature chips — center-aligned, auto-width (hug content),
-              single column stack on mobile. Each pill sizes to its content.
-              Desktop: flex-wrap with same styling. */}
-          <div ref={chipsRef} className="flex flex-col sm:flex-wrap items-center gap-2.5 sm:gap-3 mb-5 sm:mb-14 w-full sm:max-w-3xl mx-auto sm:justify-center">
+          {/* Feature chips — DIFFERENT layouts for mobile vs desktop:
+              Mobile: flex-col (single column stack, center-aligned, auto-width)
+              Desktop: flex-wrap (3+2 centered wrap, auto-width)
+              Both use the same chip styling (px-4 py-2.5, 12px text, icon). */}
+          <div ref={chipsRef} className="flex flex-col sm:flex-row sm:flex-wrap items-center gap-2.5 sm:gap-3 mb-5 sm:mb-12 w-full sm:max-w-3xl mx-auto sm:justify-center">
             {[
               { label: "Hired experienced people", Icon: UserPlus },
               { label: "Promoted managers", Icon: TrendingUp },
@@ -198,7 +199,7 @@ export default function Hero() {
           {/* CTAs — stacked on mobile (full width), row on desktop. */}
           <div
             ref={ctaRef}
-            className="flex flex-col items-center w-full sm:max-w-none sm:flex-row sm:justify-center gap-2.5 sm:gap-4 mb-5 sm:mb-16 mx-auto"
+            className="flex flex-col items-center w-full sm:max-w-none sm:flex-row sm:justify-center gap-2.5 sm:gap-4 mb-5 sm:mb-12 mx-auto"
           >
             <ArrowRevealButton
               label="Talk To Us"
@@ -280,8 +281,8 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Marquee Ticker — smaller on mobile */}
-      <div ref={marqueeRef} className="mt-8 sm:mt-12 w-full border-y border-white/10 bg-navy-deep py-3 sm:py-4 flex items-center relative z-10 overflow-hidden">
+      {/* Marquee Ticker — tighter spacing to avoid blank gap */}
+      <div ref={marqueeRef} className="mt-6 sm:mt-8 w-full border-y border-white/10 bg-navy-deep py-3 sm:py-4 flex items-center relative z-10 overflow-hidden">
         <div
           aria-hidden="true"
           className="animate-marquee-slow flex whitespace-nowrap gap-x-24 select-none"
