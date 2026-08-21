@@ -136,8 +136,8 @@ export default function Header() {
         ref={headerRef}
         className={`w-full max-w-6xl pointer-events-auto transition-[background-color,border-color,box-shadow,padding] duration-300 ease-out-expo rounded-[22px] ${
           scrolled || isOpen
-            ? "py-2 px-3 sm:px-4 lg:py-2 lg:px-4 border border-white/60 bg-white/70 shadow-[0_8px_32px_-8px_rgba(var(--navy-rgb),0.18)] backdrop-blur-xl backdrop-saturate-150"
-            : "py-2.5 px-3 sm:px-5 lg:px-6 bg-white/50 backdrop-blur-lg border border-white/25 shadow-sm"
+            ? "py-2 px-3 sm:px-4 lg:py-2 lg:px-4 border border-black/[0.06] bg-white/70 shadow-[0_2px_16px_-4px_rgba(0,0,0,0.08),0_8px_32px_-8px_rgba(0,0,0,0.06)] backdrop-blur-xl backdrop-saturate-150"
+            : "py-2.5 px-3 sm:px-5 lg:px-6 bg-white/50 backdrop-blur-lg border border-black/[0.04] shadow-sm"
         }`}
       >
         <div className="flex items-center gap-4 lg:gap-6">
@@ -158,7 +158,7 @@ export default function Header() {
           <nav
             ref={navRef}
             aria-label="Main navigation"
-            className="hidden lg:flex items-center gap-0.5 relative bg-white/40 px-1 py-1 rounded-full border border-white/30"
+            className="hidden lg:flex items-center gap-0.5 relative bg-white/40 px-1 py-1 rounded-full border border-black/[0.05]"
             onMouseLeave={() => setHoveredIndex(null)}
           >
             {navItems.map((item, i) => {

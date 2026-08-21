@@ -332,7 +332,7 @@ export default function OGIDiagnostic() {
         {/* Content Box */}
         <div
           ref={contentBoxRef}
-          className="card-premium bg-white/70 border border-white/40 rounded-3xl overflow-hidden min-h-[420px] flex flex-col justify-between shadow-[0_8px_32px_-12px_rgba(11,27,46,0.1)]"
+          className="card-premium bg-white/70 border border-black/[0.06] rounded-3xl overflow-hidden min-h-[420px] flex flex-col justify-between shadow-[0_2px_16px_-4px_rgba(0,0,0,0.08),0_8px_32px_-8px_rgba(0,0,0,0.06)]"
         >
           <AnimatePresence mode="wait">
             {/* INTRO SCREEN */}
@@ -725,7 +725,7 @@ export default function OGIDiagnostic() {
                           className={`relative py-4 sm:py-5 px-2 sm:px-3 text-xs sm:text-sm text-center rounded-xl font-display font-semibold transition-all duration-300 border cursor-pointer select-none focus-ring min-h-[52px] ${
                             isSelected
                               ? "bg-navy-deep border-navy-deep text-white shadow-md shadow-slate-900/10 scale-[1.02]"
-                              : "bg-slate-50 border-slate-200/80 hover:border-gold hover:bg-white hover:shadow-sm text-slate-600 hover:text-navy-deep active:bg-slate-100"
+                              : "bg-slate-50 border-black/[0.06] hover:border-gold hover:bg-white hover:shadow-sm text-slate-600 hover:text-navy-deep active:bg-slate-100"
                           }`}
                           id={`ogi-q-${currentQ.id}-opt-${opt.label}`}
                         >

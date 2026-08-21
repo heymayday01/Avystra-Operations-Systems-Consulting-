@@ -106,7 +106,7 @@ export default function Hero() {
 
           {/* Eyebrow badge — refined, subtle */}
           <div ref={eyebrowRef} className="mb-10 sm:mb-12">
-            <span className="hero-badge-premium inline-flex items-center gap-2.5 rounded-full border border-gold/30 bg-white/70 backdrop-blur-md px-5 py-2">
+            <span className="hero-badge-premium inline-flex items-center gap-2.5 rounded-full border border-gold/20 bg-white/65 backdrop-blur-md px-5 py-2">
               <span className="relative flex h-1.5 w-1.5">
                 {!reducedMotion && (
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75" />
@@ -157,7 +157,7 @@ export default function Hero() {
             ].map(({ label, Icon }, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/30 bg-white/55 backdrop-blur-md hover:border-gold/35 hover:bg-white/80 transition-[border-color,background-color] duration-500 ease-out-expo"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-black/[0.05] bg-white/60 backdrop-blur-md hover:border-gold/35 hover:bg-white/80 transition-[border-color,background-color] duration-500 ease-out-expo"
               >
                 <Icon className="w-3.5 h-3.5 text-gold/60 shrink-0" />
                 <span className="text-navy-deep/70 font-sans text-[11px] sm:text-[12px] font-medium whitespace-nowrap">

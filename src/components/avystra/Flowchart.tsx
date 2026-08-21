@@ -179,7 +179,7 @@ export default function Flowchart() {
         <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
           <div
             ref={eyebrowRef}
-            className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/70 backdrop-blur-md border border-white/40 rounded-full mb-3.5 shadow-sm"
+            className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/70 backdrop-blur-md border border-black/[0.06] rounded-full mb-3.5 shadow-sm"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
             <span className="text-[10.5px] text-navy-deep font-mono tracking-widest font-bold uppercase">

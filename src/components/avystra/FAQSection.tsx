@@ -107,7 +107,7 @@ export default function FAQSection() {
         {/* Accordions Containment Block */}
         <div
           ref={accordionsRef}
-          className="bg-white/65 border border-white/40 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-8 lg:p-10 divide-y divide-slate-300/20"
+          className="bg-white/65 border border-black/[0.06] rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-8 lg:p-10 divide-y divide-slate-300/20"
         >
           {faqData.map((faq, index) => {
             const isOpen = openIndex === index;
