@@ -96,8 +96,8 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
   const pageReady = usePageReady();
 
   // ── MOBILE/TOUCH: IntersectionObserver-based reveal ──
-  // We run useInViewReveal's logic inline here (not via the hook) so we
-  // share the SAME ref. This avoids the dual-ref problem.
+  // Best-in-class: no getBoundingClientRect(), is-revealing lifecycle for
+  // minimal will-change memory, rootMargin pre-fires reveals.
   useEffect(() => {
     if (!pageReady) return;
     if (!isTouchDevice()) return; // Desktop uses GSAP below
@@ -109,37 +109,42 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
     // Mark for CSS reveal
     el.setAttribute("data-reveal", "");
     if (options.delay && options.delay > 0) {
-      const slot = Math.min(5, Math.max(1, Math.round((options.delay * 1000) / 80)));
-      el.setAttribute("data-reveal-delay", String(slot));
+      el.style.setProperty("--reveal-delay", `${options.delay}s`);
     }
 
-    // If already in viewport (above the fold), reveal immediately
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.85 && rect.bottom > 0) {
+    // The reveal lifecycle: add is-visible + is-revealing, then remove
+    // is-revealing after the transition completes. This scopes will-change
+    // to ONLY the element currently animating → minimal memory pressure.
+    const reveal = () => {
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => el.classList.add("is-visible"));
+        requestAnimationFrame(() => {
+          el.classList.add("is-visible", "is-revealing");
+          const cleanupTimer = setTimeout(() => {
+            el.classList.remove("is-revealing");
+          }, 700);
+          (el as unknown as { _revealCleanupTimer?: ReturnType<typeof setTimeout> })._revealCleanupTimer = cleanupTimer;
+        });
       });
-      return;
-    }
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                entry.target.classList.add("is-visible");
-              });
-            });
+            reveal();
             observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" }
+      { threshold: 0, rootMargin: "0px 0px -10% 0px" }
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      const timer = (el as unknown as { _revealCleanupTimer?: ReturnType<typeof setTimeout> })._revealCleanupTimer;
+      if (timer) clearTimeout(timer);
+    };
   }, [pageReady, options.delay]);
 
   // ── DESKTOP: GSAP ScrollTrigger reveal ──

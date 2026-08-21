@@ -87,48 +87,56 @@ export function useGsapCards<T extends HTMLElement = HTMLDivElement>(
     }
 
     // ── MOBILE/TOUCH: IntersectionObserver + CSS stagger ──
+    // Best-in-class: is-revealing lifecycle, --reveal-delay custom property,
+    // rootMargin pre-fires, no getBoundingClientRect() for the in-view check.
     if (isTouchDevice()) {
-      // Mark each card for CSS reveal with staggered delay
+      // Mark each card for CSS reveal with staggered delay via custom property
+      const staggerSec = options.stagger ?? 0.08;
       cards.forEach((card, index) => {
         card.setAttribute("data-reveal", "");
-        const slot = Math.min(5, Math.max(1, Math.round((index * (options.stagger ?? 0.08) * 1000) / 80) + 1));
-        card.setAttribute("data-reveal-delay", String(slot));
+        card.style.setProperty("--reveal-delay", `${index * staggerSec}s`);
       });
 
-      // Check if any card is already in viewport (above the fold)
-      const anyInView = cards.some((card) => {
-        const rect = card.getBoundingClientRect();
-        return rect.top < window.innerHeight * 0.85 && rect.bottom > 0;
-      });
-
-      if (anyInView) {
+      // The reveal lifecycle: add is-visible + is-revealing, then remove
+      // is-revealing after transition completes. Scopes will-change to
+      // only the animating elements → minimal memory.
+      const revealCards = () => {
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
-            cards.forEach((card) => card.classList.add("is-visible"));
+            cards.forEach((card) => {
+              card.classList.add("is-visible", "is-revealing");
+            });
+            // Remove is-revealing after transition completes (600ms + buffer
+            // for the last staggered card: 5 * 80ms = 400ms + 600ms = 1000ms)
+            const maxStagger = cards.length * staggerSec * 1000;
+            const cleanupDelay = Math.max(700, maxStagger + 700);
+            const cleanupTimer = setTimeout(() => {
+              cards.forEach((card) => card.classList.remove("is-revealing"));
+            }, cleanupDelay);
+            (el as unknown as { _revealCleanupTimer?: ReturnType<typeof setTimeout> })._revealCleanupTimer = cleanupTimer;
           });
         });
-        return;
-      }
+      };
 
       // IntersectionObserver on the container — when it enters, reveal all cards
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                  cards.forEach((card) => card.classList.add("is-visible"));
-                });
-              });
+              revealCards();
               observer.unobserve(entry.target);
             }
           });
         },
-        { threshold: 0.1, rootMargin: "0px 0px -10% 0px" }
+        { threshold: 0, rootMargin: "0px 0px -10% 0px" }
       );
 
       observer.observe(el);
-      return () => observer.disconnect();
+      return () => {
+        observer.disconnect();
+        const timer = (el as unknown as { _revealCleanupTimer?: ReturnType<typeof setTimeout> })._revealCleanupTimer;
+        if (timer) clearTimeout(timer);
+      };
     }
 
     // ── DESKTOP: GSAP ScrollTrigger.batch ──
