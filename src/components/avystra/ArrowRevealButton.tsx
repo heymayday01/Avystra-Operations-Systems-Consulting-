@@ -69,7 +69,7 @@ type Props = {
   transition?: Transition;
   newTab?: boolean;
   style?: React.CSSProperties;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler;
   ariaLabel?: string;
 };
 
