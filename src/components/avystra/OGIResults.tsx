@@ -510,7 +510,7 @@ export default function OGIResults({
                 <div key={p.code} className="space-y-2">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      <span className="p-1.5 rounded-lg border border-white/60 bg-white/40 backdrop-blur-xl saturate-150 text-slate-700" style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)" }}>
+                      <span className="p-1.5 rounded-lg border border-navy-deep/[0.08] bg-white/90 text-slate-700" style={{ boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
                         <PillarIcon className="w-4 h-4" style={{ color: p.color }} />
                       </span>
                       <span className="font-display font-medium text-sm text-navy-soft">
@@ -579,7 +579,7 @@ export default function OGIResults({
                   <div className="space-y-3">
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <span className="p-2 rounded-xl border border-white/60 bg-white/40 backdrop-blur-xl saturate-150" style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)" }}>
+                        <span className="p-2 rounded-xl border border-navy-deep/[0.08] bg-white/90" style={{ boxShadow: "0 1px 3px rgba(11,27,46,0.06), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
                           <PillarIcon className="w-5 h-5" style={{ color: p.color }} />
                         </span>
                         <h4 className="font-display font-semibold text-base text-navy-soft">

@@ -157,8 +157,9 @@ export default function FAQSection() {
                     className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border transition-all duration-300 ${
                       isOpen
                         ? "border-gold bg-gold text-white rotate-180"
-                        : "border-white/60 bg-white/50 text-slate-500 group-hover:border-gold/40 group-hover:bg-gold/10 group-hover:text-gold"
+                        : "border-navy-deep/[0.08] bg-white/90 text-slate-500 group-hover:border-gold/40 group-hover:bg-gold/10 group-hover:text-gold"
                     }`}
+                    style={!isOpen ? { boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)" } : undefined}
                   >
                     <ChevronDown className="w-4 h-4" />
                   </div>

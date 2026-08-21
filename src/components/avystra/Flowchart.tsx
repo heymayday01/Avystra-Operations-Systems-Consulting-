@@ -233,8 +233,8 @@ export default function Flowchart() {
 
                   {/* Main Icon Badge */}
                   <div className="flex justify-center mb-6">
-                    <div className="relative p-1.5 rounded-full border border-white/60 bg-white/40 backdrop-blur-xl saturate-150" style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.7)" }}>
-                      <div className="flex items-center justify-center w-14 h-14 rounded-full bg-white/70 border border-white/60 text-navy-deep transition-all duration-500 group-hover:border-gold/40 group-hover:text-gold" style={{ boxShadow: "0 2px 8px -2px rgba(11,27,46,0.08)" }}>
+                    <div className="relative p-1.5 rounded-full border border-navy-deep/[0.08] bg-white/90" style={{ boxShadow: "0 1px 3px rgba(11,27,46,0.06), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
+                      <div className="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-white to-slate-50 border border-navy-deep/[0.06] text-navy-deep transition-all duration-500 group-hover:border-gold/40 group-hover:text-gold" style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.8)" }}>
                         {step.icon}
                       </div>
                     </div>
@@ -251,7 +251,7 @@ export default function Flowchart() {
                   </div>
 
                   {/* Description */}
-                  <p className="text-slate-500 font-sans text-[14px] leading-relaxed text-center font-light mb-5 break-words">
+                  <p className="text-slate-600 font-sans text-[14px] leading-relaxed text-center font-medium mb-5 break-words">
                     {step.description}
                   </p>
 

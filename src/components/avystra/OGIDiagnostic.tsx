@@ -374,8 +374,8 @@ export default function OGIDiagnostic() {
                     ].map((item) => (
                       <div
                         key={item.code}
-                        className="p-3 sm:p-3.5 rounded-xl border border-white/60 bg-white/40 backdrop-blur-xl saturate-150 flex flex-col items-center group hover:border-gold/35 transition-all duration-300"
-                        style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)" }}
+                        className="p-3 sm:p-3.5 rounded-xl border border-navy-deep/[0.08] bg-white/90 flex flex-col items-center group hover:border-gold/40 transition-all duration-300"
+                        style={{ boxShadow: "0 1px 3px rgba(11,27,46,0.06), inset 0 1px 0 rgba(255,255,255,0.9)" }}
                       >
                         <span
                           className={`w-6 h-6 rounded-full ${item.color} mb-2 flex items-center justify-center text-[11.5px] text-white font-mono font-bold`}

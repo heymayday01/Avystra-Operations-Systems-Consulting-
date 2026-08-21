@@ -329,68 +329,71 @@ body::-webkit-scrollbar {
    Buttons: 180ms, bg/color + glow.
    Nav links: 150ms, opacity + underline. */
 
-/* Premium card — Apple-style frosted glass with proper depth.
-   The "million dollar" aesthetic: subtle white tint + strong blur +
-   saturation boost + layered shadows + inner top highlight line.
-   This is glass done RIGHT — not the flat/weak kind, not the heavy kind.
-   - background: rgba(255,255,255,0.55) — lets the warm mesh show through
-   - backdrop-filter: blur(40px) saturate(1.8) — frosted, color-rich
-   - box-shadow: ambient (soft) + key (directional) + inset (top highlight)
-   - border: white/60 — catches light at the edge (Apple's signature)
+/* ═══ PREMIUM CARD — The "Million Dollar" weighted card ═══
+   What Linear / Vercel / Stripe / Apple actually ship: NOT pure glass (which
+   looks washed-out/ghostly on light backgrounds), but NEAR-SOLID cards with
+   WEIGHT and DEFINITION. Cards must visually SIT ON TOP of the background,
+   not blend into it.
+
+   Design recipe:
+   - background: near-solid white gradient (0.94→0.88) — gives WEIGHT, the
+     animated background is a HINT through it, not a bleed.
+   - border: 1px CRISP navy-tint (rgba 11,27,46 / 0.08) — a VISIBLE edge
+     that defines the card silhouette (not invisible white/60).
+   - box-shadow: 3 layers — (1) tight ambient 0 1px 2px, (2) soft directional
+     0 8px 28px, (3) inset top highlight for "lit from above" depth.
+   - backdrop-filter: SUBTLE blur(8px) — just a hint of frosted life, not
+     the heavy 40px that made cards look like JPEG artifacts.
    NOTE: Doubled class selector (.card-premium.card-premium) boosts specificity
    to 0-2-0 so it beats .js .reveal (also 0-2-0). */
 .card-premium.card-premium {
-  background: rgba(255, 255, 255, 0.55);
-  --bd-filter: blur(40px) saturate(1.8);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.88) 100%);
+  --bd-filter: blur(8px) saturate(1.15);
   -webkit-backdrop-filter: var(--bd-filter);
   backdrop-filter: var(--bd-filter);
-  border: 1px solid rgba(255, 255, 255, 0.60);
+  border: 1px solid rgba(11, 27, 46, 0.08);
   box-shadow:
     0 1px 2px rgba(11, 27, 46, 0.04),
-    0 8px 24px -8px rgba(11, 27, 46, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.70);
+    0 8px 28px -8px rgba(11, 27, 46, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.90);
   transition: transform var(--dur-standard) var(--ease-out),
-              background-color var(--dur-standard) var(--ease-sine),
-              border-color var(--dur-micro) var(--ease-sine),
+              border-color var(--dur-standard) var(--ease-sine),
               box-shadow var(--dur-standard) var(--ease-out);
 }
 .card-premium.card-premium:hover {
   transform: translateY(-4px);
-  background-color: rgba(255, 255, 255, 0.68);
   border-color: rgba(184, 146, 78, 0.35);
   box-shadow:
     0 2px 4px rgba(11, 27, 46, 0.06),
-    0 20px 50px -12px rgba(11, 27, 46, 0.15),
-    0 0 0 1px rgba(184, 146, 78, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    0 18px 48px -10px rgba(11, 27, 46, 0.16),
+    0 0 0 1px rgba(184, 146, 78, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
-/* Premium card — dark section variant (navy backgrounds).
-   Deeper glass: white tint lower (0.08) since on dark, gold border hint. */
+/* Premium card — DARK variant (navy sections).
+   Near-solid navy gradient for WEIGHT + gold-tinted border for definition. */
 .card-premium-dark.card-premium-dark {
-  background: rgba(255, 255, 255, 0.06);
-  --bd-filter-dark: blur(20px) saturate(1.6);
+  background: linear-gradient(135deg, rgba(22, 38, 61, 0.92) 0%, rgba(11, 27, 46, 0.94) 100%);
+  --bd-filter-dark: blur(8px) saturate(1.2);
   -webkit-backdrop-filter: var(--bd-filter-dark);
   backdrop-filter: var(--bd-filter-dark);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(184, 146, 78, 0.18);
   box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.20),
-    0 8px 24px -8px rgba(0, 0, 0, 0.30),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    0 8px 28px -8px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
   transition: transform var(--dur-standard) var(--ease-out),
-              background-color var(--dur-standard) var(--ease-sine),
-              border-color var(--dur-micro) var(--ease-sine),
+              border-color var(--dur-standard) var(--ease-sine),
               box-shadow var(--dur-standard) var(--ease-out);
 }
 .card-premium-dark.card-premium-dark:hover {
   transform: translateY(-4px);
-  background-color: rgba(255, 255, 255, 0.10);
   border-color: rgba(184, 146, 78, 0.45);
   box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.25),
-    0 20px 50px -12px rgba(0, 0, 0, 0.40),
+    0 18px 48px -10px rgba(0, 0, 0, 0.45),
     0 0 0 1px rgba(184, 146, 78, 0.20),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
 }
 
 /* Premium button hover — smooth bg shift + gold glow.
@@ -467,34 +470,31 @@ body::-webkit-scrollbar {
   box-shadow: 0 0 24px 6px rgba(var(--gold-rgb), 0.12);
 }
 
-/* Premium hero card — Apple-style frosted glass with refined depth.
-   Slightly richer than .card-premium (more blur, gold-tinted border).
+/* Premium hero card — near-solid weighted card, slightly richer than .card-premium.
    Doubled selector prevents Lightning CSS from stripping unprefixed backdrop-filter. */
 .hero-card-premium.hero-card-premium {
-  background: rgba(255, 255, 255, 0.58);
-  --bd-filter-hero: blur(44px) saturate(1.9);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.90) 100%);
+  --bd-filter-hero: blur(10px) saturate(1.2);
   -webkit-backdrop-filter: var(--bd-filter-hero);
   backdrop-filter: var(--bd-filter-hero);
-  border: 1px solid rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(11, 27, 46, 0.08);
   box-shadow:
     0 1px 2px rgba(11, 27, 46, 0.05),
-    0 12px 36px -10px rgba(11, 27, 46, 0.10),
-    0 0 0 1px rgba(184, 146, 78, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    0 12px 36px -10px rgba(11, 27, 46, 0.12),
+    0 0 0 1px rgba(184, 146, 78, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
   transition: transform var(--dur-standard) var(--ease-out),
-              background-color var(--dur-standard) var(--ease-sine),
               box-shadow var(--dur-standard) var(--ease-out),
               border-color var(--dur-standard) var(--ease-sine);
 }
 .hero-card-premium.hero-card-premium:hover {
   transform: translateY(-3px);
-  background-color: rgba(255, 255, 255, 0.70);
   border-color: rgba(184, 146, 78, 0.35);
   box-shadow:
     0 2px 4px rgba(11, 27, 46, 0.06),
-    0 20px 50px -12px rgba(11, 27, 46, 0.15),
-    0 0 0 1px rgba(184, 146, 78, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.90);
+    0 20px 50px -12px rgba(11, 27, 46, 0.18),
+    0 0 0 1px rgba(184, 146, 78, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
 /* Gold divider — static (entrance via GSAP) */
@@ -1089,19 +1089,19 @@ html {
   .bg-orb { animation: none !important; }
 }
 
-/* ═══ EYEBROW BADGE — Apple-style frosted pill ═══
-   Used on section eyebrows across the site. Frosted glass with gold tint.
-   Doubled selector (.eyebrow-premium.eyebrow-premium) prevents Lightning CSS
-   from stripping the unprefixed backdrop-filter (cross-browser compat). */
+/* ═══ EYEBROW BADGE — weighted frosted pill ═══
+   Used on section eyebrows. Near-solid white with crisp navy border + soft
+   shadow + subtle gold accent dot. Weighted (not ghostly) so text reads.
+   Doubled selector prevents Lightning CSS stripping unprefixed backdrop-filter. */
 .eyebrow-premium.eyebrow-premium {
-  background: rgba(255, 255, 255, 0.50);
-  --bd-filter-eyebrow: blur(20px) saturate(1.6);
+  background: rgba(255, 255, 255, 0.88);
+  --bd-filter-eyebrow: blur(8px) saturate(1.2);
   -webkit-backdrop-filter: var(--bd-filter-eyebrow);
   backdrop-filter: var(--bd-filter-eyebrow);
-  border: 1px solid rgba(255, 255, 255, 0.60);
+  border: 1px solid rgba(11, 27, 46, 0.08);
   box-shadow:
     0 1px 2px rgba(11, 27, 46, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.70);
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
   transition: border-color var(--dur-standard) var(--ease-sine),
               box-shadow var(--dur-standard) var(--ease-out);
 }
@@ -1109,5 +1109,5 @@ html {
   border-color: rgba(184, 146, 78, 0.35);
   box-shadow:
     0 2px 8px rgba(184, 146, 78, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    inset 0 1px 0 rgba(255, 255, 255, 1);
 }

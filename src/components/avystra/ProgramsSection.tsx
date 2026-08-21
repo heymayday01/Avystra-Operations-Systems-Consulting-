@@ -38,7 +38,7 @@ function ProgramCard({ prog }: { prog: Program }) {
 
       <div className="relative z-10">
         {/* Category Pill Tag */}
-        <div className="inline-flex px-2.5 sm:px-3 py-1 rounded-md border border-white/60 bg-white/40 backdrop-blur-xl saturate-150 text-slate-500 text-[9px] sm:text-[11px] font-mono font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase mb-4 sm:mb-6 group-hover:border-gold/35 group-hover:text-gold-hover transition-all duration-500" style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)" }}>
+        <div className="inline-flex px-2.5 sm:px-3 py-1 rounded-md border border-navy-deep/[0.08] bg-white/90 text-slate-600 text-[9px] sm:text-[11px] font-mono font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase mb-4 sm:mb-6 group-hover:border-gold/40 group-hover:text-gold-hover transition-all duration-500" style={{ boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
           {prog.category}
         </div>
 
@@ -58,22 +58,22 @@ function ProgramCard({ prog }: { prog: Program }) {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-slate-100 via-slate-200/50 to-transparent" />
 
         <div className="flex flex-col gap-2 sm:gap-2.5">
-          <div className="flex items-center gap-2.5 text-slate-400">
-            <div className="p-1 rounded-lg" style={{ background: "rgba(184,146,78,0.08)", border: "1px solid rgba(184,146,78,0.20)" }}>
-              <Users className="w-3.5 h-3.5 text-gold/80 shrink-0" />
+          <div className="flex items-center gap-2.5 text-slate-500">
+            <div className="p-1 rounded-lg" style={{ background: "rgba(184,146,78,0.10)", border: "1px solid rgba(184,146,78,0.22)" }}>
+              <Users className="w-3.5 h-3.5 text-gold shrink-0" />
             </div>
-            <span className="font-mono text-[10px] sm:text-[10.5px] uppercase tracking-wider">
+            <span className="font-mono text-[10px] sm:text-[10.5px] uppercase tracking-wider text-slate-500">
               Audience:{" "}
               <strong className="text-navy-deep font-bold">
                 {prog.audience}
               </strong>
             </span>
           </div>
-          <div className="flex items-center gap-2.5 text-slate-400">
-            <div className="p-1 rounded-lg" style={{ background: "rgba(184,146,78,0.08)", border: "1px solid rgba(184,146,78,0.20)" }}>
-              <Calendar className="w-3.5 h-3.5 text-gold/80 shrink-0" />
+          <div className="flex items-center gap-2.5 text-slate-500">
+            <div className="p-1 rounded-lg" style={{ background: "rgba(184,146,78,0.10)", border: "1px solid rgba(184,146,78,0.22)" }}>
+              <Calendar className="w-3.5 h-3.5 text-gold shrink-0" />
             </div>
-            <span className="font-mono text-[10px] sm:text-[10.5px] uppercase tracking-wider">
+            <span className="font-mono text-[10px] sm:text-[10.5px] uppercase tracking-wider text-slate-500">
               Duration:{" "}
               <strong className="text-navy-deep font-bold">
                 {prog.duration}
@@ -395,7 +395,7 @@ export default function ProgramsSection() {
                 className={`min-h-[44px] px-4 sm:px-6 py-3 rounded-2xl font-mono text-[10px] sm:text-[12.5px] font-black uppercase tracking-[0.14em] sm:tracking-[0.2em] border transition-all duration-500 cursor-pointer relative group shrink-0 focus-ring ${
                   isActive
                     ? "bg-navy-deep text-gold border-navy-deep shadow-xl"
-                    : "border border-white/60 bg-white/40 backdrop-blur-xl saturate-150 text-slate-500 hover:text-navy-deep hover:border-gold/30 hover:bg-white/55"
+                    : "border border-navy-deep/[0.08] bg-white/90 text-slate-600 hover:text-navy-deep hover:border-gold/40"
                 }`}
                 aria-pressed={isActive}
               >

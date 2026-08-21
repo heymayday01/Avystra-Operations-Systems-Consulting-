@@ -184,8 +184,8 @@ export default function FourPillars() {
                   <div className="relative z-10">
                     {/* Icon with accent color */}
                     <div
-                      className="inline-flex p-3.5 rounded-2xl border border-white/60 bg-white/50 backdrop-blur-xl saturate-150 mb-6 transition-all duration-500 group-hover:scale-110"
-                      style={{ color: pillar.accent, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.7)" }}
+                      className="inline-flex p-3.5 rounded-2xl border border-navy-deep/[0.08] bg-white/90 mb-6 transition-all duration-500 group-hover:scale-110"
+                      style={{ color: pillar.accent, boxShadow: "0 1px 3px rgba(11,27,46,0.06), inset 0 1px 0 rgba(255,255,255,0.9)" }}
                     >
                       {pillar.icon}
                     </div>
@@ -204,7 +204,7 @@ export default function FourPillars() {
                     </h3>
 
                     {/* Description */}
-                    <p className="text-slate-500 text-sm md:text-[14.5px] font-light leading-relaxed">
+                    <p className="text-slate-600 text-sm md:text-[14.5px] font-medium leading-relaxed">
                       {pillar.description}
                     </p>
                   </div>

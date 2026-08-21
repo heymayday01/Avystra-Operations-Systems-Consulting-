@@ -212,7 +212,7 @@ export default function StatsFounder() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="flex flex-col items-center justify-center text-center p-6 text-slate-400">
+                      <div className="flex flex-col items-center justify-center text-center p-6 text-slate-500">
                         <div className="w-16 h-16 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-gold mb-3">
                           <User className="w-8 h-8" />
                         </div>
@@ -373,7 +373,7 @@ const StatCard = React.memo(function StatCard({
       {/* flex-1 pushes this paragraph to fill remaining vertical space,
           so all cards have identical visible height even when description
           text lengths differ. flex-end keeps the text bottom-aligned. */}
-      <p className="text-slate-400 text-xs font-sans font-light leading-relaxed flex-1 flex items-end justify-center">
+      <p className="text-slate-600 text-xs font-sans font-medium leading-relaxed flex-1 flex items-end justify-center">
         <span>{stat.context}</span>
       </p>
     </div>

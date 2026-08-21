@@ -157,11 +157,11 @@ export default function Hero() {
             ].map(({ label, Icon }, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/60 bg-white/50 backdrop-blur-xl saturate-150 hover:border-gold/35 hover:bg-white/65 transition-[border-color,background-color] duration-500 ease-out-expo"
-                style={{ boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.7)" }}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-500 ease-out-expo"
+                style={{ boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)" }}
               >
-                <Icon className="w-3.5 h-3.5 text-gold/80 shrink-0" />
-                <span className="text-navy-deep/75 font-sans text-[11px] sm:text-[12px] font-medium whitespace-nowrap">
+                <Icon className="w-3.5 h-3.5 text-gold shrink-0" />
+                <span className="text-navy-deep/80 font-sans text-[11px] sm:text-[12px] font-medium whitespace-nowrap">
                   You {label}
                 </span>
               </div>
