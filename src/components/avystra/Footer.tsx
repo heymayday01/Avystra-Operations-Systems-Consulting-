@@ -80,7 +80,7 @@ export default function Footer({ leadCount }: FooterProps) {
             </h2>
             <p
               ref={descriptionRef}
-              className="text-slate-400 max-w-md leading-relaxed text-sm mb-5"
+              className="text-slate-300 max-w-md leading-relaxed text-[14px] mb-5"
             >
               AVYSTRA helps founders and leaders build the clarity,
               accountability, and systems necessary for scalable, decisive
@@ -140,7 +140,7 @@ export default function Footer({ leadCount }: FooterProps) {
             <h3 className="text-[12.5px] font-mono text-gold uppercase tracking-[0.2em] mb-4 font-bold">
               Connect
             </h3>
-            <p className="text-slate-400 text-[13px] leading-relaxed mb-4 max-w-xs">
+            <p className="text-slate-300 text-[14px] leading-relaxed mb-4 max-w-xs">
               Follow our work for insights on leadership, execution, and
               organizational performance.
             </p>

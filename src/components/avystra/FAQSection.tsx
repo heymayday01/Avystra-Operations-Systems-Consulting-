@@ -98,7 +98,7 @@ export default function FAQSection() {
           </h2>
 
           {/* Slogan */}
-          <p className="text-slate-500 font-sans text-base sm:text-lg font-light leading-relaxed max-w-2xl">
+          <p className="text-slate-600 font-sans text-[15px] sm:text-lg font-normal leading-relaxed max-w-2xl">
             Clear answers to help you understand our approach, process, and what
             to expect from an AVYSTRA engagement.
           </p>
@@ -178,7 +178,7 @@ export default function FAQSection() {
                 >
                   <div className="overflow-hidden">
                     <div
-                      className="pt-3 pb-1 pl-12 pr-4 sm:pl-14 text-slate-700 text-sm sm:text-base leading-relaxed font-medium transition-opacity duration-300"
+                      className="pt-3 pb-1 pl-12 pr-4 sm:pl-14 text-slate-700 text-[15px] sm:text-base leading-relaxed font-normal transition-opacity duration-300"
                       style={{ opacity: isOpen ? 1 : 0 }}
                     >
                       {faq.answer}

@@ -149,7 +149,7 @@ export default function TestimonialsSection() {
                 </div>
 
                 {/* Elegant Testimonial Quote */}
-                <p className="font-serif italic text-slate-700 text-base sm:text-lg leading-[1.65] font-light mb-8">
+                <p className="font-serif italic text-slate-700 text-[16px] sm:text-lg leading-[1.65] font-normal mb-8">
                   {testimonial.quote}
                 </p>
               </div>
@@ -167,7 +167,7 @@ export default function TestimonialsSection() {
                     <span className="font-display font-medium text-sm text-navy-deep tracking-wide">
                       {testimonial.name}
                     </span>
-                    <span className="text-xs text-slate-500 mt-0.5 font-sans font-light">
+                    <span className="text-slate-500 mt-0.5 font-sans font-normal text-[14px]">
                       {testimonial.role},{" "}
                       <span className="text-gold font-medium">
                         {testimonial.company}

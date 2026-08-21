@@ -155,7 +155,7 @@ export default function StatsFounder() {
                 />
               </span>
             </h2>
-            <p ref={subtextRef} className="text-slate-600 font-sans text-xs sm:text-sm max-w-lg mx-auto font-medium leading-relaxed">
+            <p ref={subtextRef} className="text-slate-600 font-sans text-[15px] sm:text-base max-w-lg mx-auto font-medium leading-relaxed">
               The cost of inaction is staggering. These are not opinions — they are research-backed realities every leader must confront.
             </p>
           </div>
@@ -257,14 +257,14 @@ export default function StatsFounder() {
                   </span>
                 </div>
 
-                <p className="text-slate-600 text-[13.5px] sm:text-[14.5px] font-sans font-light leading-relaxed">
+                <p className="text-slate-600 text-[15px] sm:text-[15px] font-sans font-normal leading-relaxed">
                   Most organizations don&apos;t struggle with knowing what to do.
                   They struggle with consistently doing it. Kirankumar Pandey has
                   spent over a decade in that room — and what he kept seeing
                   wasn&apos;t a knowledge problem. It was a doing problem.
                 </p>
 
-                <p className="text-slate-600 text-[13.5px] sm:text-[14.5px] font-sans font-light leading-relaxed">
+                <p className="text-slate-600 text-[15px] sm:text-[15px] font-sans font-normal leading-relaxed">
                   Postgraduate and MBA, Kirankumar built his career on one
                   demanding skill — holding a room of skeptical, distracted
                   people and making something complex land so clearly that they
@@ -290,7 +290,7 @@ export default function StatsFounder() {
                   </p>
                 </div>
 
-                <p className="text-slate-600 text-[13.5px] sm:text-[14.5px] font-sans font-light leading-relaxed">
+                <p className="text-slate-600 text-[15px] sm:text-[15px] font-sans font-normal leading-relaxed">
                   Across advisory, consulting, and director-level roles, he built
                   AVYSTRA on that conviction — every program research-backed,
                   organization-specific, and measured for outcomes.
@@ -323,7 +323,7 @@ export default function StatsFounder() {
                   <span className="text-[9px] sm:text-[10px] font-mono text-gold uppercase tracking-widest font-black block mt-1 leading-none mb-2 sm:mb-3">
                     {cred.subtitle}
                   </span>
-                  <p className="text-slate-600 font-sans text-[11px] sm:text-[12.5px] leading-relaxed font-light mt-auto">
+                  <p className="text-slate-600 font-sans text-[13px] sm:text-[13px] leading-relaxed font-normal mt-auto">
                     {cred.desc}
                   </p>
                 </div>
@@ -373,7 +373,7 @@ const StatCard = React.memo(function StatCard({
       {/* flex-1 pushes this paragraph to fill remaining vertical space,
           so all cards have identical visible height even when description
           text lengths differ. flex-end keeps the text bottom-aligned. */}
-      <p className="text-slate-600 text-xs font-sans font-medium leading-relaxed flex-1 flex items-end justify-center">
+      <p className="text-slate-300 text-[13px] sm:text-sm font-sans font-normal leading-relaxed flex-1 flex items-end justify-center">
         <span>{stat.context}</span>
       </p>
     </div>

@@ -187,7 +187,7 @@ export default function Flowchart() {
           </h2>
           <p
             ref={descriptionRef}
-            className="text-slate-500 text-xs sm:text-sm font-sans font-light mt-4"
+            className="text-slate-600 text-[15px] sm:text-sm font-sans font-normal mt-4"
           >
             We don&apos;t run isolated motivational sessions. We design, deliver,
             and verify bespoke organizational systems that build true operational
@@ -251,7 +251,7 @@ export default function Flowchart() {
                   </div>
 
                   {/* Description */}
-                  <p className="text-slate-600 font-sans text-[14px] leading-relaxed text-center font-medium mb-5 break-words">
+                  <p className="text-slate-600 font-sans text-[15px] leading-relaxed text-center font-medium mb-5 break-words">
                     {step.description}
                   </p>
 
@@ -287,7 +287,7 @@ export default function Flowchart() {
                                 className="flex items-start gap-1.5 text-left text-slate-600"
                               >
                                 <CheckCircle2 className="w-3.5 h-3.5 text-gold shrink-0 mt-0.5" />
-                                <span className="font-sans text-[12.5px] leading-relaxed font-light">
+                                <span className="font-sans text-[13.5px] leading-relaxed font-normal">
                                   {activity}
                                 </span>
                               </li>
@@ -309,7 +309,7 @@ export default function Flowchart() {
                       <span className="text-[10px] font-mono font-bold tracking-widest text-gold uppercase block leading-none mb-1">
                         {step.outputLabel}
                       </span>
-                      <p className="text-navy-deep font-sans text-[12.5px] font-semibold leading-normal">
+                      <p className="text-navy-deep font-sans text-[13.5px] font-semibold leading-normal">
                         {step.outputDetails}
                       </p>
                     </div>
@@ -336,7 +336,7 @@ export default function Flowchart() {
                 <p className="text-gold font-mono text-[10.5px] font-bold tracking-widest uppercase">
                   System Integration Safeguard
                 </p>
-                <p className="text-slate-100 font-sans text-xs sm:text-[13.5px] font-light leading-relaxed">
+                <p className="text-slate-100 font-sans text-[15px] sm:text-[14.5px] font-medium leading-relaxed">
                   We don&apos;t just build capability. We build{" "}
                   <span className="text-gold font-semibold underline decoration-gold">
                     accountability, ownership

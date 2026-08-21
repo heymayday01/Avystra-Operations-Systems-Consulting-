@@ -895,7 +895,7 @@ export default function OGIResults({
 
         {/* 4. Disclaimer Section */}
         <div className="pt-6 border-t border-slate-100">
-          <p className="text-[11.5px] text-slate-400 font-sans font-light leading-relaxed max-w-5xl text-left">
+          <p className="text-[13px] text-slate-500 font-sans font-normal leading-relaxed max-w-5xl text-left">
             The OGI is a directional self-reported assessment tool — not a
             professional organizational audit. It is based on the responses of a
             single individual and reflects one perspective. Results are

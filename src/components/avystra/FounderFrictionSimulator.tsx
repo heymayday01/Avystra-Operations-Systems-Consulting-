@@ -363,7 +363,7 @@ export default function FounderFrictionSimulator() {
                         >
                           ◆
                         </span>
-                        <span className="text-white/75 font-sans text-[13px] leading-relaxed font-normal">
+                        <span className="text-white/80 font-sans text-[14px] leading-relaxed font-normal">
                           {issue}
                         </span>
                       </div>
@@ -384,7 +384,7 @@ export default function FounderFrictionSimulator() {
                         strokeWidth={2}
                         style={{ color: "var(--color-success)" }}
                       />
-                      <span className="text-white/90 font-sans text-[13px] leading-relaxed font-medium">
+                      <span className="text-white/90 font-sans text-[14px] leading-relaxed font-medium">
                         {outcome.solution}
                       </span>
                     </div>
@@ -424,7 +424,7 @@ export default function FounderFrictionSimulator() {
               >
                 {isResolved ? "AVYSTRA SYSTEM" : "FOUNDER"}
               </div>
-              <div className="text-[11px] font-sans text-white/50 mt-1 transition-colors duration-500">
+              <div className="text-[12px] font-sans text-white/55 mt-1 transition-colors duration-500">
                 {isResolved ? "The system that holds" : "Single point of failure"}
               </div>
             </div>
@@ -461,7 +461,7 @@ export default function FounderFrictionSimulator() {
               >
                 {isResolved ? "AVYSTRA SYSTEM" : "FOUNDER"}
               </div>
-              <div className="text-[10.5px] font-sans text-white/50 mt-1 transition-colors duration-500">
+              <div className="text-[12px] font-sans text-white/55 mt-1 transition-colors duration-500">
                 {isResolved ? "The system that holds" : "Single point of failure"}
               </div>
             </div>
@@ -525,7 +525,7 @@ export default function FounderFrictionSimulator() {
                           >
                             ◆
                           </span>
-                          <span className="text-white/75 font-sans text-[13px] leading-relaxed font-normal">
+                          <span className="text-white/80 font-sans text-[14px] leading-relaxed font-normal">
                             {issue}
                           </span>
                         </div>
@@ -542,7 +542,7 @@ export default function FounderFrictionSimulator() {
                           strokeWidth={2}
                           style={{ color: "var(--color-success)" }}
                         />
-                        <span className="text-white/90 font-sans text-[13px] leading-relaxed font-medium">
+                        <span className="text-white/90 font-sans text-[14px] leading-relaxed font-medium">
                           {outcome.solution}
                         </span>
                       </div>

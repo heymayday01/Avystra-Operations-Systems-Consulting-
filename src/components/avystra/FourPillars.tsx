@@ -133,7 +133,7 @@ export default function FourPillars() {
 
           <p
             ref={descRef}
-            className="text-slate-500 font-sans text-lg md:text-xl font-light leading-relaxed max-w-2xl"
+            className="text-slate-600 font-sans text-[15px] sm:text-lg font-normal leading-relaxed max-w-2xl"
           >
             Sustainable performance isn&apos;t accidental. It&apos;s built on
             four pillars that strengthen your organization from the inside out.

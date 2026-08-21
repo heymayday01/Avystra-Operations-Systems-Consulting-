@@ -963,8 +963,8 @@ html, body {
   h2 { font-size: clamp(1.75rem, 6vw, 3rem); }
   h3 { font-size: clamp(1.125rem, 4vw, 1.5rem); }
 
-  /* Ensure body text is at least 14px on mobile */
-  p { font-size: 14px; }
+  /* Ensure body text is at least 15px on mobile (WCAG readability) */
+  p { font-size: 15px; line-height: 1.6; }
 }
 
 /* Safe-area insets for iOS devices with notches / home indicators.

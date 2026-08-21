@@ -48,7 +48,7 @@ function ProgramCard({ prog }: { prog: Program }) {
         </h3>
 
         {/* Program Description */}
-        <p className="text-slate-600 text-[13px] sm:text-sm font-medium leading-relaxed mb-5 sm:mb-8 opacity-100 transition-opacity duration-700">
+        <p className="text-slate-600 text-[15px] sm:text-sm font-medium leading-relaxed mb-5 sm:mb-8 opacity-100 transition-opacity duration-700">
           {prog.description}
         </p>
       </div>
@@ -378,7 +378,7 @@ export default function ProgramsSection() {
           </h2>
           <p
             ref={descriptionRef}
-            className="text-slate-500 font-sans text-base sm:text-lg font-light leading-relaxed max-w-2xl"
+            className="text-slate-600 font-sans text-[15px] sm:text-lg font-normal leading-relaxed max-w-2xl"
           >
             Syllabi engineered strictly for execution — bypassing the usual motivation traps and generic trainer scripts.
           </p>
@@ -566,7 +566,7 @@ export default function ProgramsSection() {
           className="mt-14 p-5 bg-navy-deep border border-slate-800 rounded-3xl text-center max-w-4xl mx-auto shadow-lg relative overflow-hidden"
         >
           <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
-          <p className="text-slate-200 font-sans text-xs sm:text-[13px] font-medium leading-relaxed">
+          <p className="text-slate-200 font-sans text-[15px] sm:text-[14px] font-medium leading-relaxed">
             Every program connects to{" "}
             <span className="text-white font-bold underline decoration-gold">
               real business outcomes

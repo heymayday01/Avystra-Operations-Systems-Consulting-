@@ -180,13 +180,13 @@ export default function Hero() {
               So why does it still feel like the company slows down whenever you step away?
             </p>
             <div className="hero-divider w-12 h-px mx-auto mb-5" />
-            <p className="text-navy-deep/80 font-sans text-sm sm:text-base font-medium leading-relaxed mb-2" style={{ lineHeight: 1.65 }}>
+            <p className="text-navy-deep/85 font-sans text-[15px] sm:text-base font-medium leading-relaxed mb-2" style={{ lineHeight: 1.65 }}>
               Most organizations don&apos;t struggle because people don&apos;t know what to do.
             </p>
-            <p className="text-navy-deep/80 font-sans text-sm sm:text-base font-medium leading-relaxed mb-6" style={{ lineHeight: 1.65 }}>
+            <p className="text-navy-deep/85 font-sans text-[15px] sm:text-base font-medium leading-relaxed mb-6" style={{ lineHeight: 1.65 }}>
               They struggle because knowing and doing are two very different things.
             </p>
-            <p className="text-navy-deep font-sans text-xs sm:text-sm font-medium tracking-[0.12em] uppercase">
+            <p className="text-navy-deep font-sans text-[13px] sm:text-sm font-medium tracking-[0.12em] uppercase">
               That&apos;s the gap{" "}
               <span className="text-gold font-bold">AVYSTRA</span>{" "}
               helps organizations close.
