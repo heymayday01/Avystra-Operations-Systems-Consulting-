@@ -333,7 +333,7 @@ export default function FounderFrictionSimulator() {
             return (
               <div
                 key={outcome.id}
-                className="card-premium-dark absolute w-[200px] md:w-[220px] lg:w-[240px] rounded-2xl p-5 sm:p-6 z-10 overflow-hidden"
+                className="card-premium-dark relative rounded-3xl p-5 sm:p-6 z-10 overflow-hidden"
                 style={{
                   ...outcome.desktopStyle,
                   borderLeft: `2px solid ${accent}`,
@@ -489,7 +489,7 @@ export default function FounderFrictionSimulator() {
               return (
                 <div
                   key={outcome.id}
-                  className="card-premium-dark relative rounded-2xl p-5 sm:p-6 overflow-hidden"
+                  className="card-premium-dark relative rounded-3xl p-5 sm:p-6 overflow-hidden"
                   style={{ borderLeft: `2px solid ${accent}` }}
                 >
                   {/* HUD corner brackets — mobile too */}

@@ -172,7 +172,7 @@ export default function FourPillars() {
                 key={pillar.id}
                 className="pillar-card-new group relative h-full flex flex-col"
               >
-                <div className="card-premium relative h-full rounded-2xl p-6 sm:p-7 md:p-8 flex flex-col justify-between overflow-hidden transition-all duration-500 ease-out-expo group-hover:-translate-y-1.5 group-hover:shadow-[0_20px_50px_-15px_rgba(11,27,46,0.12)]">
+                <div className="card-premium relative h-full rounded-3xl p-6 sm:p-7 md:p-8 flex flex-col justify-between overflow-hidden transition-all duration-500 ease-out-expo group-hover:-translate-y-1.5 group-hover:shadow-[0_20px_50px_-15px_rgba(11,27,46,0.12)]">
                   {/* Background number — large, low-contrast */}
                   <span
                     className="absolute top-5 right-6 text-6xl font-display font-black select-none z-0 transition-colors duration-500"

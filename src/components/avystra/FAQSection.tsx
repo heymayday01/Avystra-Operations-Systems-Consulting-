@@ -107,7 +107,7 @@ export default function FAQSection() {
         {/* Accordions Containment Block */}
         <div
           ref={accordionsRef}
-          className="card-premium rounded-2xl p-5 sm:p-8 lg:p-10 divide-y divide-navy-deep/[0.08]"
+          className="card-premium rounded-3xl p-5 sm:p-8 lg:p-10 divide-y divide-navy-deep/[0.08]"
         >
           {faqData.map((faq, index) => {
             const isOpen = openIndex === index;

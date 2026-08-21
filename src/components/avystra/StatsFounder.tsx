@@ -200,7 +200,7 @@ export default function StatsFounder() {
                 {/* Decorative offset frame */}
                 <div className="absolute -top-3 -right-3 w-full h-full rounded-2xl border border-gold/20 pointer-events-none" />
 
-                <div className="relative rounded-2xl p-2.5 border border-navy-deep/[0.08]" style={{ background: "rgba(255,255,255,0.94)", boxShadow: "0 1px 2px rgba(11,27,46,0.05), 0 8px 28px -8px rgba(11,27,46,0.10), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
+                <div className="relative rounded-3xl p-2.5 border border-navy-deep/[0.08]" style={{ background: "rgba(255,255,255,0.94)", boxShadow: "0 1px 2px rgba(11,27,46,0.05), 0 8px 28px -8px rgba(11,27,46,0.10), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
                   <div className="relative overflow-hidden rounded-xl aspect-[4/5] bg-slate-50/40 flex items-center justify-center border border-white/40 p-0.5">
                     {!photoFailed ? (
                       <img
@@ -311,7 +311,7 @@ export default function StatsFounder() {
               {credentials.map((cred, i) => (
                 <div
                   key={i}
-                  className="card-premium p-4 sm:p-5 rounded-2xl flex flex-col"
+                  className="card-premium p-4 sm:p-5 rounded-3xl flex flex-col"
                 >
                   {/* Icon */}
                   <div className="p-2 border border-gold/25 rounded-xl w-fit mb-3 shrink-0" style={{ background: "rgba(184,146,78,0.08)", backdropFilter: "blur(8px)" }}>
@@ -342,7 +342,7 @@ const StatCard = React.memo(function StatCard({
   stat: StatItemProps;
 }) {
   return (
-    <div className="card-premium-dark relative rounded-2xl p-5 flex flex-col items-center text-center group overflow-hidden h-full">
+    <div className="card-premium-dark relative rounded-3xl p-5 flex flex-col items-center text-center group overflow-hidden h-full">
       {/* Red warning line at top */}
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-danger/0 via-danger to-danger/0" />
 

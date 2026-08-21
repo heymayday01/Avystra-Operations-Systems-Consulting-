@@ -218,7 +218,7 @@ export default function Flowchart() {
             return (
               <div
                 key={step.step}
-                className="card-premium group relative flex flex-col justify-between rounded-2xl p-5 sm:p-6 z-10 overflow-hidden"
+                className="card-premium group relative flex flex-col justify-between rounded-3xl p-5 sm:p-6 z-10 overflow-hidden"
               >
                 {/* Gold gradient sweep on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/0 via-gold/5 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -323,7 +323,7 @@ export default function Flowchart() {
         {/* Double Banner Message */}
         <div
           ref={bannerRef}
-          className="mt-6 bg-navy-deep border border-gold/30 rounded-2xl overflow-hidden shadow-2xl relative"
+          className="mt-6 bg-navy-deep border border-gold/30 rounded-3xl overflow-hidden shadow-2xl relative"
         >
           <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
 

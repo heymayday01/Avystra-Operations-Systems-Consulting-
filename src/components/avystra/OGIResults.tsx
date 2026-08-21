@@ -408,7 +408,7 @@ export default function OGIResults({
     >
       <div className="space-y-6">
         {/* 2.1 Header: Score circle progress and band details */}
-        <div className="flex flex-col md:flex-row items-center gap-6 bg-gradient-to-br from-navy-deep to-navy-soft rounded-2xl p-5 sm:p-8 text-white border border-blue-900/40 relative overflow-hidden shadow-lg">
+        <div className="flex flex-col md:flex-row items-center gap-6 bg-gradient-to-br from-navy-deep to-navy-soft rounded-3xl p-5 sm:p-8 text-white border border-blue-900/40 relative overflow-hidden shadow-lg">
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
           <div className="absolute -right-20 -top-20 w-80 h-80 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -478,7 +478,7 @@ export default function OGIResults({
         </div>
 
         {/* 2.2 Bar Chart — Score vs Benchmark */}
-        <div className="card-premium rounded-2xl p-6 md:p-8 space-y-6">
+        <div className="card-premium rounded-3xl p-6 md:p-8 space-y-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
             <div>
               <h3 className="font-display font-semibold text-lg text-navy-soft">
@@ -612,7 +612,7 @@ export default function OGIResults({
 
         {/* 2.4 & 2.5 Key Findings & Priority Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="card-premium rounded-2xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
+          <div className="card-premium rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
             <div className="space-y-4">
               <div>
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-rose-50 rounded-full border border-rose-100 text-[11.5px] text-rose-700 font-mono tracking-wider font-bold uppercase mb-2">
@@ -641,7 +641,7 @@ export default function OGIResults({
             </div>
           </div>
 
-          <div className="card-premium rounded-2xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
+          <div className="card-premium rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
             <div className="space-y-4">
               <div>
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-emerald-50 rounded-full border border-emerald-100 text-[11.5px] text-emerald-700 font-mono tracking-wider font-bold uppercase mb-2">
@@ -742,7 +742,7 @@ export default function OGIResults({
             {recommendedPrograms.map((prog, idx) => (
               <div
                 key={idx}
-                className="bg-gradient-to-br from-navy-deep to-navy-soft rounded-2xl p-6 text-white border border-blue-900/40 relative overflow-hidden shadow-md"
+                className="bg-gradient-to-br from-navy-deep to-navy-soft rounded-3xl p-6 text-white border border-blue-900/40 relative overflow-hidden shadow-md"
               >
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
                 <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-gold/5 rounded-full blur-2xl pointer-events-none" />
@@ -781,7 +781,7 @@ export default function OGIResults({
         </div>
 
         {/* 2.75 Get My Full Report — submit results to backend */}
-        <div className="bg-gradient-to-br from-navy-deep to-navy-soft rounded-2xl p-6 sm:p-8 border border-gold/20 shadow-lg text-left">
+        <div className="bg-gradient-to-br from-navy-deep to-navy-soft rounded-3xl p-6 sm:p-8 border border-gold/20 shadow-lg text-left">
           {!submissionResult ? (
             <div className="space-y-4">
               <div>

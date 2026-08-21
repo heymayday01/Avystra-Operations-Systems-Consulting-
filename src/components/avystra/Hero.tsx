@@ -177,7 +177,7 @@ export default function Hero() {
               tall stacked at the viewport bottom). */}
           <div
             ref={cardRef}
-            className="hero-card-premium mb-5 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-4 py-4 sm:px-12 sm:py-10 pb-20 sm:pb-10 text-center"
+            className="hero-card-premium mb-5 sm:mb-14 max-w-2xl mx-auto rounded-3xl px-4 py-4 sm:px-12 sm:py-10 pb-20 sm:pb-10 text-center"
           >
             <p className="text-navy-deep font-sans text-sm sm:text-xl font-medium leading-relaxed mb-3 sm:mb-5" style={{ lineHeight: 1.5 }}>
               So why does it still feel like the company slows down whenever you step away?

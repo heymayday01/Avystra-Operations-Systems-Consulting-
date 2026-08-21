@@ -28,7 +28,7 @@ interface Program {
 function ProgramCard({ prog }: { prog: Program }) {
   return (
     <article
-      className="program-card card-premium group relative rounded-2xl p-5 sm:p-8 lg:p-10 flex flex-col justify-between h-full overflow-hidden"
+      className="program-card card-premium group relative rounded-3xl p-5 sm:p-8 lg:p-10 flex flex-col justify-between h-full overflow-hidden"
     >
       {/* Subtle Glow Reflection Layer */}
       <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
@@ -563,7 +563,7 @@ export default function ProgramsSection() {
 
         {/* Bottom Banner */}
         <div
-          className="mt-14 p-5 bg-navy-deep border border-slate-800 rounded-2xl text-center max-w-4xl mx-auto shadow-lg relative overflow-hidden"
+          className="mt-14 p-5 bg-navy-deep border border-slate-800 rounded-3xl text-center max-w-4xl mx-auto shadow-lg relative overflow-hidden"
         >
           <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
           <p className="text-slate-200 font-sans text-[15px] sm:text-[14px] font-medium leading-relaxed">
