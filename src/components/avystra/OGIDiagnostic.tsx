@@ -317,16 +317,7 @@ export default function OGIDiagnostic() {
       id="consult"
       className="relative py-6 bg-transparent border-none overflow-hidden md:py-12 scroll-mt-20"
     >
-      {/* Static radial gradient ambiance — replaces the two animated blur orbs
-          that caused repaint jank during scroll. Same premium glow, zero
-          per-frame cost. */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(ellipse 50% 40% at 70% 20%, rgba(184,146,78,0.04), transparent 70%), radial-gradient(ellipse 50% 40% at 30% 80%, rgba(84,122,149,0.03), transparent 70%)",
-        }}
-      />
+      {/* Background handled by the single AmbientCanvas — no section-level overlay */}
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Content Box */}

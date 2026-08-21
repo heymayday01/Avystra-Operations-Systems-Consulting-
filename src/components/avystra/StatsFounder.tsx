@@ -129,23 +129,7 @@ export default function StatsFounder() {
       id="team"
       className="relative py-8 md:py-12 bg-transparent border-none overflow-hidden animate-fade-in scroll-mt-24"
     >
-      {/* Background radial spotlights */}
-      <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
-        <div
-          className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] rounded-full"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(var(--gold-rgb), 0.04) 0%, transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute bottom-[20%] left-[-15%] w-[550px] h-[550px] rounded-full"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(var(--info-rgb), 0.03) 0%, transparent 70%)",
-          }}
-        />
-      </div>
+      {/* Background handled by the single AmbientCanvas — no section-level overlay */}
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* SECTION 1: STATS */}

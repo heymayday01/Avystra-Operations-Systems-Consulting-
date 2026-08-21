@@ -163,11 +163,7 @@ export default function FounderFrictionSimulator() {
     <section
       ref={sectionRef}
       id="bottlenecks"
-      className="relative w-full overflow-hidden select-none scroll-mt-20"
-      style={{
-        background:
-          "radial-gradient(ellipse at 50% 0%, var(--color-navy-deep) 0%, color-mix(in srgb, var(--color-navy-deep) 55%, black) 50%, color-mix(in srgb, var(--color-navy-deep) 35%, black) 100%)",
-      }}
+      className="relative w-full overflow-hidden select-none scroll-mt-20 bg-navy-deep"
     >
       {/* Architectural grid overlay */}
       <div
