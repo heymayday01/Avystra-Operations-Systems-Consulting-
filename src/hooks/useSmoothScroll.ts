@@ -66,28 +66,46 @@ function nativeScrollToId(targetId: string, offset = -110) {
 /**
  * Unified smooth-scroll orchestration for the entire site.
  *
- * Architecture (premium fluid scroll on ALL devices):
- * - Desktop (non-touch): Lenis owns the scroll position (wheel → smoothed
- *   scroll). Lenis drives GSAP's ticker (single rAF loop). ScrollTrigger
- *   reads from Lenis via `scrollerProxy` so triggers stay in sync.
- * - Mobile/Touch: Lenis is NOW enabled with syncTouch for premium momentum
- *   scrolling that feels like a native app. The touchMultiplier is tuned
- *   for natural feel + the prevent hook stops interference with form fields.
- *   scrollerProxy is still desktop-only (touch devices use native scroll
- *   position which Lenis reads via the `scroll` event).
- * - Reduced motion: skip Lenis entirely, native scroll + lenis shim for
- *   smoothScrollTo() to work.
- * - Hash-link clicks are intercepted on ALL devices for consistent
- *   anchor navigation with header-offset.
+ * Architecture (premium scroll on ALL devices — the RIGHT way):
+ *
+ * DESKTOP (non-touch):
+ * - Lenis owns the scroll position (wheel → smoothed scroll via lerp)
+ * - Lenis drives GSAP's ticker (single rAF loop)
+ * - ScrollTrigger reads from Lenis via `scrollerProxy` so triggers stay in sync
+ * - This gives the "Linear/Vercel" buttery wheel-scroll feel
+ *
+ * MOBILE/TOUCH:
+ * - Lenis is NOT initialized. Native touch scrolling is used instead.
+ *   This is what Apple/Linear/Stripe actually do — they do NOT use JS-based
+ *   scroll smoothing on touch. Native touch scrolling on modern iOS/Android
+ *   already has hardware-accelerated momentum that JS can't beat.
+ *   Lenis's `syncTouch` + `scrollerProxy` on touch FIGHTS native momentum
+ *   and causes jank — that's why we disable it.
+ * - A lenis-like shim is installed so smoothScrollTo() + Header scroll
+ *   tracking work without a real Lenis instance.
+ * - Premium feel comes from CSS tuning in globals.css:
+ *     scroll-behavior: smooth (programmatic scrolls)
+ *     overscroll-behavior-y: none (kills rubber-band bounce)
+ *     -webkit-overflow-scrolling: touch (iOS momentum)
+ *     touch-action: pan-y (removes 300ms tap delay)
+ *     content-visibility: auto on offscreen sections (skips rendering = fast)
+ *
+ * REDUCED MOTION:
+ * - Skip Lenis entirely, native scroll + shim for smoothScrollTo() to work
+ *
+ * HASH-LINK CLICKS:
+ * - Intercepted on ALL devices for consistent anchor navigation with header-offset
  */
 export function useSmoothScroll() {
   useEffect(() => {
     const prefersReducedMotion = getPrefersReducedMotion();
     const isTouch = isTouchDevice();
 
-    // ── Reduced motion ONLY: native scroll + lenis shim ──
-    // (Touch devices now get full Lenis with syncTouch for premium feel)
-    if (prefersReducedMotion) {
+    // ── Mobile/Touch OR Reduced motion: native scroll + lenis shim ──
+    // No Lenis instance, no scrollerProxy. Native touch scrolling works
+    // exactly as the browser intends — hardware-accelerated momentum.
+    // The shim lets smoothScrollTo() + Header scroll tracking work.
+    if (isTouch || prefersReducedMotion) {
       const hashHandler = createHashClickHandler((targetId) =>
         nativeScrollToId(targetId)
       );
@@ -98,6 +116,8 @@ export function useSmoothScroll() {
       window.addEventListener("resize", resizeHandler, { passive: true });
 
       // Lenis-like shim so smoothScrollTo() + getLenis().on("scroll") work.
+      // The `on("scroll", cb)` attaches a real window scroll listener so
+      // Header can track scroll position on touch devices.
       const scrollListeners: Array<() => void> = [];
       (window as unknown as { lenis: unknown }).lenis = {
         scrollTo: (
@@ -147,22 +167,14 @@ export function useSmoothScroll() {
       };
     }
 
-    // ═══ FULL LENIS SETUP — Desktop AND Mobile (touch) ═══
-    // Mobile gets syncTouch for premium momentum scrolling that matches
-    // the native iOS/Android feel. The key tuning:
-    //   - lerp 0.1 (desktop) / 0.12 (touch — slightly snappier so it doesn't
-    //     fight native momentum)
-    //   - syncTouch: true on touch — syncs Lenis's smooth scroll with native
-    //     touch events (this is the magic that makes mobile feel fluid)
-    //   - touchMultiplier: 1.5 — amplifies touch drag for a more responsive feel
-    //   - wheelMultiplier: 1 — default trackpad/mouse feel on desktop
+    // ═══ DESKTOP ONLY: Full Lenis + scrollerProxy setup ═══
 
     const lenis = new Lenis({
-      lerp: isTouch ? 0.12 : 0.1,
+      // lerp 0.1 = premium smooth-scroll feel. Matches iOS Safari momentum.
+      // 0.08 was too laggy, 0.12 too instant. 0.1 is the sweet spot.
+      lerp: 0.1,
       smoothWheel: true,
-      // syncTouch: on touch devices, Lenis syncs with native touch scroll
-      // for premium momentum. On desktop this is irrelevant.
-      syncTouch: isTouch,
+      syncTouch: false,
       infinite: false,
       autoRaf: false,
       wheelMultiplier: 1,
@@ -179,9 +191,9 @@ export function useSmoothScroll() {
 
     (window as unknown as { lenis: typeof lenis }).lenis = lenis;
 
-    // Wire Lenis as the ScrollTrigger scroller.
-    // On touch devices, Lenis reads native scroll position (via syncTouch)
-    // so scrollerProxy still works — ScrollTrigger reads from Lenis.scroll.
+    // Wire Lenis as the ScrollTrigger scroller (desktop only).
+    // scrollerProxy is NOT installed on touch devices — it fights native
+    // touch momentum and causes jank.
     ScrollTrigger.scrollerProxy(document.body, {
       scrollTop(value) {
         if (arguments.length && value !== undefined) {

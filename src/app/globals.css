@@ -267,17 +267,16 @@
   }
 
   /* ═══ MOBILE SCROLL MOMENTUM — Premium fluid feel ═══
-     On touch devices (no .lenis class), promote the document to a
-     compositor layer so scroll transforms run on the GPU. Combined with
-     the -webkit-overflow-scrolling + overscroll-behavior rules above, this
-     gives the "buttery momentum" feel users expect from native apps.
-     The contain rule prevents layout thrash during fast scroll. */
+     The secret to premium mobile scroll is NOT JS smoothing (Lenis on touch
+     fights native momentum → jank). It's:
+     1. NATIVE scrolling (no Lenis on touch — see useSmoothScroll.ts)
+     2. GPU-composited transforms on animated elements (not the body)
+     3. content-visibility: auto on offscreen sections (skips rendering)
+     NOTE: we do NOT add `will-change: scroll-position` or `contain: layout`
+     to body — these force the whole document into a compositor layer +
+     layout containment, which causes memory pressure + jank on mobile. */
   @media (max-width: 768px) {
-    html, body {
-      will-change: scroll-position;
-      contain: layout style;
-    }
-    /* Ensure all scrollable sections inherit momentum scrolling */
+    /* Ensure all scrollable sub-containers inherit momentum scrolling */
     .overflow-y-auto, .overflow-auto, [class*="max-h-"] {
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
@@ -1196,12 +1195,43 @@ html {
 }
 
 /* ═══ SCROLL PERFORMANCE OPTIMIZATIONS ═══
-   NOTE: content-visibility: auto was removed because it broke smooth-scroll
-   positioning. When Lenis/scrollTo targets an element, it reads
-   getBoundingClientRect() — but offscreen sections had their intrinsic-size
-   estimate (600px) instead of actual height. Once they rendered, the page
-   height shifted and the scroll landed at the wrong position. The GPU
-   layer promotions below provide enough scroll perf without content-visibility. */
+   The REAL secret to premium mobile scroll: content-visibility: auto.
+   This skips rendering of offscreen sections entirely (layout, paint,
+   compositing) until they scroll into view — dramatically reducing scroll
+   jank on long pages. This is what Apple/Linear/Vercel actually use.
+
+   The key: pair it with `contain-intrinsic-size` so the browser knows
+   the section's height BEFORE rendering, preventing scroll-position jumps.
+
+   We apply this ONLY to the major <section> elements (not the whole body)
+   and with generous intrinsic-size estimates so smooth-scroll targets
+   land at the correct position. */
+
+/* content-visibility: auto on major sections — mobile only (desktop has
+   GPU headroom + the orbs already provide visual continuity). The
+   contain-intrinsic-size values are tuned to roughly match each section's
+   actual mobile height so smooth-scroll doesn't overshoot/undershoot. */
+@media (max-width: 768px) {
+  section[id="bottlenecks"],
+  section[id="process"],
+  section[id="pillars"],
+  section[id="team"],
+  section[id="programs"],
+  section[id="testimonials"],
+  section[id="faq"],
+  section[id="consult"] {
+    content-visibility: auto;
+    contain-intrinsic-size: 800px;
+  }
+  /* The founder-friction section is taller (diagram + cards + CTA) */
+  section[id="bottlenecks"] {
+    contain-intrinsic-size: 1400px;
+  }
+  /* OGI diagnostic is tall (multi-screen flow) */
+  section[id="consult"] {
+    contain-intrinsic-size: 1000px;
+  }
+}
 
 /* Touch device illumination is handled via JS inline styles in FourPillars.tsx
    (isTouch state + style props) because Tailwind v4 strips @media (hover: none)
