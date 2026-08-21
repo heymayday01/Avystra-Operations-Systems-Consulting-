@@ -165,24 +165,7 @@ export default function FounderFrictionSimulator() {
       id="bottlenecks"
       className="relative w-full overflow-hidden select-none scroll-mt-20 bg-navy-deep"
     >
-      {/* Architectural grid overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, var(--color-gold) 1px, transparent 1px), linear-gradient(to bottom, var(--color-gold) 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
-        }}
-      />
-
-      {/* Ambient accent glow — top center, color matches active state */}
-      <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full pointer-events-none transition-colors duration-500"
-        style={{
-          background: `radial-gradient(ellipse, ${accentSoft} 0%, transparent 70%)`,
-          opacity: 0.6,
-        }}
-      />
+      {/* Background handled by the single AmbientCanvas — no section-level overlay */}
 
       <div className="relative max-w-[1200px] mx-auto px-5 sm:px-6 lg:px-8 z-10 py-16 sm:py-20 lg:py-24">
         {/* Visually-hidden section heading for screen-reader navigation */}

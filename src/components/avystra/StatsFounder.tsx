@@ -135,7 +135,7 @@ export default function StatsFounder() {
         {/* SECTION 1: STATS */}
         <div className="mb-8 text-center">
           <div className="mb-8">
-            <div ref={eyebrowRef} className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/60 border border-slate-200/50 rounded-full mb-3 shadow-sm">
+            <div ref={eyebrowRef} className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/70 backdrop-blur-md border border-black/[0.06] rounded-full mb-3 shadow-sm">
               <AlertTriangle className="w-3.5 h-3.5 text-danger" />
               <span className="text-[10.5px] text-danger font-mono tracking-widest font-bold uppercase">
                 The Numbers Don&apos;t Lie

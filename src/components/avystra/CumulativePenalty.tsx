@@ -49,14 +49,7 @@ export default function CumulativePenalty() {
       id="penalty"
       className="relative py-8 md:py-12 overflow-hidden scroll-mt-24"
     >
-      {/* Ambient glow */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse, rgba(184,146,78,0.04) 0%, transparent 70%)",
-        }}
-      />
+      {/* Background handled by the single AmbientCanvas — no section-level overlay */}
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 rounded-3xl overflow-hidden shadow-[0_30px_80px_-20px_rgba(11,27,46,0.25)] border border-slate-200/60">
