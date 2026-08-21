@@ -52,7 +52,7 @@ export default function CumulativePenalty() {
       {/* Section background comes from <body> — no section-level overlay */}
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 rounded-3xl overflow-hidden shadow-[0_30px_80px_-20px_rgba(11,27,46,0.25)] border border-slate-200/60">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 rounded-2xl overflow-hidden shadow-[0_30px_80px_-20px_rgba(11,27,46,0.25)] border border-slate-200/60">
 
           {/* LEFT PANEL — Dark navy with headline */}
           <div className="lg:col-span-2 bg-navy-deep p-8 sm:p-10 lg:p-12 flex flex-col justify-center relative overflow-hidden">

@@ -191,7 +191,7 @@ export default function StatsFounder() {
               <div className="relative w-full max-w-[280px] sm:max-w-[320px]">
                 {/* Decorative gold glow behind portrait */}
                 <div
-                  className="absolute -inset-4 rounded-3xl pointer-events-none"
+                  className="absolute -inset-4 rounded-2xl pointer-events-none"
                   style={{
                     background:
                       "radial-gradient(ellipse at center, rgba(184,146,78,0.08) 0%, transparent 70%)",

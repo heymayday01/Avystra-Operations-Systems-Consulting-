@@ -323,7 +323,7 @@ export default function OGIDiagnostic() {
         {/* Content Box */}
         <div
           ref={contentBoxRef}
-          className="card-premium rounded-3xl overflow-hidden min-h-[420px] flex flex-col justify-between"
+          className="card-premium rounded-2xl overflow-hidden min-h-[420px] flex flex-col justify-between"
         >
           <AnimatePresence mode="wait">
             {/* INTRO SCREEN */}

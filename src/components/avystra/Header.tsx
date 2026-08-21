@@ -134,7 +134,7 @@ export default function Header() {
     >
       <header
         ref={headerRef}
-        className={`w-full max-w-6xl pointer-events-auto transition-[background-color,border-color,box-shadow,padding] duration-300 ease-out-expo rounded-[22px] ${
+        className={`w-full max-w-6xl pointer-events-auto transition-[background-color,border-color,box-shadow,padding] duration-300 ease-out-expo rounded-2xl ${
           scrolled || isOpen
             ? "py-2 px-3 sm:px-4 lg:py-2 lg:px-4 border border-navy-deep/[0.08] bg-white/85 backdrop-blur-xl backdrop-saturate-150"
             : "py-2.5 px-3 sm:px-5 lg:px-6 bg-white/70 backdrop-blur-lg border border-navy-deep/[0.06]"
@@ -250,7 +250,7 @@ export default function Header() {
           style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
         >
           <div className="overflow-hidden">
-            <div className="mt-2 pt-2 pb-1.5 space-y-1 rounded-3xl border border-navy-deep/[0.08] bg-white/85 backdrop-blur-xl backdrop-saturate-150 p-2"
+            <div className="mt-2 pt-2 pb-1.5 space-y-1 rounded-2xl border border-navy-deep/[0.08] bg-white/85 backdrop-blur-xl backdrop-saturate-150 p-2"
               style={{
                 opacity: isOpen ? 1 : 0,
                 transform: isOpen ? "translateY(0)" : "translateY(-8px)",
