@@ -1194,15 +1194,49 @@ html {
   }
 }
 
-/* ═══ SCROLL PERFORMANCE OPTIMIZATIONS ═══
-   NOTE: content-visibility: auto was REMOVED because it conflicts with
-   ScrollTrigger's getBoundingClientRect() — offscreen sections return
-   their contain-intrinsic-size estimate instead of actual height, so
-   reveal triggers fire at wrong positions or don't fire at all on mobile.
+/* ═══ SCROLL PERFORMANCE + SCROLL-DRIVEN ANIMATIONS ═══
+   Industry-leading: CSS Scroll-Driven Animations API (compositor thread).
+   These run entirely on the GPU — zero JS, zero scroll listeners, zero jank.
+   Browser support: Chrome 115+, Safari 17.4+, Firefox 110+ (~92% coverage).
+   Graceful degradation: older browsers simply skip the animation. */
 
-   Instead, mobile scroll-reveal uses IntersectionObserver (via useInViewReveal)
-   which works regardless of layout containment, and is GPU-cheap. Desktop
-   keeps GSAP ScrollTrigger (synced with Lenis via scrollerProxy). */
+/* ── Scroll Progress Bar — pure CSS, compositor-thread ──
+   animation-timeline: scroll() binds the animation to the document scroll
+   position. scaleX goes from 0 → 1 as you scroll top → bottom.
+   This replaces the previous JS-based ScrollProgress (motion/react +
+   useScroll + useSpring) with a single <div> + CSS. */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-gold) 0%, var(--color-gold-light) 50%, var(--color-gold) 100%);
+  transform-origin: left;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform;
+  transform: scaleX(0);
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress-bar {
+    animation: scroll-progress-grow linear both;
+    animation-timeline: scroll(root);
+  }
+  @keyframes scroll-progress-grow {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+}
+
+/* ── Scroll Padding — for anchor navigation offset ──
+   When smooth-scrolling to an element, the sticky header would cover it.
+   scroll-padding-top ensures the target sits below the header. */
+html {
+  scroll-padding-top: 6rem;
+}
+
 
 /* ═══ BEST-IN-CLASS SCROLL REVEAL ENGINE ═══
    This is the animation engine used by Linear/Vercel/Stripe/Apple.
@@ -1292,6 +1326,74 @@ html {
     contain: none !important;
   }
 }
+
+/* ═══ NATIVE CSS SCROLL-DRIVEN REVEALS (industry-leading) ═══
+   Where the CSS Scroll-Driven Animations API is supported (Chrome 115+,
+   Safari 17.4+, Firefox 110+), reveals run ENTIRELY on the compositor
+   thread — zero JS, zero IntersectionObserver, zero main-thread work.
+   This is even smoother than the IntersectionObserver fallback because
+   the browser handles the animation natively on the GPU.
+
+   The `view()` timeline tracks the element's position relative to the
+   scrollport. As the element enters from the bottom, opacity goes 0→1
+   and translateY goes 28px→0. The animation is driven by scroll position
+   directly — no rAF loop, no class toggling, completely declarative.
+
+   For browsers without support, the IntersectionObserver fallback handles
+   reveals via the [data-reveal].is-visible pattern above. */
+@supports (animation-timeline: view()) {
+  /* Only use native scroll-driven reveals when the element has NOT been
+     marked .is-visible by JS (which means IO already handled it).
+     This prevents double-animation. The `:not(.is-visible)` selector
+     ensures we only apply the native animation to elements that haven't
+     been revealed yet. */
+  [data-reveal]:not(.is-visible) {
+    /* Override the JS-driven transition with a native scroll-driven animation */
+    animation: reveal-fade-in linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 80%;
+    /* Remove the transition (the animation handles it now) */
+    transition: none;
+  }
+
+  @keyframes reveal-fade-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 28px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  /* Mobile tuning for native reveals */
+  @media (max-width: 768px) {
+    [data-reveal]:not(.is-visible) {
+      animation-range: entry 0% entry 70%;
+    }
+    @keyframes reveal-fade-in {
+      from {
+        opacity: 0;
+        transform: translate3d(0, 20px, 0);
+      }
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+    }
+  }
+
+  /* Reduced motion: skip the animation entirely */
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal]:not(.is-visible) {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
 
 
 /* Touch device illumination is handled via JS inline styles in FourPillars.tsx

@@ -168,25 +168,37 @@ export function useSmoothScroll() {
     }
 
     // ═══ DESKTOP ONLY: Full Lenis + scrollerProxy setup ═══
+    // Industry-leading Lenis config — tuned to match Linear/Vercel feel:
+    // - lerp 0.1 = the "sweet spot" (0.08 too laggy, 0.12 too instant)
+    // - smoothWheel: true = lerp-smoothed wheel scroll
+    // - gestureOrientation: "vertical" = only smooth vertical scroll
+    //   (horizontal scroll stays native for carousels)
+    // - wheelMultiplier: 1 = natural trackpad/mouse feel
+    // - touchMultiplier: 1.5 = slightly amplified touch (desktop only,
+    //   irrelevant since syncTouch is false)
+    // - prevent: nested scroll containers + form fields keep native behavior
 
     const lenis = new Lenis({
-      // lerp 0.1 = premium smooth-scroll feel. Matches iOS Safari momentum.
-      // 0.08 was too laggy, 0.12 too instant. 0.1 is the sweet spot.
       lerp: 0.1,
       smoothWheel: true,
       syncTouch: false,
       infinite: false,
       autoRaf: false,
+      gestureOrientation: "vertical",
       wheelMultiplier: 1,
       touchMultiplier: 1.5,
-      // Prevent Lenis from intercepting clicks on elements that need native
-      // behavior (e.g. links with target=_blank, file downloads, form fields).
+      // Prevent Lenis from intercepting interactions on:
+      // - [data-lenis-prevent] elements (nested scroll containers)
+      // - Form fields (native focus + input behavior)
+      // - Video (native playback controls)
+      // - Contenteditable elements (rich text editing)
       prevent: (node) =>
         node.closest("[data-lenis-prevent]") !== null ||
         node.tagName === "VIDEO" ||
         node.tagName === "INPUT" ||
         node.tagName === "TEXTAREA" ||
-        node.tagName === "SELECT",
+        node.tagName === "SELECT" ||
+        node.isContentEditable,
     });
 
     (window as unknown as { lenis: typeof lenis }).lenis = lenis;
