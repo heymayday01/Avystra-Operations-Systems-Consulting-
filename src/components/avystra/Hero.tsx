@@ -100,7 +100,7 @@ export default function Hero() {
     <section
       id="hero-section"
       ref={sectionRef}
-      className="relative w-full pt-20 sm:pt-28 lg:pt-32 pb-24 sm:pb-0 overflow-x-hidden bg-transparent"
+      className="relative w-full pt-28 sm:pt-28 lg:pt-32 pb-0 overflow-x-hidden bg-transparent"
     >
       <div className="relative max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full select-none">
         <div className="flex flex-col items-center text-center w-full">
