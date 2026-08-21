@@ -146,11 +146,12 @@ export default function Hero() {
             </span>
           </h1>
 
-          {/* Feature chips — single column stack on mobile (all balanced),
-              flex-wrap on desktop. Each chip has icon + text.
-              Mobile: grid-cols-1 so all 5 pills are full-width + stacked
-              (no orphaned 5th item). Desktop: flex-wrap with full labels. */}
-          <div ref={chipsRef} className="grid grid-cols-1 sm:flex sm:flex-wrap items-center gap-2 sm:gap-3 mb-5 sm:mb-14 w-full sm:max-w-3xl mx-auto sm:justify-center">
+          {/* Feature chips — full-width single column on mobile (left-aligned),
+              flex-wrap on desktop.
+              Mobile: each pill is full-width with icon + readable text.
+              The layout matches the reference: stacked pills with generous
+              padding, left-aligned content, and consistent spacing. */}
+          <div ref={chipsRef} className="grid grid-cols-1 sm:flex sm:flex-wrap items-stretch gap-2 sm:gap-3 mb-5 sm:mb-14 w-full sm:max-w-3xl mx-auto sm:justify-center">
             {[
               { label: "Hired experienced people", short: "Hired experienced people", Icon: UserPlus },
               { label: "Promoted managers", short: "Promoted managers", Icon: TrendingUp },
@@ -160,11 +161,11 @@ export default function Hero() {
             ].map(({ label, short, Icon }, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-500 ease-out-expo justify-center sm:justify-start"
+                className="flex items-center gap-2.5 px-4 py-2.5 sm:px-4 sm:py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-500 ease-out-expo justify-start sm:justify-start"
                 style={{ boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)" }}
               >
-                <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold shrink-0" />
-                <span className="text-navy-deep/80 font-sans text-[10px] sm:text-[12px] font-medium whitespace-nowrap">
+                <Icon className="w-3.5 h-3.5 sm:w-3.5 sm:h-3.5 text-gold shrink-0" />
+                <span className="text-navy-deep/80 font-sans text-[11px] sm:text-[12px] font-medium whitespace-nowrap">
                   <span className="sm:hidden">You {short}</span>
                   <span className="hidden sm:inline">You {label}</span>
                 </span>
