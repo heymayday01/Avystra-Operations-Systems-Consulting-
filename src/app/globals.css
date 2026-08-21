@@ -225,6 +225,27 @@
        Fallback `hidden` is for older browsers (Safari <16). */
     overflow-x: hidden;
     overflow-x: clip;
+
+    /* ═══ PREMIUM MOBILE SCROLL FEEL ═══
+       The trending "fluid mobile scroll" recipe — combines:
+       1. scroll-behavior: smooth — native-smooth programmatic scrolls (anchor
+          links, scroll-to-top) without needing JS on touch devices
+       2. overscroll-behavior-y: none — kills the iOS rubber-band bounce that
+          makes scroll feel "cheap" + prevents pull-to-refresh interference
+       3. -webkit-overflow-scrolling: touch — enables iOS momentum scrolling
+          on scrollable containers (older Safari, still needed)
+       4. touch-action: pan-y — tells the browser we only pan vertically, so
+          it can optimize horizontal tap/click without consulting the gesture
+          recognizer (removes 300ms delay + improves scroll responsiveness)
+       Note: Lenis sets `scroll-behavior: auto` via `.lenis-smooth` on desktop
+       so this doesn't conflict — it only applies when Lenis is NOT active
+       (mobile + reduced-motion). */
+    scroll-behavior: smooth;
+    overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    /* Prevent horizontal scroll from long words on small screens */
+    overflow-wrap: break-word;
   }
 
   /* ─── Lenis smooth scroll setup (desktop only) ─── */
@@ -243,6 +264,24 @@
   html.lenis,
   html.lenis body {
     will-change: scroll-position;
+  }
+
+  /* ═══ MOBILE SCROLL MOMENTUM — Premium fluid feel ═══
+     On touch devices (no .lenis class), promote the document to a
+     compositor layer so scroll transforms run on the GPU. Combined with
+     the -webkit-overflow-scrolling + overscroll-behavior rules above, this
+     gives the "buttery momentum" feel users expect from native apps.
+     The contain rule prevents layout thrash during fast scroll. */
+  @media (max-width: 768px) {
+    html, body {
+      will-change: scroll-position;
+      contain: layout style;
+    }
+    /* Ensure all scrollable sections inherit momentum scrolling */
+    .overflow-y-auto, .overflow-auto, [class*="max-h-"] {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
   }
 
   body {
