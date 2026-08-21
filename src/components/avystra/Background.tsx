@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-
 /**
  * Background — the trending animated ambient layer.
  *
@@ -27,18 +25,8 @@ import { useEffect, useRef } from "react";
  * Replaces the old WebGL AmbientCanvas (which caused shader/link bugs).
  */
 export default function Background() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (window.matchMedia("(max-width: 768px)").matches) return;
-  }, []);
-
   return (
     <div
-      ref={containerRef}
       className="fixed inset-0 z-0 pointer-events-none overflow-hidden"
       aria-hidden="true"
     >

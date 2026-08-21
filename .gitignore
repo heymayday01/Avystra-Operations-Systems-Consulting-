@@ -64,6 +64,8 @@ upload/
 /download/
 
 # Runtime database (each deployment creates its own)
+db/*.db
+db/*.db-journal
 
 # Generated Excel file
 public/ogi-submissions.xlsx
