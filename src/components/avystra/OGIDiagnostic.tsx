@@ -339,7 +339,7 @@ export default function OGIDiagnostic() {
               >
                 <div className="max-w-3xl w-full">
                   <div className="flex justify-center mb-5">
-                    <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-gold/5 rounded-full border border-gold/10 text-[12.5px] text-gold font-mono tracking-widest font-bold uppercase relative">
+                    <span className="eyebrow-premium inline-flex items-center gap-2 px-4 py-1.5 text-[11px] sm:text-[12.5px] text-gold font-mono tracking-wider sm:tracking-widest font-bold uppercase relative">
                       <Zap className="w-3.5 h-3.5 text-gold" />
                       Organizational Assessment
                       <DoodleSparkle
@@ -351,7 +351,7 @@ export default function OGIDiagnostic() {
 
                   <h2
                     ref={headingRef}
-                    className="font-display font-medium text-3xl sm:text-5xl text-navy-soft tracking-tighter leading-[1.15] mb-5"
+                    className="font-display font-medium text-[1.75rem] sm:text-5xl text-navy-soft tracking-tighter leading-[1.15] mb-5"
                   >
                     OGI —{" "}
                     <span className="font-serif italic text-gold">
@@ -359,7 +359,7 @@ export default function OGIDiagnostic() {
                     </span>
                   </h2>
 
-                  <p className="text-slate-600 font-sans text-base sm:text-lg max-w-xl mx-auto leading-relaxed font-light mb-8">
+                  <p className="text-slate-600 font-sans text-[15px] sm:text-lg max-w-xl mx-auto leading-relaxed font-normal mb-8">
                     A structured self-assessment measuring execution gaps
                     across 4 core growth pillars. It takes 3 minutes to complete
                     and instantly generates your personalized strategic report.
@@ -382,7 +382,7 @@ export default function OGIDiagnostic() {
                         >
                           {item.code}
                         </span>
-                        <h3 className="text-[11.5px] font-display font-bold text-navy-soft leading-tight">
+                        <h3 className="text-[10px] sm:text-[11.5px] font-display font-bold text-navy-soft leading-tight text-center break-words">
                           {item.name}
                         </h3>
                       </div>
@@ -419,7 +419,7 @@ export default function OGIDiagnostic() {
                   <button
                     onClick={() => setScreen("INTRO")}
                     aria-label="Back to intro"
-                    className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-gold font-mono tracking-wide mb-5 group focus-ring cursor-pointer"
+                    className="inline-flex items-center gap-2 text-[13px] text-slate-500 hover:text-gold font-mono tracking-wide mb-5 group focus-ring cursor-pointer"
                   >
                     <ChevronLeft className="w-4 h-4 transform group-hover:-translate-x-0.5 transition-transform" />
                     Back to intro
@@ -428,7 +428,7 @@ export default function OGIDiagnostic() {
                   <h3 className="font-display font-bold text-xl sm:text-2xl text-navy-deep tracking-tight mb-2">
                     Let&rsquo;s index your identity
                   </h3>
-                  <p className="text-slate-400 text-xs sm:text-sm font-sans font-light leading-relaxed mb-6 max-w-xl">
+                  <p className="text-slate-600 text-[13px] sm:text-sm font-sans font-normal leading-relaxed mb-6 max-w-xl">
                     Who is operating the blueprint? Provide brief parameters so
                     we customize your index evaluation correctly.
                   </p>
@@ -438,7 +438,7 @@ export default function OGIDiagnostic() {
                     <div className="space-y-1.5">
                       <label
                         htmlFor="ogi-input-name"
-                        className="block text-[11.5px] font-mono tracking-wider text-slate-400 uppercase font-bold"
+                        className="block text-[11px] sm:text-[11.5px] font-mono tracking-wider text-slate-500 uppercase font-bold"
                       >
                         Your Full Name
                       </label>
@@ -475,7 +475,7 @@ export default function OGIDiagnostic() {
                     <div className="space-y-1.5">
                       <label
                         htmlFor="ogi-input-role"
-                        className="block text-[11.5px] font-mono tracking-wider text-slate-400 uppercase font-bold"
+                        className="block text-[11px] sm:text-[11.5px] font-mono tracking-wider text-slate-500 uppercase font-bold"
                       >
                         Professional Designation / Role
                       </label>
@@ -512,7 +512,7 @@ export default function OGIDiagnostic() {
                     <div className="space-y-1.5">
                       <label
                         htmlFor="ogi-input-phone"
-                        className="block text-[11.5px] font-mono tracking-wider text-slate-400 uppercase font-bold"
+                        className="block text-[11px] sm:text-[11.5px] font-mono tracking-wider text-slate-500 uppercase font-bold"
                       >
                         WhatsApp Number
                       </label>
@@ -550,7 +550,7 @@ export default function OGIDiagnostic() {
                     <div className="space-y-1.5">
                       <label
                         htmlFor="ogi-input-email"
-                        className="block text-[11.5px] font-mono tracking-wider text-slate-400 uppercase font-bold"
+                        className="block text-[11px] sm:text-[11.5px] font-mono tracking-wider text-slate-500 uppercase font-bold"
                       >
                         Business Email
                       </label>
@@ -630,7 +630,7 @@ export default function OGIDiagnostic() {
                         className="w-2.5 h-2.5 rounded-full"
                         style={{ backgroundColor: currentQ.color }}
                       />
-                      <span className="text-[11px] sm:text-[11.5px] font-mono tracking-widest text-navy-deep uppercase font-bold">
+                      <span className="text-[10.5px] sm:text-[11.5px] font-mono tracking-wider sm:tracking-widest text-navy-deep uppercase font-bold truncate">
                         {currentQ.dimensionName}
                       </span>
                     </div>
@@ -647,7 +647,7 @@ export default function OGIDiagnostic() {
 
                   {/* Progress bar — taller + with answered indicator */}
                   <div className="mb-6">
-                    <div className="flex items-center justify-between text-[11px] sm:text-[11.5px] font-mono text-slate-400 uppercase tracking-widest mb-2.5">
+                    <div className="flex items-center justify-between text-[10.5px] sm:text-[11.5px] font-mono text-slate-500 uppercase tracking-wider sm:tracking-widest mb-2.5">
                       <span>Question</span>
                       <strong className="text-navy-deep">
                         {currentQuestionIndex + 1} of 16
@@ -727,7 +727,7 @@ export default function OGIDiagnostic() {
                     })}
                   </div>
 
-                  <p className="text-center text-[10.5px] sm:text-[11.5px] font-mono text-slate-400 mt-5 tracking-wider uppercase">
+                  <p className="text-center text-[10.5px] sm:text-[11.5px] font-mono text-slate-500 mt-5 tracking-wider sm:tracking-wider uppercase">
                     Selecting auto-advances to the next question
                   </p>
                 </div>
@@ -752,7 +752,7 @@ export default function OGIDiagnostic() {
                 className="p-6 sm:p-10 md:p-12 flex flex-col items-center justify-center h-full flex-grow text-center relative cursor-pointer group focus-ring min-h-[420px]"
                 id="ogi-screen-nudge"
               >
-                <div className="absolute top-4 right-4 text-[10px] sm:text-[10.5px] font-mono text-slate-400 uppercase tracking-widest px-3 py-1.5 rounded-full bg-white/70 border border-slate-200/50">
+                <div className="absolute top-4 right-4 text-[10px] sm:text-[10.5px] font-mono text-slate-500 uppercase tracking-wider sm:tracking-widest px-3 py-1.5 rounded-full bg-white/80 border border-navy-deep/[0.08]">
                   Tap to skip
                 </div>
 

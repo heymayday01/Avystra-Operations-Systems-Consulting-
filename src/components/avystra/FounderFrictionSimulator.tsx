@@ -444,9 +444,16 @@ export default function FounderFrictionSimulator() {
 
         {/* ═══ MOBILE STACKED VIEW (<768px) ═══ */}
         <div className="md:hidden flex flex-col items-center">
-          <div ref={mobileCenterNodeRef} className="flex flex-col items-center">
+          <div ref={mobileCenterNodeRef} className="flex flex-col items-center relative">
+            {/* Mobile aura — placed inside the founder wrapper so it tracks
+                the founder exactly, regardless of text wrapping above. */}
             <div
-              className="relative w-[130px] h-[130px] rounded-full overflow-hidden transition-all duration-700 ease-out-expo"
+              className="ff-aura-mobile"
+              aria-hidden="true"
+              style={{ ["--aura-color" as string]: auraColor }}
+            />
+            <div
+              className="relative w-[130px] h-[130px] rounded-full overflow-hidden transition-all duration-700 ease-out-expo z-10"
               style={{
                 border: `1px solid ${accentFaint}`,
                 boxShadow: `0 0 0 6px ${accentSoft}19, 0 0 44px ${accentSoft}, inset 0 0 20px rgba(0,0,0,0.4)`,

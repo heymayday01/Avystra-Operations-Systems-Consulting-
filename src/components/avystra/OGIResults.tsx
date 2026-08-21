@@ -445,7 +445,7 @@ export default function OGIResults({
               >
                 {overallScorePct}
               </motion.span>
-              <span className="text-[10.5px] font-mono text-slate-400 uppercase tracking-widest mt-1">
+              <span className="text-[10px] sm:text-[10.5px] font-mono text-slate-500 uppercase tracking-wider sm:tracking-widest mt-1">
                 / 100
               </span>
             </div>
@@ -453,7 +453,7 @@ export default function OGIResults({
 
           <div className="space-y-3 text-left max-w-2xl relative z-10">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-gold/15 rounded-full border border-gold/20 text-[10.5px] text-gold font-mono tracking-widest font-bold uppercase">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-gold/15 rounded-full border border-gold/20 text-[10.5px] text-gold font-mono tracking-wider sm:tracking-widest font-bold uppercase">
                 Growth Level
               </span>
               <span
@@ -749,7 +749,7 @@ export default function OGIResults({
 
                 <div className="relative z-10 space-y-4 flex flex-col justify-between h-full">
                   <div className="space-y-2">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-gold/15 rounded-full border border-gold/20 text-[10.5px] text-gold font-mono tracking-widest font-bold uppercase">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-gold/15 rounded-full border border-gold/20 text-[10.5px] text-gold font-mono tracking-wider sm:tracking-widest font-bold uppercase">
                       Pillar {prog.pillar} Solution
                     </span>
                     <h4 className="font-display font-semibold text-base text-white">
@@ -785,7 +785,7 @@ export default function OGIResults({
           {!submissionResult ? (
             <div className="space-y-4">
               <div>
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-gold/15 rounded-full border border-gold/20 text-[10.5px] text-gold font-mono tracking-widest font-bold uppercase mb-2">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-gold/15 rounded-full border border-gold/20 text-[10.5px] text-gold font-mono tracking-wider sm:tracking-widest font-bold uppercase mb-2">
                   <Mail className="w-3 h-3" />
                   Get Your Full Report
                 </span>

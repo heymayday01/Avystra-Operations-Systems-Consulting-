@@ -823,7 +823,11 @@ body::-webkit-scrollbar {
 }
 
 /* Radial aura spotlight behind founder — color shifts with toggle state.
-   Driven by a CSS variable --aura-color set inline in the component. */
+   Driven by a CSS variable --aura-color set inline in the component.
+   Desktop: centered in the section (the founder is at the diagram center).
+   Mobile: a separate .ff-aura-mobile element is placed inside the mobile
+   founder wrapper, so it always tracks the founder position. The section-level
+   .ff-aura is hidden on mobile. */
 .ff-aura {
   position: absolute;
   top: 50%;
@@ -839,6 +843,31 @@ body::-webkit-scrollbar {
   pointer-events: none;
   transition: background 1.2s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 1;
+}
+/* Mobile: hide the section-level aura (the mobile-specific one is inside the
+   founder wrapper and tracks the founder exactly). */
+@media (max-width: 767px) {
+  .ff-aura { display: none; }
+}
+/* Mobile aura — placed inside the mobile founder wrapper so it always sits
+   exactly behind the founder circle regardless of text wrapping. */
+.ff-aura-mobile {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 320px;
+  height: 320px;
+  max-width: 120vw;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--aura-color, rgba(239, 68, 68, 0.22)) 0%, transparent 60%);
+  filter: blur(32px);
+  pointer-events: none;
+  transition: background 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 0;
+}
+@media (min-width: 768px) {
+  .ff-aura-mobile { display: none; }
 }
 
 /* Scanline overlay — subtle CRT horizontal lines for high-tech diagnostic feel */
@@ -1099,11 +1128,14 @@ html, body {
     user-select: none;
   }
 
-  /* Larger heading sizes on mobile for better readability */
+  /* Larger heading sizes on mobile for better readability.
+     NOTE: Only apply to h2 — h3 sizes are controlled per-component via
+     Tailwind utility classes (text-[10px], text-sm, etc.) and a global
+     h3 override here would override those utilities (unlayered > layered). */
   h2 { font-size: clamp(1.75rem, 6vw, 3rem); }
-  h3 { font-size: clamp(1.125rem, 4vw, 1.5rem); }
 
-  /* Ensure body text is at least 15px on mobile (WCAG readability) */
+  /* Ensure body text is at least 15px on mobile (WCAG readability).
+     Only applies to <p> tags without an explicit Tailwind text-* class. */
   p { font-size: 15px; line-height: 1.6; }
 }
 
