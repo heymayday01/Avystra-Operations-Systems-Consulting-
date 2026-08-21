@@ -114,7 +114,7 @@ export default function Hero() {
                 )}
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-gold" />
               </span>
-              <span className="text-[10px] sm:text-[11px] text-navy-deep/70 font-mono tracking-[0.24em] font-bold uppercase whitespace-nowrap">
+              <span className="text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase whitespace-nowrap">
                 Leadership &amp; Performance Consulting
               </span>
             </span>
@@ -304,7 +304,7 @@ export default function Hero() {
                 ELIMINATE <span className="text-gold">FRICTION</span>
               </span>
               <span className="text-slate-500 font-light mx-4">•</span>
-              <span className="font-serif italic font-light text-[11px] tracking-[0.2em] text-slate-400 uppercase flex items-center gap-4">
+              <span className="font-serif italic font-light text-[11px] tracking-[0.2em] text-gold/60 uppercase flex items-center gap-4">
                 STREAMLINED SUCCESS
               </span>
               <span className="text-slate-500 font-light mx-4">•</span>

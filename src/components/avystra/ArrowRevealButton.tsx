@@ -227,7 +227,7 @@ export default function ArrowRevealButton(props: Props) {
     gap = 16,
     link = "",
     transition = {
-      ease: [0.44, 0, 0.56, 1] as [number, number, number, number],
+      ease: [0.45, 0, 0.55, 1] as [number, number, number, number],
       type: "tween",
       delay: 0,
       duration: 0.46,

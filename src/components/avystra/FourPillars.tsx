@@ -116,14 +116,14 @@ export default function FourPillars() {
             className="eyebrow-premium inline-flex items-center gap-2 px-4 py-2 rounded-full mb-5"
           >
             <Award className="w-4 h-4 text-gold" />
-            <span className="text-[11.5px] text-slate-600 font-mono tracking-[0.2em] font-black uppercase">
+            <span className="text-[11.5px] text-gold font-mono tracking-[0.18em] font-black uppercase">
               The Framework for Autonomy
             </span>
           </div>
 
           <h2
             ref={headingRef}
-            className="font-display font-bold text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.15] mb-5"
+            className="font-display font-medium text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2] mb-6"
           >
             The Four Pillars of{" "}
             <span className="font-serif italic font-light text-gold">
@@ -172,7 +172,7 @@ export default function FourPillars() {
                 key={pillar.id}
                 className="pillar-card-new group relative h-full flex flex-col"
               >
-                <div className="card-premium relative h-full rounded-[1.75rem] p-6 sm:p-7 md:p-8 flex flex-col justify-between overflow-hidden transition-all duration-500 ease-out-expo group-hover:-translate-y-1.5 group-hover:shadow-[0_20px_50px_-15px_rgba(11,27,46,0.12)]">
+                <div className="card-premium relative h-full rounded-2xl p-6 sm:p-7 md:p-8 flex flex-col justify-between overflow-hidden transition-all duration-500 ease-out-expo group-hover:-translate-y-1.5 group-hover:shadow-[0_20px_50px_-15px_rgba(11,27,46,0.12)]">
                   {/* Background number — large, low-contrast */}
                   <span
                     className="absolute top-5 right-6 text-6xl font-display font-black select-none z-0 transition-colors duration-500"

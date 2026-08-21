@@ -127,7 +127,7 @@ export default function StatsFounder() {
   return (
     <section
       id="team"
-      className="relative py-8 md:py-12 bg-transparent border-none overflow-hidden animate-fade-in scroll-mt-24"
+      className="relative py-12 md:py-20 bg-transparent border-none overflow-hidden animate-fade-in scroll-mt-24"
     >
       {/* Section background comes from <body> — no section-level overlay */}
 
@@ -137,13 +137,13 @@ export default function StatsFounder() {
           <div className="mb-8">
             <div ref={eyebrowRef} className="eyebrow-premium inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-3" style={{ borderColor: "rgba(239,68,68,0.25)" }}>
               <AlertTriangle className="w-3.5 h-3.5 text-danger" />
-              <span className="text-[10.5px] text-danger font-mono tracking-widest font-bold uppercase">
+              <span className="text-[11.5px] text-danger font-mono tracking-[0.18em] font-bold uppercase">
                 The Numbers Don&apos;t Lie
               </span>
             </div>
             <h2
               ref={headingRef}
-              className="font-display font-bold text-3xl sm:text-4xl text-danger tracking-tight mb-3 leading-[1.2]"
+              className="font-display font-medium text-4xl sm:text-5xl md:text-6xl text-danger tracking-tight leading-[1.2] mb-3"
             >
               India is Bleeding{" "}
               <span className="font-serif italic font-light relative inline-block">
@@ -200,7 +200,7 @@ export default function StatsFounder() {
                 {/* Decorative offset frame */}
                 <div className="absolute -top-3 -right-3 w-full h-full rounded-2xl border border-gold/20 pointer-events-none" />
 
-                <div className="relative rounded-2xl p-2.5 border border-white/60" style={{ background: "rgba(255,255,255,0.50)", backdropFilter: "blur(24px) saturate(1.6)", WebkitBackdropFilter: "blur(24px) saturate(1.6)", boxShadow: "0 1px 2px rgba(11,27,46,0.05), 0 12px 36px -10px rgba(11,27,46,0.12), inset 0 1px 0 rgba(255,255,255,0.7)" }}>
+                <div className="relative rounded-2xl p-2.5 border border-navy-deep/[0.08]" style={{ background: "rgba(255,255,255,0.94)", boxShadow: "0 1px 2px rgba(11,27,46,0.05), 0 8px 28px -8px rgba(11,27,46,0.10), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
                   <div className="relative overflow-hidden rounded-xl aspect-[4/5] bg-slate-50/40 flex items-center justify-center border border-white/40 p-0.5">
                     {!photoFailed ? (
                       <img

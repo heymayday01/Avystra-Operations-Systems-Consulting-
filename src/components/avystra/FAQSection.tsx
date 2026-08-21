@@ -65,7 +65,7 @@ export default function FAQSection() {
   return (
     <section
       id="faq"
-      className="relative py-6 bg-transparent border-none overflow-hidden md:py-10 scroll-mt-24"
+      className="relative py-12 bg-transparent border-none overflow-hidden md:py-20 scroll-mt-24"
     >
       {/* Visual Guideline Overlays */}
       <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" />
@@ -107,7 +107,7 @@ export default function FAQSection() {
         {/* Accordions Containment Block */}
         <div
           ref={accordionsRef}
-          className="card-premium rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-8 lg:p-10 divide-y divide-navy-deep/[0.08]"
+          className="card-premium rounded-2xl p-5 sm:p-8 lg:p-10 divide-y divide-navy-deep/[0.08]"
         >
           {faqData.map((faq, index) => {
             const isOpen = openIndex === index;

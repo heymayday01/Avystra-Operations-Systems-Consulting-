@@ -154,7 +154,7 @@ export default function Flowchart() {
   return (
     <section
       id="process"
-      className="relative py-8 md:py-12 bg-transparent border-t border-slate-200/60 overflow-hidden select-none scroll-mt-24"
+      className="relative py-12 md:py-20 bg-transparent border-t border-slate-200/60 overflow-hidden select-none scroll-mt-24"
     >
       {/* Section background comes from <body> — no section-level overlay */}
 
@@ -166,14 +166,14 @@ export default function Flowchart() {
             className="eyebrow-premium inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-3.5"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
-            <span className="text-[10.5px] text-navy-deep font-mono tracking-widest font-bold uppercase">
+            <span className="text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase">
               Our Implementation Methodology
             </span>
           </div>
 
           <h2
             ref={headingRef}
-            className="font-display font-bold text-3xl sm:text-5xl text-navy-deep tracking-tight leading-tight uppercase"
+            className="font-display font-medium text-4xl sm:text-5xl md:text-6xl text-navy-deep tracking-tight leading-[1.2]"
           >
             Our Four-Step{" "}
             <span className="font-serif italic font-light text-gold relative inline-block px-1">
@@ -218,7 +218,7 @@ export default function Flowchart() {
             return (
               <div
                 key={step.step}
-                className="card-premium group relative flex flex-col justify-between rounded-[1.75rem] sm:rounded-[2rem] p-5 sm:p-6 z-10 overflow-hidden"
+                className="card-premium group relative flex flex-col justify-between rounded-2xl p-5 sm:p-6 z-10 overflow-hidden"
               >
                 {/* Gold gradient sweep on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/0 via-gold/5 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -323,7 +323,7 @@ export default function Flowchart() {
         {/* Double Banner Message */}
         <div
           ref={bannerRef}
-          className="mt-6 bg-navy-deep border border-gold/30 rounded-[1.75rem] overflow-hidden shadow-2xl relative"
+          className="mt-6 bg-navy-deep border border-gold/30 rounded-2xl overflow-hidden shadow-2xl relative"
         >
           <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
 
