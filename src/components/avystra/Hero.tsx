@@ -100,30 +100,37 @@ export default function Hero() {
     <section
       id="hero-section"
       ref={sectionRef}
-      className="relative w-full pt-24 sm:pt-28 lg:pt-32 pb-4 sm:pb-6 overflow-x-hidden bg-transparent"
+      className="relative w-full pt-20 sm:pt-28 lg:pt-32 pb-4 sm:pb-6 overflow-x-hidden bg-transparent"
     >
       <div className="relative max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full select-none">
         <div className="flex flex-col items-center text-center w-full">
 
-          {/* Eyebrow badge — Apple-style frosted glass pill. */}
-          <div ref={eyebrowRef} className="mb-10 sm:mb-12">
-            <span className="hero-badge-premium eyebrow-premium inline-flex items-center gap-2.5 rounded-full px-5 py-2">
+          {/* Eyebrow badge — compact on mobile, normal on desktop.
+              Mobile: smaller text, tighter padding, shorter label. */}
+          <div ref={eyebrowRef} className="mb-8 sm:mb-12">
+            <span className="hero-badge-premium eyebrow-premium inline-flex items-center gap-1.5 sm:gap-2.5 rounded-full px-3 py-1 sm:px-5 sm:py-2">
               <span className="relative flex h-1.5 w-1.5">
                 {!reducedMotion && (
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75" />
                 )}
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-gold" />
               </span>
-              <span className="text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase whitespace-nowrap">
+              {/* Mobile: shorter label to fit compact pill */}
+              <span className="sm:hidden text-[9px] text-gold font-mono tracking-[0.14em] font-medium uppercase whitespace-nowrap">
+                Leadership Consulting
+              </span>
+              {/* Desktop: full label */}
+              <span className="hidden sm:inline text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase whitespace-nowrap">
                 Leadership &amp; Performance Consulting
               </span>
             </span>
           </div>
 
-          {/* Main heading — refined typography with generous breathing room.
-              Solid gold color (no background-clip) prevents iOS question mark clipping. */}
+          {/* Main heading — smaller on mobile, full size on desktop.
+              Mobile: clamp(2rem, 8vw, 2.75rem) keeps it readable without
+              pushing CTA below the fold. Desktop: clamp(2.25rem, 7vw, 5rem). */}
           <h1
-            className="font-display font-bold text-[clamp(2.25rem,7vw,5rem)] tracking-[-0.04em] text-navy-deep select-none heading-balance mb-12 sm:mb-14"
+            className="font-display font-bold text-[clamp(2rem,8vw,2.75rem)] sm:text-[clamp(2.25rem,7vw,5rem)] tracking-[-0.04em] text-navy-deep select-none heading-balance mb-10 sm:mb-14"
             style={{ lineHeight: 1.15 }}
           >
             <span className="block hero-line-1">
@@ -145,10 +152,9 @@ export default function Hero() {
             </span>
           </h1>
 
-          {/* Feature chips — single column on mobile with generous spacing,
-              wrap on desktop. Mobile gap increased from 2.5 to 3 for
-              better touch separation + visual breathing room. */}
-          <div ref={chipsRef} className="flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3 mb-12 sm:mb-14 max-w-3xl mx-auto">
+          {/* Feature chips — horizontal scroll on mobile (no wrapping),
+              wrap on desktop. Mobile: smaller chips, tighter padding. */}
+          <div ref={chipsRef} className="flex flex-row sm:flex-wrap items-center gap-2 sm:gap-3 mb-10 sm:mb-14 max-w-3xl mx-auto overflow-x-auto scrollbar-none pb-2 sm:pb-0 sm:justify-center">
             {[
               { label: "Hired experienced people", Icon: UserPlus },
               { label: "Promoted managers", Icon: TrendingUp },
@@ -158,36 +164,33 @@ export default function Hero() {
             ].map(({ label, Icon }, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-500 ease-out-expo"
+                className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-500 ease-out-expo shrink-0"
                 style={{ boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)" }}
               >
-                <Icon className="w-3.5 h-3.5 text-gold shrink-0" />
-                <span className="text-navy-deep/80 font-sans text-[11px] sm:text-[12px] font-medium whitespace-nowrap">
+                <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold shrink-0" />
+                <span className="text-navy-deep/80 font-sans text-[10px] sm:text-[12px] font-medium whitespace-nowrap">
                   You {label}
                 </span>
               </div>
             ))}
           </div>
 
-          {/* Bridging content block — cleaner, less dense, better line-height.
-              Font consistency: all paragraphs use font-medium (500) for a
-              uniform look. Hierarchy is established via COLOR + SIZE, not
-              weight jumps (which looked mismatched: semibold→regular→light→bold). */}
+          {/* Bridging content block — smaller padding on mobile. */}
           <div
             ref={cardRef}
-            className="hero-card-premium mb-12 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-5 py-7 sm:px-12 sm:py-10 text-center"
+            className="hero-card-premium mb-10 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-4 py-5 sm:px-12 sm:py-10 text-center"
           >
-            <p className="text-navy-deep font-sans text-lg sm:text-xl font-medium leading-relaxed mb-5" style={{ lineHeight: 1.5 }}>
+            <p className="text-navy-deep font-sans text-base sm:text-xl font-medium leading-relaxed mb-4" style={{ lineHeight: 1.5 }}>
               So why does it still feel like the company slows down whenever you step away?
             </p>
-            <div className="hero-divider w-12 h-px mx-auto mb-5" />
-            <p className="text-navy-deep/85 font-sans text-[15px] sm:text-base font-medium leading-relaxed mb-2" style={{ lineHeight: 1.65 }}>
+            <div className="hero-divider w-12 h-px mx-auto mb-4" />
+            <p className="text-navy-deep/85 font-sans text-[14px] sm:text-base font-medium leading-relaxed mb-2" style={{ lineHeight: 1.65 }}>
               Most organizations don&apos;t struggle because people don&apos;t know what to do.
             </p>
-            <p className="text-navy-deep/85 font-sans text-[15px] sm:text-base font-medium leading-relaxed mb-6" style={{ lineHeight: 1.65 }}>
+            <p className="text-navy-deep/85 font-sans text-[14px] sm:text-base font-medium leading-relaxed mb-5" style={{ lineHeight: 1.65 }}>
               They struggle because knowing and doing are two very different things.
             </p>
-            <p className="text-navy-deep font-sans text-[13px] sm:text-sm font-medium tracking-[0.12em] uppercase">
+            <p className="text-navy-deep font-sans text-[12px] sm:text-sm font-medium tracking-[0.1em] sm:tracking-[0.12em] uppercase">
               That&apos;s the gap{" "}
               <span className="text-gold font-bold">AVYSTRA</span>{" "}
               helps organizations close.
@@ -258,10 +261,10 @@ export default function Hero() {
             />
           </div>
 
-          {/* Trust indicators — refined, subtle */}
+          {/* Trust indicators — 2x2 grid on mobile, row on desktop. */}
           <div
             ref={trustRef}
-            className="flex flex-wrap justify-center gap-x-10 sm:gap-x-14 gap-y-3 pt-8 border-t border-slate-200/50 w-full max-w-2xl"
+            className="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-x-6 sm:gap-x-10 md:gap-x-14 gap-y-3 pt-6 sm:pt-8 border-t border-slate-200/50 w-full max-w-2xl"
           >
             {[
               "Leadership Development",
