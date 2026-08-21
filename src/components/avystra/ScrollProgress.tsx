@@ -1,27 +1,39 @@
-/**
- * ScrollProgress — pure CSS scroll-driven progress bar.
- *
- * INDUSTRY-LEADING: Uses the CSS Scroll-Driven Animations API
- * (animation-timeline: scroll()) which runs ENTIRELY on the compositor
- * thread. Zero JavaScript, zero scroll listeners, zero jank.
- *
- * This is the approach Vercel uses — a single <div> with a CSS animation
- * bound to the scroll position. The browser handles the progress bar
- * updates natively on the GPU.
- *
- * Browser support: Chrome 115+, Edge 115+, Safari 17.4+, Firefox 110+
- * (covers ~92% of users as of 2025). For older browsers, the bar simply
- * won't animate — graceful degradation, no broken state.
- *
- * The previous JS version used motion/react's useScroll + useSpring which
- * added a scroll listener + a rAF loop. This CSS version is free.
- */
+"use client";
 
+import { useState } from "react";
+import { motion, useScroll, useSpring, useMotionValueEvent } from "motion/react";
+
+/**
+ * Top-of-page scroll progress bar.
+ *
+ * Uses motion/react's `useScroll` which reads from the native scroll
+ * position that Lenis writes to — no extra scroll listener needed.
+ * Visibility is toggled via `useMotionValueEvent` (also derived from the
+ * same scroll value) so there's only ONE scroll subscription total.
+ */
 export default function ScrollProgress() {
+  const { scrollYProgress, scrollY } = useScroll();
+
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 28,
+    restDelta: 0.001,
+  });
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Single scroll-derived subscription for visibility — no native listener
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const shouldShow = latest > 50;
+    setIsVisible((prev) => (prev !== shouldShow ? shouldShow : prev));
+  });
+
   return (
-    <div
-      className="scroll-progress-bar"
-      aria-hidden="true"
+    <motion.div
+      style={{ scaleX }}
+      animate={{ opacity: isVisible ? 1 : 0 }}
+      transition={{ duration: 0.3 }}
+      className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-gold via-navy-deep to-gold z-[9999] origin-left pointer-events-none will-change-transform"
     />
   );
 }

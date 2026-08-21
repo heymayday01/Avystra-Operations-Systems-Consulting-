@@ -66,6 +66,8 @@ export default function AvystraLogo({
         <img
           src={logoSrc}
           alt="AVYSTRA"
+          loading="eager"
+          decoding="async"
           className="shrink-0 transition-transform duration-500 ease-out-expo group-hover:scale-105"
           style={{ height: `${h}px`, width: `${w}px` }}
         />
@@ -86,6 +88,8 @@ export default function AvystraLogo({
         <img
           src={logoSrc}
           alt="AVYSTRA Consulting Pvt. Ltd."
+          loading="eager"
+          decoding="async"
           className="shrink-0 transition-transform duration-500 ease-out-expo group-hover:scale-[1.03]"
           style={{ height: `${imgHeight}px`, width: "auto" }}
         />

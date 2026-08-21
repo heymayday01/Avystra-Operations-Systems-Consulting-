@@ -207,7 +207,7 @@ export default function StatsFounder() {
                         src="/founder-portrait.jpg"
                         alt="Kirankumar Pandey"
                         referrerPolicy="no-referrer"
-                        loading="lazy"
+                        loading="lazy" decoding="async"
                         onError={() => setPhotoFailed(true)}
                         className="w-full h-full object-cover"
                       />

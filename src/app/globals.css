@@ -225,27 +225,6 @@
        Fallback `hidden` is for older browsers (Safari <16). */
     overflow-x: hidden;
     overflow-x: clip;
-
-    /* ═══ PREMIUM MOBILE SCROLL FEEL ═══
-       The trending "fluid mobile scroll" recipe — combines:
-       1. scroll-behavior: smooth — native-smooth programmatic scrolls (anchor
-          links, scroll-to-top) without needing JS on touch devices
-       2. overscroll-behavior-y: none — kills the iOS rubber-band bounce that
-          makes scroll feel "cheap" + prevents pull-to-refresh interference
-       3. -webkit-overflow-scrolling: touch — enables iOS momentum scrolling
-          on scrollable containers (older Safari, still needed)
-       4. touch-action: pan-y — tells the browser we only pan vertically, so
-          it can optimize horizontal tap/click without consulting the gesture
-          recognizer (removes 300ms delay + improves scroll responsiveness)
-       Note: Lenis sets `scroll-behavior: auto` via `.lenis-smooth` on desktop
-       so this doesn't conflict — it only applies when Lenis is NOT active
-       (mobile + reduced-motion). */
-    scroll-behavior: smooth;
-    overscroll-behavior-y: none;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-    /* Prevent horizontal scroll from long words on small screens */
-    overflow-wrap: break-word;
   }
 
   /* ─── Lenis smooth scroll setup (desktop only) ─── */
@@ -264,23 +243,6 @@
   html.lenis,
   html.lenis body {
     will-change: scroll-position;
-  }
-
-  /* ═══ MOBILE SCROLL MOMENTUM — Premium fluid feel ═══
-     The secret to premium mobile scroll is NOT JS smoothing (Lenis on touch
-     fights native momentum → jank). It's:
-     1. NATIVE scrolling (no Lenis on touch — see useSmoothScroll.ts)
-     2. GPU-composited transforms on animated elements (not the body)
-     3. content-visibility: auto on offscreen sections (skips rendering)
-     NOTE: we do NOT add `will-change: scroll-position` or `contain: layout`
-     to body — these force the whole document into a compositor layer +
-     layout containment, which causes memory pressure + jank on mobile. */
-  @media (max-width: 768px) {
-    /* Ensure all scrollable sub-containers inherit momentum scrolling */
-    .overflow-y-auto, .overflow-auto, [class*="max-h-"] {
-      -webkit-overflow-scrolling: touch;
-      overscroll-behavior: contain;
-    }
   }
 
   body {
@@ -432,6 +394,37 @@ body::-webkit-scrollbar {
     0 18px 48px -10px rgba(0, 0, 0, 0.45),
     0 0 0 1px rgba(184, 146, 78, 0.20),
     inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+/* ═══ MOBILE PERFORMANCE: disable backdrop-filter (the #1 jank cause) ═══
+   backdrop-filter: blur() requires the browser to sample a large area
+   behind EVERY card on EVERY frame. On mobile GPUs this is extremely
+   expensive and causes scroll jank. Disabling it on mobile and using
+   a solid (but still beautiful) background gives buttery scroll without
+   losing visual quality — the cards still look premium, just without
+   the frosted-glass blur effect (which is barely visible on small screens
+   anyway due to the busy background behind them). */
+@media (max-width: 768px) {
+  .card-premium.card-premium,
+  .card-premium-dark.card-premium-dark,
+  .hero-card-premium.hero-card-premium,
+  .eyebrow-premium.eyebrow-premium {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  /* Slightly more opaque backgrounds to compensate for no blur */
+  .card-premium.card-premium {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.93) 100%);
+  }
+  .card-premium-dark.card-premium-dark {
+    background: linear-gradient(135deg, rgba(22, 38, 61, 0.97) 0%, rgba(11, 27, 46, 0.98) 100%);
+  }
+  .hero-card-premium.hero-card-premium {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.93) 100%);
+  }
+  .eyebrow-premium.eyebrow-premium {
+    background: rgba(255, 255, 255, 0.95);
+  }
 }
 
 /* Premium button hover — smooth bg shift + gold glow.
@@ -1194,207 +1187,13 @@ html {
   }
 }
 
-/* ═══ SCROLL PERFORMANCE + SCROLL-DRIVEN ANIMATIONS ═══
-   Industry-leading: CSS Scroll-Driven Animations API (compositor thread).
-   These run entirely on the GPU — zero JS, zero scroll listeners, zero jank.
-   Browser support: Chrome 115+, Safari 17.4+, Firefox 110+ (~92% coverage).
-   Graceful degradation: older browsers simply skip the animation. */
-
-/* ── Scroll Progress Bar — pure CSS, compositor-thread ──
-   animation-timeline: scroll() binds the animation to the document scroll
-   position. scaleX goes from 0 → 1 as you scroll top → bottom.
-   This replaces the previous JS-based ScrollProgress (motion/react +
-   useScroll + useSpring) with a single <div> + CSS. */
-.scroll-progress-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--color-gold) 0%, var(--color-gold-light) 50%, var(--color-gold) 100%);
-  transform-origin: left;
-  z-index: 9999;
-  pointer-events: none;
-  will-change: transform;
-  transform: scaleX(0);
-}
-
-@supports (animation-timeline: scroll()) {
-  .scroll-progress-bar {
-    animation: scroll-progress-grow linear both;
-    animation-timeline: scroll(root);
-  }
-  @keyframes scroll-progress-grow {
-    from { transform: scaleX(0); }
-    to   { transform: scaleX(1); }
-  }
-}
-
-/* ── Scroll Padding — for anchor navigation offset ──
-   When smooth-scrolling to an element, the sticky header would cover it.
-   scroll-padding-top ensures the target sits below the header. */
-html {
-  scroll-padding-top: 6rem;
-}
-
-
-/* ═══ BEST-IN-CLASS SCROLL REVEAL ENGINE ═══
-   This is the animation engine used by Linear/Vercel/Stripe/Apple.
-   Key optimizations for buttery-smooth mobile performance:
-
-   1. NO `will-change` on the base rule — will-change promotes EVERY reveal
-      element (hundreds) to its own compositor layer → memory explosion +
-      jank. Instead, will-change is added ONLY during the active transition
-      via a `.is-revealing` class, then removed after.
-
-   2. `contain: content` — tells the browser the element's contents don't
-      affect outside layout, so scroll doesn't trigger reflow recalculation
-      on ancestors. Massive scroll-perf win on long pages.
-
-   3. `transform: translateZ(0)` on the BASE state (not will-change) — this
-      promotes the element to its own layer ONCE at a low memory cost (the
-      element stays in a fixed-size layer). This is cheaper than will-change
-      which can dynamically resize layers.
-
-   4. Single `transition` property (not per-property) — the browser can
-      optimize a single transition better than two separate ones.
-
-   5. `translate3d` instead of `translateY` — forces GPU compositing on
-      all browsers including older Safari.
-
-   6. Duration 0.6s on mobile (snappier than 0.7s desktop) — mobile users
-      scroll faster, long animations feel laggy.
-
-   7. Easing: cubic-bezier(0.22, 1, 0.36, 1) — "ease-out-expo" variant
-      that's slightly snappier than Apple's (0.16, 1, 0.3, 1). This is
-      the exact easing Linear uses for their reveals. */
-
-/* ── BASE STATE: hidden + contained + GPU-promoted ── */
-[data-reveal] {
-  opacity: 0;
-  transform: translate3d(0, 28px, 0);
-  /* contain: content = layout + paint + style + size containment.
-     The element's contents can't affect ancestors → no reflow cascade
-     during scroll. Safe because reveal elements are leaf content (cards,
-     text blocks, headings) — not containers of dynamic content. */
-  contain: content;
-  /* translateZ(0) promotes to a compositor layer ONCE (fixed memory cost).
-     This is cheaper than will-change which creates resizable layers. */
-  backface-visibility: hidden;
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* ── VISIBLE STATE: animate to natural position ── */
-[data-reveal].is-visible {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-}
-
-/* ── DURING-ANIMATION: add will-change ONLY while transitioning ──
-   The JS adds .is-revealing when the animation starts and removes it
-   ~700ms later (after the transition completes). This keeps memory low
-   (only ~1 element has will-change at a time per reveal batch) while
-   giving the browser a heads-up to promote the layer for the animation. */
-[data-reveal].is-revealing {
-  will-change: opacity, transform;
-}
-
-/* ── STAGGER via CSS custom property (set inline by JS) ──
-   JS sets --reveal-delay in seconds. More flexible than fixed slots. */
-[data-reveal] {
-  transition-delay: var(--reveal-delay, 0s);
-}
-
-/* ── MOBILE TUNING: snappier duration + smaller distance ──
-   Mobile users scroll faster + screens are smaller, so:
-   - 0.5s duration (vs 0.6s desktop) — feels more responsive
-   - 20px translateY (vs 28px desktop) — subtler, less jumpy */
-@media (max-width: 768px) {
-  [data-reveal] {
-    transform: translate3d(0, 20px, 0);
-    transition-duration: 0.5s;
-  }
-}
-
-/* ── REDUCED MOTION: instant reveal, no transition ── */
-@media (prefers-reduced-motion: reduce) {
-  [data-reveal] {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-    contain: none !important;
-  }
-}
-
-/* ═══ NATIVE CSS SCROLL-DRIVEN REVEALS (industry-leading) ═══
-   Where the CSS Scroll-Driven Animations API is supported (Chrome 115+,
-   Safari 17.4+, Firefox 110+), reveals run ENTIRELY on the compositor
-   thread — zero JS, zero IntersectionObserver, zero main-thread work.
-   This is even smoother than the IntersectionObserver fallback because
-   the browser handles the animation natively on the GPU.
-
-   The `view()` timeline tracks the element's position relative to the
-   scrollport. As the element enters from the bottom, opacity goes 0→1
-   and translateY goes 28px→0. The animation is driven by scroll position
-   directly — no rAF loop, no class toggling, completely declarative.
-
-   For browsers without support, the IntersectionObserver fallback handles
-   reveals via the [data-reveal].is-visible pattern above. */
-@supports (animation-timeline: view()) {
-  /* Only use native scroll-driven reveals when the element has NOT been
-     marked .is-visible by JS (which means IO already handled it).
-     This prevents double-animation. The `:not(.is-visible)` selector
-     ensures we only apply the native animation to elements that haven't
-     been revealed yet. */
-  [data-reveal]:not(.is-visible) {
-    /* Override the JS-driven transition with a native scroll-driven animation */
-    animation: reveal-fade-in linear both;
-    animation-timeline: view();
-    animation-range: entry 0% entry 80%;
-    /* Remove the transition (the animation handles it now) */
-    transition: none;
-  }
-
-  @keyframes reveal-fade-in {
-    from {
-      opacity: 0;
-      transform: translate3d(0, 28px, 0);
-    }
-    to {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-    }
-  }
-
-  /* Mobile tuning for native reveals */
-  @media (max-width: 768px) {
-    [data-reveal]:not(.is-visible) {
-      animation-range: entry 0% entry 70%;
-    }
-    @keyframes reveal-fade-in {
-      from {
-        opacity: 0;
-        transform: translate3d(0, 20px, 0);
-      }
-      to {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-      }
-    }
-  }
-
-  /* Reduced motion: skip the animation entirely */
-  @media (prefers-reduced-motion: reduce) {
-    [data-reveal]:not(.is-visible) {
-      animation: none;
-      opacity: 1;
-      transform: none;
-    }
-  }
-}
-
-
+/* ═══ SCROLL PERFORMANCE OPTIMIZATIONS ═══
+   NOTE: content-visibility: auto was removed because it broke smooth-scroll
+   positioning. When Lenis/scrollTo targets an element, it reads
+   getBoundingClientRect() — but offscreen sections had their intrinsic-size
+   estimate (600px) instead of actual height. Once they rendered, the page
+   height shifted and the scroll landed at the wrong position. The GPU
+   layer promotions below provide enough scroll perf without content-visibility. */
 
 /* Touch device illumination is handled via JS inline styles in FourPillars.tsx
    (isTouch state + style props) because Tailwind v4 strips @media (hover: none)
@@ -1412,7 +1211,7 @@ html {
 .bg-orb {
   position: fixed;
   border-radius: 50%;
-  filter: blur(80px);
+  filter: blur(60px);
   pointer-events: none;
   z-index: 0;
   will-change: transform;
@@ -1447,6 +1246,27 @@ html {
 /* Reduced motion: freeze orbs (no animation) */
 @media (prefers-reduced-motion: reduce) {
   .bg-orb { animation: none !important; }
+}
+
+/* ═══ LAYOUT CONTAINMENT — scroll smoothness without touching scroll system ═══
+   `contain: layout style` on major sections tells the browser that the
+   section's layout doesn't affect its ancestors. This means when you scroll
+   and a section's content changes (e.g., a card animates in), the browser
+   doesn't recalculate the layout of the ENTIRE page — just that section.
+
+   This is a massive scroll-perf win on long pages with many sections.
+   Safe because these sections are self-contained content blocks.
+
+   NOTE: we use `layout style` (NOT `paint`) because `paint` would clip
+   the floating buttons + sticky header that extend outside section bounds. */
+section[id="bottlenecks"],
+section[id="process"],
+section[id="pillars"],
+section[id="team"],
+section[id="programs"],
+section[id="testimonials"],
+section[id="faq"] {
+  contain: layout style;
 }
 
 /* ═══ EYEBROW BADGE — weighted frosted pill ═══

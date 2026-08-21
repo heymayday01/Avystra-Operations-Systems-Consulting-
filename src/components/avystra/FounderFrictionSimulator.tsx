@@ -25,7 +25,7 @@ function FounderImages({ isResolved }: { isResolved: boolean }) {
         src="/founder-frustrated.webp"
         alt="Founder — frustrated, bottlenecked"
         referrerPolicy="no-referrer"
-        loading="lazy"
+        loading="lazy" decoding="async"
         className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-out-expo"
         style={{
           opacity: isResolved ? 0 : 1,
@@ -45,7 +45,7 @@ function FounderImages({ isResolved }: { isResolved: boolean }) {
         src="/founder-confident.webp"
         alt="Founder — confident, system in place"
         referrerPolicy="no-referrer"
-        loading="lazy"
+        loading="lazy" decoding="async"
         className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-out-expo"
         style={{
           opacity: isResolved ? 1 : 0,
@@ -71,7 +71,7 @@ function FloatingParticles() {
     if (typeof window === "undefined") return [];
     if (window.matchMedia("(max-width: 768px)").matches) return [];
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return [];
-    return Array.from({ length: 14 }, (_, i) => ({
+    return Array.from({ length: 8 }, (_, i) => ({
       id: i,
       left: `${Math.random() * 100}%`,
       top: `${60 + Math.random() * 40}%`,
