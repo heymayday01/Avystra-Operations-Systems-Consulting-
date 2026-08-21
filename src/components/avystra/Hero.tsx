@@ -105,9 +105,8 @@ export default function Hero() {
       <div className="relative max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full select-none">
         <div className="flex flex-col items-center text-center w-full">
 
-          {/* Eyebrow badge — compact on mobile, normal on desktop.
-              Mobile: smaller text, tighter padding, shorter label. */}
-          <div ref={eyebrowRef} className="mb-8 sm:mb-12">
+          {/* Eyebrow badge — compact on mobile, normal on desktop. */}
+          <div ref={eyebrowRef} className="mb-6 sm:mb-12">
             <span className="hero-badge-premium eyebrow-premium inline-flex items-center gap-1.5 sm:gap-2.5 rounded-full px-3 py-1 sm:px-5 sm:py-2">
               <span className="relative flex h-1.5 w-1.5">
                 {!reducedMotion && (
@@ -115,36 +114,29 @@ export default function Hero() {
                 )}
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-gold" />
               </span>
-              {/* Mobile: shorter label to fit compact pill */}
               <span className="sm:hidden text-[9px] text-gold font-mono tracking-[0.14em] font-medium uppercase whitespace-nowrap">
                 Leadership Consulting
               </span>
-              {/* Desktop: full label */}
               <span className="hidden sm:inline text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase whitespace-nowrap">
                 Leadership &amp; Performance Consulting
               </span>
             </span>
           </div>
 
-          {/* Main heading — smaller on mobile, full size on desktop.
-              Mobile: clamp(2rem, 8vw, 2.75rem) keeps it readable without
-              pushing CTA below the fold. Desktop: clamp(2.25rem, 7vw, 5rem). */}
+          {/* Main heading — properly scaled for mobile. */}
           <h1
-            className="font-display font-bold text-[clamp(2rem,8vw,2.75rem)] sm:text-[clamp(2.25rem,7vw,5rem)] tracking-[-0.04em] text-navy-deep select-none heading-balance mb-10 sm:mb-14"
-            style={{ lineHeight: 1.15 }}
+            className="font-display font-bold text-[clamp(1.875rem,7vw,2.5rem)] sm:text-[clamp(2.25rem,7vw,5rem)] tracking-[-0.04em] text-navy-deep select-none heading-balance mb-6 sm:mb-14"
+            style={{ lineHeight: 1.2 }}
           >
             <span className="block hero-line-1">
               You Built A Team.
             </span>
-            <span className="block text-center hero-line-2 mt-1">
+            <span className="block text-center hero-line-2 mt-0.5 sm:mt-1">
               So Why Does Everything Still
             </span>
-            <span className="block text-center hero-line-3 mt-1">
+            <span className="block text-center hero-line-3 mt-0.5 sm:mt-1">
               <span className="relative inline-block font-serif italic font-semibold whitespace-nowrap text-gold">
                 Depend On You?
-                {/* Squiggle mounts only after pageReady so its delay is
-                    measured from the hero reveal start (not from initial
-                    mount, which would fire behind the loading screen). */}
                 {pageReady && (
                   <UnderlineSquiggle className="text-gold/50" delay={0.4} duration={0.8} />
                 )}
@@ -152,9 +144,10 @@ export default function Hero() {
             </span>
           </h1>
 
-          {/* Feature chips — horizontal scroll on mobile (no wrapping),
-              wrap on desktop. Mobile: smaller chips, tighter padding. */}
-          <div ref={chipsRef} className="flex flex-row sm:flex-wrap items-center gap-2 sm:gap-3 mb-10 sm:mb-14 max-w-3xl mx-auto overflow-x-auto scrollbar-none pb-2 sm:pb-0 sm:justify-center">
+          {/* Feature chips — horizontal scroll on mobile (snap), wrap on desktop.
+              On mobile: full-width container with snap-x so chips scroll cleanly.
+              No max-width constraint on mobile so chips don't wrap. */}
+          <div ref={chipsRef} className="flex sm:flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-14 w-full sm:max-w-3xl mx-auto overflow-x-auto scrollbar-none pb-2 sm:pb-0 sm:justify-center">
             {[
               { label: "Hired experienced people", Icon: UserPlus },
               { label: "Promoted managers", Icon: TrendingUp },
@@ -164,44 +157,43 @@ export default function Hero() {
             ].map(({ label, Icon }, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-500 ease-out-expo shrink-0"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-500 ease-out-expo shrink-0 snap-start"
                 style={{ boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)" }}
               >
                 <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold shrink-0" />
-                <span className="text-navy-deep/80 font-sans text-[10px] sm:text-[12px] font-medium whitespace-nowrap">
+                <span className="text-navy-deep/80 font-sans text-[9.5px] sm:text-[12px] font-medium whitespace-nowrap">
                   You {label}
                 </span>
               </div>
             ))}
           </div>
 
-          {/* Bridging content block — smaller padding on mobile. */}
+          {/* Bridging content block — compact on mobile, full on desktop. */}
           <div
             ref={cardRef}
-            className="hero-card-premium mb-10 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-4 py-5 sm:px-12 sm:py-10 text-center"
+            className="hero-card-premium mb-6 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-4 py-4 sm:px-12 sm:py-10 text-center"
           >
-            <p className="text-navy-deep font-sans text-base sm:text-xl font-medium leading-relaxed mb-4" style={{ lineHeight: 1.5 }}>
+            <p className="text-navy-deep font-sans text-sm sm:text-xl font-medium leading-relaxed mb-3 sm:mb-5" style={{ lineHeight: 1.5 }}>
               So why does it still feel like the company slows down whenever you step away?
             </p>
-            <div className="hero-divider w-12 h-px mx-auto mb-4" />
-            <p className="text-navy-deep/85 font-sans text-[14px] sm:text-base font-medium leading-relaxed mb-2" style={{ lineHeight: 1.65 }}>
+            <div className="hero-divider w-10 sm:w-12 h-px mx-auto mb-3 sm:mb-5" />
+            <p className="text-navy-deep/85 font-sans text-[13px] sm:text-base font-medium leading-relaxed mb-2" style={{ lineHeight: 1.6 }}>
               Most organizations don&apos;t struggle because people don&apos;t know what to do.
             </p>
-            <p className="text-navy-deep/85 font-sans text-[14px] sm:text-base font-medium leading-relaxed mb-5" style={{ lineHeight: 1.65 }}>
+            <p className="text-navy-deep/85 font-sans text-[13px] sm:text-base font-medium leading-relaxed mb-4 sm:mb-6" style={{ lineHeight: 1.6 }}>
               They struggle because knowing and doing are two very different things.
             </p>
-            <p className="text-navy-deep font-sans text-[12px] sm:text-sm font-medium tracking-[0.1em] sm:tracking-[0.12em] uppercase">
+            <p className="text-navy-deep font-sans text-[11px] sm:text-sm font-medium tracking-[0.08em] sm:tracking-[0.12em] uppercase">
               That&apos;s the gap{" "}
               <span className="text-gold font-bold">AVYSTRA</span>{" "}
               helps organizations close.
             </p>
           </div>
 
-          {/* CTAs — ArrowRevealButton (premium expanding badge on hover).
-              Auto-width (hug content), properly proportioned badge. */}
+          {/* CTAs — stacked on mobile (full width), row on desktop. */}
           <div
             ref={ctaRef}
-            className="flex flex-col items-center w-full sm:max-w-none sm:flex-row sm:justify-center gap-3 sm:gap-4 mb-14 sm:mb-16 mx-auto"
+            className="flex flex-col items-center w-full sm:max-w-none sm:flex-row sm:justify-center gap-2.5 sm:gap-4 mb-6 sm:mb-16 mx-auto"
           >
             <ArrowRevealButton
               label="Talk To Us"
@@ -264,7 +256,7 @@ export default function Hero() {
           {/* Trust indicators — 2x2 grid on mobile, row on desktop. */}
           <div
             ref={trustRef}
-            className="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-x-6 sm:gap-x-10 md:gap-x-14 gap-y-3 pt-6 sm:pt-8 border-t border-slate-200/50 w-full max-w-2xl"
+            className="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-x-4 sm:gap-x-10 md:gap-x-14 gap-y-2.5 pt-5 sm:pt-8 border-t border-slate-200/50 w-full max-w-2xl"
           >
             {[
               "Leadership Development",
@@ -272,9 +264,9 @@ export default function Hero() {
               "Team Accountability",
               "Execution Systems",
             ].map((label, i) => (
-              <div key={i} className="flex items-center gap-2.5 group cursor-default">
+              <div key={i} className="flex items-center gap-2 sm:gap-2.5 group cursor-default justify-center sm:justify-start">
                 <span className="w-1 h-1 rounded-full bg-gold/40 group-hover:bg-gold transition-colors duration-500" />
-                <span className="font-mono text-[10px] sm:text-[11px] font-bold text-navy-deep/60 uppercase tracking-[0.16em] group-hover:text-navy-deep transition-colors duration-500">
+                <span className="font-mono text-[8.5px] sm:text-[11px] font-bold text-navy-deep/60 uppercase tracking-[0.1em] sm:tracking-[0.16em] group-hover:text-navy-deep transition-colors duration-500">
                   {label}
                 </span>
               </div>
@@ -283,8 +275,8 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Marquee Ticker */}
-      <div ref={marqueeRef} className="mt-12 w-full border-y border-white/10 bg-navy-deep py-4 flex items-center relative z-10 overflow-hidden">
+      {/* Marquee Ticker — smaller on mobile */}
+      <div ref={marqueeRef} className="mt-8 sm:mt-12 w-full border-y border-white/10 bg-navy-deep py-3 sm:py-4 flex items-center relative z-10 overflow-hidden">
         <div
           aria-hidden="true"
           className="animate-marquee-slow flex whitespace-nowrap gap-x-24 select-none"
