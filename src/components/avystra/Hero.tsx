@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useRef, useEffect, useCallback, useState, useSyncExternalStore } from "react";
-import { ArrowRight, UserPlus, TrendingUp, Building2, Banknote, ClipboardList } from "lucide-react";
+import { UserPlus, TrendingUp, Building2, Banknote, ClipboardList } from "lucide-react";
 import { UnderlineSquiggle } from "./DoodleWidgets";
 import { smoothScrollTo } from "@/lib/scroll";
 import { useGsapReveal } from "@/lib/useGsapReveal";
 import { usePageReady } from "@/lib/pageReady";
+import ArrowRevealButton from "./ArrowRevealButton";
 
 // Subscribe to prefers-reduced-motion without setState-in-effect
 const reducedMotionSubscribe = (callback: () => void) => {
@@ -193,31 +194,68 @@ export default function Hero() {
             </p>
           </div>
 
-          {/* CTAs — smooth premium hover.
-              Mobile: stacked, full-width, centered text — max tap target.
-              Desktop: inline, auto-width, centered as a group. */}
+          {/* CTAs — ArrowRevealButton (premium expanding badge on hover).
+              Mobile: stacked, full-width. Desktop: inline. */}
           <div
             ref={ctaRef}
             className="flex flex-col items-center w-full max-w-[16rem] sm:max-w-none sm:flex-row sm:justify-center gap-3 sm:gap-5 mb-14 sm:mb-16 mx-auto"
           >
-            <button
+            <ArrowRevealButton
+              label="Talk To Us"
               onClick={handleScrollToForm}
-              className="hero-btn-primary btn-premium group relative cursor-pointer rounded-full px-9 py-4 flex w-full sm:w-auto items-center justify-center gap-3 focus-ring shadow-lg overflow-hidden"
-            >
-              <span className="relative z-10 text-white font-mono text-[12px] font-bold tracking-[0.2em] uppercase">
-                Talk To Us
-              </span>
-              <ArrowRight className="relative z-10 w-4 h-4 text-gold group-hover:translate-x-1 transition-transform duration-500 ease-out-expo" />
-            </button>
+              ariaLabel="Talk to us on WhatsApp"
+              colors={{ fill: "#0B1B2E", textColor: "#FFFFFF" }}
+              font={{ fontFamily: "var(--font-mono)", fontSize: "12px", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" }}
+              padding="16px 36px 16px 16px"
+              rounded={100}
+              gap={12}
+              icon={{
+                type: "icon",
+                icon: "arrow",
+                background: "#B8924E",
+                color: "#0B1B2E",
+                size: 36,
+                padding: 14,
+                rounded: 100,
+                restAngle: 0,
+                hoverAngle: 45,
+                side: "left",
+              }}
+              style={{ width: "100%" }}
+            />
 
-            <button
+            <ArrowRevealButton
+              label="See The Problem"
               onClick={handleScrollToBento}
-              className="hero-btn-secondary btn-premium group relative cursor-pointer rounded-full px-9 py-4 flex w-full sm:w-auto items-center justify-center focus-ring shadow-sm overflow-hidden"
-            >
-              <span className="relative z-10 text-navy-deep font-mono text-[12px] font-bold tracking-[0.2em] uppercase">
-                See The Problem
-              </span>
-            </button>
+              ariaLabel="See the problem — scroll to founder diagnostic"
+              colors={{ fill: "#FFFFFF", textColor: "#0B1B2E" }}
+              font={{ fontFamily: "var(--font-mono)", fontSize: "12px", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" }}
+              padding="16px 36px 16px 16px"
+              rounded={100}
+              gap={12}
+              icon={{
+                type: "icon",
+                icon: "chevron",
+                background: "#0B1B2E",
+                color: "#B8924E",
+                size: 36,
+                padding: 14,
+                rounded: 100,
+                restAngle: 90,
+                hoverAngle: 180,
+                side: "left",
+              }}
+              border={{
+                borderColor: "rgba(11, 27, 46, 0.12)",
+                borderStyle: "solid",
+                borderWidth: 1,
+                borderTopWidth: 1,
+                borderLeftWidth: 1,
+                borderRightWidth: 1,
+                borderBottomWidth: 1,
+              }}
+              style={{ width: "100%" }}
+            />
           </div>
 
           {/* Trust indicators — refined, subtle */}

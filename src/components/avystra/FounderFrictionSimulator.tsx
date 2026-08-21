@@ -4,13 +4,13 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { motion } from "motion/react";
 import { useGsapReveal } from "@/lib/useGsapReveal";
 import { useGsapCards } from "@/lib/useGsapCards";
+import ArrowRevealButton from "./ArrowRevealButton";
 import {
   Compass,
   Briefcase,
   Users,
   Target,
   ShieldCheck,
-  ArrowRight,
 } from "lucide-react";
 
 // ═══ Shared Founder Images — crossfade between frustrated (bottleneck)
@@ -577,17 +577,29 @@ export default function FounderFrictionSimulator() {
           <p className="font-serif italic text-white text-lg sm:text-xl" style={{ lineHeight: 1.4 }}>
             Recognise your business in the left state?
           </p>
-          <button
+          <ArrowRevealButton
+            label="Book Assessment Call"
             onClick={handleBookCall}
-            aria-label="Book an assessment call"
-            className="btn-premium group inline-flex items-center gap-2 bg-gold text-navy-deep font-sans font-bold text-xs uppercase tracking-[0.12em] px-7 py-3.5 rounded-full hover:bg-gold-light transition-colors duration-500 ease-out-expo cursor-pointer w-full sm:w-auto shrink-0 focus-ring"
-          >
-            Book an assessment call
-            <ArrowRight
-              className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-500 ease-out-expo"
-              strokeWidth={2.5}
-            />
-          </button>
+            ariaLabel="Book an assessment call"
+            colors={{ fill: "#B8924E", textColor: "#0B1B2E" }}
+            font={{ fontFamily: "var(--font-sans)", fontSize: "12px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" }}
+            padding="14px 32px 14px 14px"
+            rounded={100}
+            gap={10}
+            icon={{
+              type: "icon",
+              icon: "arrowDiagonal",
+              background: "#0B1B2E",
+              color: "#B8924E",
+              size: 32,
+              padding: 12,
+              rounded: 100,
+              restAngle: 0,
+              hoverAngle: 45,
+              side: "left",
+            }}
+            style={{ width: "100%", maxWidth: "280px" }}
+          />
         </div>
       </div>
     </section>
