@@ -5,19 +5,22 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { usePageReady } from "@/lib/pageReady";
 
 /**
- * useGsapReveal — GSAP ScrollTrigger-powered scroll reveal.
+ * useGsapReveal — scroll reveal that works on ALL devices.
+ *
+ * DUAL-MODE (Apple-inspired):
+ * - DESKTOP (non-touch): GSAP ScrollTrigger (synced with Lenis via scrollerProxy).
+ *   Premium lerp-smoothed reveals that match the smooth-scroll feel.
+ * - MOBILE/TOUCH: IntersectionObserver via useInViewReveal.
+ *   Works without Lenis, without ScrollTrigger, without getBoundingClientRect
+ *   dependencies — so it works perfectly on native touch scrolling.
  *
  * FLASH PREVENTION:
- * - On mount (before pageReady), elements are immediately hidden via gsap.set().
- *   This prevents the flash where content appears, then disappears, then animates in.
- * - When pageReady fires (after loading screen), gsap.to() animates them to visible.
- * - For below-the-fold elements, ScrollTrigger handles the timing.
+ * - On mount (before pageReady), elements are immediately hidden.
+ * - When pageReady fires, the appropriate reveal system animates them to visible.
  *
  * SAFETY:
- * - If pageReady never fires, elements stay hidden (but the loading screen
- *   timeout at 1.3s ensures pageReady always fires).
- * - Reduced motion: elements set visible immediately, no tweens.
- * - Cleanup: gsap.context kills only its own tweens/triggers.
+ * - Reduced motion: elements set visible immediately.
+ * - Cleanup: gsap.context kills only its own tweens/triggers (desktop only).
  */
 
 export type RevealMode = "fade" | "words";
@@ -33,6 +36,15 @@ export interface GsapRevealOptions {
 function prefersReducedMotion(): boolean {
   if (typeof window === "undefined") return false;
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function isTouchDevice(): boolean {
+  if (typeof window === "undefined") return false;
+  return (
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints > 0 ||
+    window.matchMedia("(pointer: coarse)").matches
+  );
 }
 
 function splitWords(el: HTMLElement): HTMLElement[] {
@@ -77,33 +89,82 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
   mode: RevealMode = "fade",
   options: GsapRevealOptions = {}
 ): RefObject<T | null> {
+  // Single ref that both systems can use. On touch, useInViewReveal's
+  // IntersectionObserver attaches to the same element. On desktop, GSAP
+  // gsap.set() + ScrollTrigger attach to the same element.
   const ref = useRef<T>(null);
   const pageReady = usePageReady();
 
+  // ── MOBILE/TOUCH: IntersectionObserver-based reveal ──
+  // We run useInViewReveal's logic inline here (not via the hook) so we
+  // share the SAME ref. This avoids the dual-ref problem.
+  useEffect(() => {
+    if (!pageReady) return;
+    if (!isTouchDevice()) return; // Desktop uses GSAP below
+    if (prefersReducedMotion()) return;
+
+    const el = ref.current;
+    if (!el) return;
+
+    // Mark for CSS reveal
+    el.setAttribute("data-reveal", "");
+    if (options.delay && options.delay > 0) {
+      const slot = Math.min(5, Math.max(1, Math.round((options.delay * 1000) / 80)));
+      el.setAttribute("data-reveal-delay", String(slot));
+    }
+
+    // If already in viewport (above the fold), reveal immediately
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.85 && rect.bottom > 0) {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => el.classList.add("is-visible"));
+      });
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                entry.target.classList.add("is-visible");
+              });
+            });
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [pageReady, options.delay]);
+
+  // ── DESKTOP: GSAP ScrollTrigger reveal ──
   // PHASE 1: Immediately hide the element on mount (prevents flash).
-  // This runs before pageReady — the element is hidden from the first paint.
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (prefersReducedMotion()) return; // Don't hide for reduced-motion users
+    if (prefersReducedMotion()) return;
+    if (isTouchDevice()) return; // Mobile uses IntersectionObserver above
 
     if (mode === "words") {
-      // For words mode, we can't split yet (text nodes need to be ready).
-      // Just hide the container — splitting happens in phase 2.
       gsap.set(el, { opacity: 0 });
     } else {
       gsap.set(el, { opacity: 0, y: options.y ?? 16 });
     }
   }, [mode]);
 
-  // PHASE 2: Animate to visible when pageReady fires.
+  // PHASE 2: Animate to visible when pageReady fires (DESKTOP ONLY).
   useEffect(() => {
     if (!pageReady) return;
+    if (isTouchDevice()) return;
 
     const el = ref.current;
     if (!el) return;
 
-    // Reduced motion: set visible immediately
     if (prefersReducedMotion()) {
       gsap.set(el, { opacity: 1, y: 0, clearProps: "all" });
       return;
@@ -121,7 +182,6 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
       if (mode === "words") {
         const wordInners = splitWords(el);
         if (wordInners.length === 0) {
-          // Fallback to fade
           gsap.to(el, {
             opacity: 1,
             y: 0,
@@ -136,7 +196,6 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
           });
           return;
         }
-        // Show the container, animate words from hidden
         gsap.set(el, { opacity: 1 });
         gsap.set(wordInners, { yPercent: 110 });
         gsap.to(wordInners, {
@@ -152,9 +211,6 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
           },
         });
       } else {
-        // fade — animate from hidden (set in phase 1) to visible
-        // clearProps:"transform" removes the inline transform after animation,
-        // so CSS :hover transforms (e.g., .card-premium:hover translateY) work.
         gsap.to(el, {
           opacity: 1,
           y: 0,
@@ -178,3 +234,4 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
 }
 
 export default useGsapReveal;
+

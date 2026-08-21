@@ -1195,41 +1195,46 @@ html {
 }
 
 /* ═══ SCROLL PERFORMANCE OPTIMIZATIONS ═══
-   The REAL secret to premium mobile scroll: content-visibility: auto.
-   This skips rendering of offscreen sections entirely (layout, paint,
-   compositing) until they scroll into view — dramatically reducing scroll
-   jank on long pages. This is what Apple/Linear/Vercel actually use.
+   NOTE: content-visibility: auto was REMOVED because it conflicts with
+   ScrollTrigger's getBoundingClientRect() — offscreen sections return
+   their contain-intrinsic-size estimate instead of actual height, so
+   reveal triggers fire at wrong positions or don't fire at all on mobile.
 
-   The key: pair it with `contain-intrinsic-size` so the browser knows
-   the section's height BEFORE rendering, preventing scroll-position jumps.
+   Instead, mobile scroll-reveal uses IntersectionObserver (via useInViewReveal)
+   which works regardless of layout containment, and is GPU-cheap. Desktop
+   keeps GSAP ScrollTrigger (synced with Lenis via scrollerProxy). */
 
-   We apply this ONLY to the major <section> elements (not the whole body)
-   and with generous intrinsic-size estimates so smooth-scroll targets
-   land at the correct position. */
+/* ═══ APPLE-STYLE SCROLL REVEAL — IntersectionObserver-driven ═══
+   Elements with [data-reveal] start hidden (opacity 0 + translateY 24px).
+   When IntersectionObserver sees them enter the viewport, it adds the
+   `is-visible` class which triggers the CSS transition to visible.
+   GPU-composited (transform + opacity only), works on ALL devices,
+   no ScrollTrigger / Lenis dependency. Apple's own pages use this pattern. */
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+/* Stagger children — [data-reveal-delay="1"] = 80ms, "2" = 160ms, etc. */
+[data-reveal-delay="1"] { transition-delay: 0.08s; }
+[data-reveal-delay="2"] { transition-delay: 0.16s; }
+[data-reveal-delay="3"] { transition-delay: 0.24s; }
+[data-reveal-delay="4"] { transition-delay: 0.32s; }
+[data-reveal-delay="5"] { transition-delay: 0.40s; }
 
-/* content-visibility: auto on major sections — mobile only (desktop has
-   GPU headroom + the orbs already provide visual continuity). The
-   contain-intrinsic-size values are tuned to roughly match each section's
-   actual mobile height so smooth-scroll doesn't overshoot/undershoot. */
-@media (max-width: 768px) {
-  section[id="bottlenecks"],
-  section[id="process"],
-  section[id="pillars"],
-  section[id="team"],
-  section[id="programs"],
-  section[id="testimonials"],
-  section[id="faq"],
-  section[id="consult"] {
-    content-visibility: auto;
-    contain-intrinsic-size: 800px;
-  }
-  /* The founder-friction section is taller (diagram + cards + CTA) */
-  section[id="bottlenecks"] {
-    contain-intrinsic-size: 1400px;
-  }
-  /* OGI diagnostic is tall (multi-screen flow) */
-  section[id="consult"] {
-    contain-intrinsic-size: 1000px;
+/* Respect reduced motion — reveal instantly, no transition */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
 
