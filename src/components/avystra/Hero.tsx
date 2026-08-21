@@ -106,7 +106,7 @@ export default function Hero() {
         <div className="flex flex-col items-center text-center w-full">
 
           {/* Eyebrow badge — compact on mobile, normal on desktop. */}
-          <div ref={eyebrowRef} className="mb-6 sm:mb-12">
+          <div ref={eyebrowRef} className="mb-5 sm:mb-12">
             <span className="hero-badge-premium eyebrow-premium inline-flex items-center gap-1.5 sm:gap-2.5 rounded-full px-3 py-1 sm:px-5 sm:py-2">
               <span className="relative flex h-1.5 w-1.5">
                 {!reducedMotion && (
@@ -123,10 +123,12 @@ export default function Hero() {
             </span>
           </div>
 
-          {/* Main heading — properly scaled for mobile. */}
+          {/* Main heading — BIGGER on mobile for impact.
+              Mobile: clamp(2.25rem, 9vw, 3rem) = 36→48px — makes the heading
+              the hero of the page, not just text. Tight line-height 1.1. */}
           <h1
-            className="font-display font-bold text-[clamp(1.875rem,7vw,2.5rem)] sm:text-[clamp(2.25rem,7vw,5rem)] tracking-[-0.04em] text-navy-deep select-none heading-balance mb-6 sm:mb-14"
-            style={{ lineHeight: 1.2 }}
+            className="font-display font-bold text-[clamp(2.25rem,9vw,3rem)] sm:text-[clamp(2.25rem,7vw,5rem)] tracking-[-0.04em] text-navy-deep select-none heading-balance mb-5 sm:mb-14"
+            style={{ lineHeight: 1.1 }}
           >
             <span className="block hero-line-1">
               You Built A Team.
@@ -144,25 +146,26 @@ export default function Hero() {
             </span>
           </h1>
 
-          {/* Feature chips — horizontal scroll on mobile (snap), wrap on desktop.
-              On mobile: full-width container with snap-x so chips scroll cleanly.
-              No max-width constraint on mobile so chips don't wrap. */}
-          <div ref={chipsRef} className="flex sm:flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-14 w-full sm:max-w-3xl mx-auto overflow-x-auto scrollbar-none pb-2 sm:pb-0 sm:justify-center">
+          {/* Feature chips — 2-column grid on mobile (all visible, no scroll),
+              flex-wrap on desktop. Each chip is compact with icon + short text.
+              The "You " prefix is dropped on mobile to save space. */}
+          <div ref={chipsRef} className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-3 mb-5 sm:mb-14 w-full sm:max-w-3xl mx-auto sm:justify-center">
             {[
-              { label: "Hired experienced people", Icon: UserPlus },
-              { label: "Promoted managers", Icon: TrendingUp },
-              { label: "Created departments", Icon: Building2 },
-              { label: "Increased salaries", Icon: Banknote },
-              { label: "Held meetings & set targets", Icon: ClipboardList },
-            ].map(({ label, Icon }, idx) => (
+              { label: "Hired experienced people", short: "Hired people", Icon: UserPlus },
+              { label: "Promoted managers", short: "Promoted managers", Icon: TrendingUp },
+              { label: "Created departments", short: "Created depts", Icon: Building2 },
+              { label: "Increased salaries", short: "Raised salaries", Icon: Banknote },
+              { label: "Held meetings & set targets", short: "Set targets", Icon: ClipboardList },
+            ].map(({ label, short, Icon }, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-500 ease-out-expo shrink-0 snap-start"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-500 ease-out-expo justify-center sm:justify-start"
                 style={{ boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)" }}
               >
                 <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold shrink-0" />
                 <span className="text-navy-deep/80 font-sans text-[9.5px] sm:text-[12px] font-medium whitespace-nowrap">
-                  You {label}
+                  <span className="sm:hidden">{short}</span>
+                  <span className="hidden sm:inline">You {label}</span>
                 </span>
               </div>
             ))}
@@ -171,7 +174,7 @@ export default function Hero() {
           {/* Bridging content block — compact on mobile, full on desktop. */}
           <div
             ref={cardRef}
-            className="hero-card-premium mb-6 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-4 py-4 sm:px-12 sm:py-10 text-center"
+            className="hero-card-premium mb-5 sm:mb-14 max-w-2xl mx-auto rounded-2xl px-4 py-4 sm:px-12 sm:py-10 text-center"
           >
             <p className="text-navy-deep font-sans text-sm sm:text-xl font-medium leading-relaxed mb-3 sm:mb-5" style={{ lineHeight: 1.5 }}>
               So why does it still feel like the company slows down whenever you step away?
@@ -193,7 +196,7 @@ export default function Hero() {
           {/* CTAs — stacked on mobile (full width), row on desktop. */}
           <div
             ref={ctaRef}
-            className="flex flex-col items-center w-full sm:max-w-none sm:flex-row sm:justify-center gap-2.5 sm:gap-4 mb-6 sm:mb-16 mx-auto"
+            className="flex flex-col items-center w-full sm:max-w-none sm:flex-row sm:justify-center gap-2.5 sm:gap-4 mb-5 sm:mb-16 mx-auto"
           >
             <ArrowRevealButton
               label="Talk To Us"
