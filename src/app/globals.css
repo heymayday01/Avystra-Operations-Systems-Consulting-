@@ -105,19 +105,19 @@
   --section-y-md: 6rem;    /* 96px — standard sections */
   --section-y-lg: 8rem;    /* 128px — hero/feature sections */
 
-  /* ── SHADOW / GLOW SYSTEM ── */
-  /* Card default: none (let border do the work) */
-  --shadow-card-rest: none;
-  /* Card hover: dramatic lift + gold ring */
-  --shadow-card-hover: 0 8px 40px rgba(0,0,0,0.12), 0 0 0 1px rgba(var(--gold-rgb), 0.2);
-  /* Card hover on dark sections: heavier shadow */
-  --shadow-card-hover-dark: 0 8px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(var(--gold-rgb), 0.2);
-  /* Gold glow: ambient accent */
-  --shadow-gold-glow: 0 0 32px rgba(var(--gold-rgb), 0.18);
-  /* Button glow: on hover */
-  --shadow-btn-glow: 0 0 20px rgba(var(--gold-rgb), 0.3);
-  /* Floating elements: header, modals */
-  --shadow-floating: 0 8px 32px -8px rgba(var(--navy-rgb), 0.18);
+  /* ── SHADOW / GLOW SYSTEM (Apple-inspired: softer, more diffuse) ── */
+  /* Card default: very subtle resting shadow (Apple uses soft ambient shadow) */
+  --shadow-card-rest: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+  /* Card hover: gentle lift with diffuse shadow (not dramatic) */
+  --shadow-card-hover: 0 4px 24px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.06), 0 0 0 1px rgba(var(--gold-rgb), 0.12);
+  /* Card hover on dark sections: heavier but still soft */
+  --shadow-card-hover-dark: 0 4px 24px rgba(0,0,0,0.3), 0 12px 48px rgba(0,0,0,0.2), 0 0 0 1px rgba(var(--gold-rgb), 0.2);
+  /* Gold glow: ambient accent (subtle, Apple-style) */
+  --shadow-gold-glow: 0 0 24px rgba(var(--gold-rgb), 0.12);
+  /* Button glow: on hover (soft, not aggressive) */
+  --shadow-btn-glow: 0 2px 12px rgba(var(--gold-rgb), 0.2);
+  /* Floating elements: header, modals (Apple-style soft elevation) */
+  --shadow-floating: 0 2px 16px -4px rgba(var(--navy-rgb), 0.12), 0 8px 32px -8px rgba(var(--navy-rgb), 0.08);
 
   /* ── MOTION TOKENS (tuned for premium smoothness) ── */
   /* Durations — shorter = snappier but still smooth. Previous 600ms felt laggy. */
@@ -332,19 +332,19 @@ body::-webkit-scrollbar {
               border-color var(--dur-micro) var(--ease-sine),
               box-shadow var(--dur-standard) var(--ease-out),
               backdrop-filter var(--dur-standard) var(--ease-out);
-  border: 1px solid rgba(var(--navy-rgb), 0.10);
-  /* Glassmorphism — stronger blur for content readability over the
-     darker animated background. Opacity comes from the element's bg
-     class (bg-white/50 → should be bg-white/60 for text contrast). */
-  backdrop-filter: blur(12px) saturate(1.3);
-  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-card-rest);
+  /* Glassmorphism — Apple-style: strong blur, subtle saturation.
+     Background opacity comes from the element's bg-white/65 class. */
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
 }
 .card-premium.card-premium:hover {
-  transform: translateY(-4px);
-  border-color: rgba(var(--gold-rgb), 0.4);
+  transform: translateY(-3px);
+  border-color: rgba(var(--gold-rgb), 0.25);
   box-shadow: var(--shadow-card-hover);
-  backdrop-filter: blur(16px) saturate(1.5);
-  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
 }
 
 /* Premium card hover — dark section variant (heavier shadow) */

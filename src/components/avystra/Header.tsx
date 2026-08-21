@@ -245,7 +245,7 @@ export default function Header() {
           style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
         >
           <div className="overflow-hidden">
-            <div className="mt-2 pt-2 pb-1.5 space-y-1 bg-navy-deep/[0.03] backdrop-blur-md rounded-[18px] border border-navy-deep/[0.06] p-2"
+            <div className="mt-2 pt-2 pb-1.5 space-y-1 bg-navy-deep/[0.03] backdrop-blur-md rounded-3xl border border-navy-deep/[0.06] p-2"
               style={{
                 opacity: isOpen ? 1 : 0,
                 transform: isOpen ? "translateY(0)" : "translateY(-8px)",

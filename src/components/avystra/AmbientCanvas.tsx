@@ -180,13 +180,15 @@ export default function AmbientCanvas() {
 
     // ── Blob configs ──
     // Colors as normalized RGB (0-1)
+    // Apple-inspired: warm, monochromatic palette — no navy, just warm
+    // gold/cream tones flowing over a soft ivory base.
     const blobs: BlobConfig[] = [
-      // Gold — top left, warm
+      // Warm gold — top left, primary glow
       { baseX: 0.15, baseY: 0.15, ampX: 0.08, ampY: 0.06, speed: 0.15, phase: 0, radius: 0.35,
         color: [0.722, 0.573, 0.306] }, // #B8924E
-      // Navy — bottom right, deep
+      // Soft taupe — bottom right (replaces navy — warm neutral, not dark)
       { baseX: 0.85, baseY: 0.7, ampX: 0.06, ampY: 0.05, speed: 0.12, phase: 2.0, radius: 0.30,
-        color: [0.043, 0.105, 0.180] }, // #0B1B2E
+        color: [0.72, 0.66, 0.58] }, // #B8A894 — warm taupe/greige
       // Warm gold haze — center, gentle
       { baseX: 0.5, baseY: 0.4, ampX: 0.05, ampY: 0.04, speed: 0.08, phase: 4.0, radius: 0.40,
         color: [0.831, 0.698, 0.416] }, // #D4B26A
