@@ -582,23 +582,23 @@ export default function FounderFrictionSimulator() {
             onClick={handleBookCall}
             ariaLabel="Book an assessment call"
             colors={{ fill: "#B8924E", textColor: "#0B1B2E" }}
-            font={{ fontFamily: "var(--font-sans)", fontSize: "12px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" }}
-            padding="14px 32px 14px 14px"
+            font={{ fontFamily: "var(--font-sans)", fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}
+            padding="10px 24px 10px 10px"
             rounded={100}
-            gap={10}
+            gap={8}
             icon={{
               type: "icon",
               icon: "arrowDiagonal",
               background: "#0B1B2E",
               color: "#B8924E",
-              size: 32,
-              padding: 12,
+              size: 20,
+              padding: 7,
               rounded: 100,
               restAngle: 0,
               hoverAngle: 45,
               side: "left",
             }}
-            style={{ width: "100%", maxWidth: "280px" }}
+            style={{ maxWidth: "240px" }}
           />
         </div>
       </div>

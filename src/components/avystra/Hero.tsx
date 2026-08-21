@@ -195,33 +195,33 @@ export default function Hero() {
           </div>
 
           {/* CTAs — ArrowRevealButton (premium expanding badge on hover).
-              Mobile: stacked, full-width. Desktop: inline. */}
+              Auto-width (hug content), properly proportioned badge. */}
           <div
             ref={ctaRef}
-            className="flex flex-col items-center w-full max-w-[16rem] sm:max-w-none sm:flex-row sm:justify-center gap-3 sm:gap-5 mb-14 sm:mb-16 mx-auto"
+            className="flex flex-col items-center w-full sm:max-w-none sm:flex-row sm:justify-center gap-3 sm:gap-4 mb-14 sm:mb-16 mx-auto"
           >
             <ArrowRevealButton
               label="Talk To Us"
               onClick={handleScrollToForm}
               ariaLabel="Talk to us on WhatsApp"
               colors={{ fill: "#0B1B2E", textColor: "#FFFFFF" }}
-              font={{ fontFamily: "var(--font-mono)", fontSize: "12px", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" }}
-              padding="16px 36px 16px 16px"
+              font={{ fontFamily: "var(--font-mono)", fontSize: "11px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase" }}
+              padding="11px 28px 11px 11px"
               rounded={100}
-              gap={12}
+              gap={8}
               icon={{
                 type: "icon",
                 icon: "arrow",
                 background: "#B8924E",
                 color: "#0B1B2E",
-                size: 36,
-                padding: 14,
+                size: 22,
+                padding: 8,
                 rounded: 100,
                 restAngle: 0,
                 hoverAngle: 45,
                 side: "left",
               }}
-              style={{ width: "100%" }}
+              style={{ width: "100%", maxWidth: "220px" }}
             />
 
             <ArrowRevealButton
@@ -229,17 +229,17 @@ export default function Hero() {
               onClick={handleScrollToBento}
               ariaLabel="See the problem — scroll to founder diagnostic"
               colors={{ fill: "#FFFFFF", textColor: "#0B1B2E" }}
-              font={{ fontFamily: "var(--font-mono)", fontSize: "12px", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" }}
-              padding="16px 36px 16px 16px"
+              font={{ fontFamily: "var(--font-mono)", fontSize: "11px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase" }}
+              padding="11px 28px 11px 11px"
               rounded={100}
-              gap={12}
+              gap={8}
               icon={{
                 type: "icon",
                 icon: "chevron",
                 background: "#0B1B2E",
                 color: "#B8924E",
-                size: 36,
-                padding: 14,
+                size: 22,
+                padding: 8,
                 rounded: 100,
                 restAngle: 90,
                 hoverAngle: 180,
@@ -254,7 +254,7 @@ export default function Hero() {
                 borderRightWidth: 1,
                 borderBottomWidth: 1,
               }}
-              style={{ width: "100%" }}
+              style={{ width: "100%", maxWidth: "260px" }}
             />
           </div>
 
