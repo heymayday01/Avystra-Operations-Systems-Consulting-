@@ -9,7 +9,6 @@ import { motion } from "motion/react";
 import { smoothScrollTo } from "@/lib/scroll";
 import { ScrollTrigger } from "@/lib/gsap";
 import LoadingScreen from "@/components/avystra/LoadingScreen";
-import AmbientCanvas from "@/components/avystra/AmbientCanvas";
 import { PageReadyProvider } from "@/lib/pageReady";
 
 // Eager: only Header, Hero, ScrollProgress, LoadingScreen (above the fold)
@@ -128,11 +127,9 @@ export default function Home() {
         style={{ transition: "opacity 0.25s cubic-bezier(0.16,1,0.3,1)" }}
       >
           {/* ═══ AMBIENT BACKGROUND ═══
-              GPU-accelerated WebGL canvas rendering flowing organic gradient
-              blobs — the kind seen on $1M+ award-winning sites (Linear, Vercel).
-              Paused on mobile + reduced-motion (CSS fallback gradient handles it).
-              Runs on the GPU via a fragment shader — zero CPU cost. */}
-          <AmbientCanvas />
+              Refined static CSS background (warm ivory + gold radial glows +
+              faint grain) lives on <body> via globals.css. No canvas needed
+              — instant, GPU-cheap, zero runtime bugs. */}
 
           {/* Top Banner — slim promo bar, visible on ALL viewports.
               On mobile the text is shortened to fit one line without wrapping. */}

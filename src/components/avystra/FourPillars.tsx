@@ -113,7 +113,7 @@ export default function FourPillars() {
         <div className="max-w-4xl mb-12 md:mb-16">
           <div
             ref={eyebrowRef}
-            className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-md border border-black/[0.06] px-4 py-2 rounded-full mb-5 shadow-sm"
+            className="inline-flex items-center gap-2 border border-gold/20 px-4 py-2 rounded-full mb-5"
           >
             <Award className="w-4 h-4 text-gold" />
             <span className="text-[11.5px] text-slate-600 font-mono tracking-[0.2em] font-black uppercase">
@@ -172,11 +172,11 @@ export default function FourPillars() {
                 key={pillar.id}
                 className="pillar-card-new group relative h-full flex flex-col"
               >
-                <div className="card-premium relative h-full bg-white/65 rounded-[1.75rem] p-6 sm:p-7 md:p-8 flex flex-col justify-between overflow-hidden transition-all duration-500 ease-out-expo group-hover:-translate-y-1.5 group-hover:shadow-[0_20px_50px_-15px_rgba(11,27,46,0.12)]">
+                <div className="card-premium relative h-full rounded-[1.75rem] p-6 sm:p-7 md:p-8 flex flex-col justify-between overflow-hidden transition-all duration-500 ease-out-expo group-hover:-translate-y-1.5 group-hover:shadow-[0_20px_50px_-15px_rgba(11,27,46,0.12)]">
                   {/* Background number — large, low-contrast */}
                   <span
                     className="absolute top-5 right-6 text-6xl font-display font-black select-none z-0 transition-colors duration-500"
-                    style={{ color: "rgba(184, 146, 78, 0.08)" }}
+                    style={{ color: "rgba(184, 146, 78, 0.10)" }}
                   >
                     {pillar.num}
                   </span>
@@ -184,8 +184,8 @@ export default function FourPillars() {
                   <div className="relative z-10">
                     {/* Icon with accent color */}
                     <div
-                      className="inline-flex p-3.5 rounded-2xl border border-slate-100 mb-6 transition-all duration-500 group-hover:scale-110"
-                      style={{ color: pillar.accent, backgroundColor: "rgba(255,255,255,0.8)" }}
+                      className="inline-flex p-3.5 rounded-2xl border border-slate-200/60 mb-6 transition-all duration-500 group-hover:scale-110"
+                      style={{ color: pillar.accent }}
                     >
                       {pillar.icon}
                     </div>

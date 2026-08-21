@@ -317,13 +317,13 @@ export default function OGIDiagnostic() {
       id="consult"
       className="relative py-6 bg-transparent border-none overflow-hidden md:py-12 scroll-mt-20"
     >
-      {/* Background handled by the single AmbientCanvas — no section-level overlay */}
+      {/* Section background comes from <body> — no section-level overlay */}
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Content Box */}
         <div
           ref={contentBoxRef}
-          className="card-premium bg-white/70 border border-black/[0.06] rounded-3xl overflow-hidden min-h-[420px] flex flex-col justify-between shadow-[0_2px_16px_-4px_rgba(0,0,0,0.08),0_8px_32px_-8px_rgba(0,0,0,0.06)]"
+          className="card-premium border border-slate-200/60 rounded-3xl overflow-hidden min-h-[420px] flex flex-col justify-between"
         >
           <AnimatePresence mode="wait">
             {/* INTRO SCREEN */}
@@ -374,7 +374,7 @@ export default function OGIDiagnostic() {
                     ].map((item) => (
                       <div
                         key={item.code}
-                        className="p-3 sm:p-3.5 rounded-xl bg-white/50 border border-slate-200/50 flex flex-col items-center group hover:border-gold/30 hover:bg-white/80 transition-all duration-300"
+                        className="p-3 sm:p-3.5 rounded-xl border border-slate-200/60 flex flex-col items-center group hover:border-gold/30 transition-all duration-300"
                       >
                         <span
                           className={`w-6 h-6 rounded-full ${item.color} mb-2 flex items-center justify-center text-[11.5px] text-white font-mono font-bold`}
@@ -748,7 +748,7 @@ export default function OGIDiagnostic() {
                   setScreen("QUESTIONS");
                   setCurrentQuestionIndex(8);
                 }}
-                className="p-6 sm:p-10 md:p-12 flex flex-col items-center justify-center h-full flex-grow text-center bg-slate-50 relative cursor-pointer group focus-ring min-h-[420px]"
+                className="p-6 sm:p-10 md:p-12 flex flex-col items-center justify-center h-full flex-grow text-center relative cursor-pointer group focus-ring min-h-[420px]"
                 id="ogi-screen-nudge"
               >
                 <div className="absolute top-4 right-4 text-[10px] sm:text-[10.5px] font-mono text-slate-400 uppercase tracking-widest px-3 py-1.5 rounded-full bg-white/70 border border-slate-200/50">

@@ -49,7 +49,7 @@ export default function CumulativePenalty() {
       id="penalty"
       className="relative py-8 md:py-12 overflow-hidden scroll-mt-24"
     >
-      {/* Background handled by the single AmbientCanvas — no section-level overlay */}
+      {/* Section background comes from <body> — no section-level overlay */}
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 rounded-3xl overflow-hidden shadow-[0_30px_80px_-20px_rgba(11,27,46,0.25)] border border-slate-200/60">
@@ -101,18 +101,18 @@ export default function CumulativePenalty() {
             </div>
           </div>
 
-          {/* RIGHT PANEL — White with penalty list */}
-          <div className="lg:col-span-3 bg-white p-6 sm:p-8 lg:p-10 flex flex-col justify-center">
+          {/* RIGHT PANEL — transparent with penalty list */}
+          <div className="lg:col-span-3 p-6 sm:p-8 lg:p-10 flex flex-col justify-center">
             <div ref={penaltiesRef} className="space-y-3 sm:space-y-4">
               {penalties.map((item, index) => {
                 const Icon = item.icon;
                 return (
                   <div
                     key={index}
-                    className="flex items-center gap-4 sm:gap-5 p-3 sm:p-4 rounded-2xl hover:bg-slate-50 transition-colors duration-300 group"
+                    className="flex items-center gap-4 sm:gap-5 p-3 sm:p-4 rounded-2xl hover:bg-navy-deep/[0.03] transition-colors duration-300 group"
                   >
                     {/* Icon */}
-                    <div className="p-2.5 sm:p-3 rounded-xl bg-gold/10 border border-gold/20 text-gold shrink-0 group-hover:scale-110 group-hover:bg-gold/15 transition-all duration-300">
+                    <div className="p-2.5 sm:p-3 rounded-xl border border-gold/20 text-gold shrink-0 group-hover:scale-110 group-hover:border-gold/40 transition-all duration-300">
                       <Icon className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
                     </div>
 

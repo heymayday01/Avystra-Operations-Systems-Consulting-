@@ -28,7 +28,7 @@ interface Program {
 function ProgramCard({ prog }: { prog: Program }) {
   return (
     <article
-      className="program-card card-premium group relative bg-gradient-to-br from-white to-slate-50/80 rounded-3xl p-5 sm:p-8 lg:p-10 flex flex-col justify-between h-full overflow-hidden"
+      className="program-card card-premium group relative rounded-3xl p-5 sm:p-8 lg:p-10 flex flex-col justify-between h-full overflow-hidden"
     >
       {/* Subtle Glow Reflection Layer */}
       <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
@@ -38,7 +38,7 @@ function ProgramCard({ prog }: { prog: Program }) {
 
       <div className="relative z-10">
         {/* Category Pill Tag */}
-        <div className="inline-flex px-2.5 sm:px-3 py-1 rounded-md border border-slate-200/50 bg-white/50 text-slate-500 text-[9px] sm:text-[11px] font-mono font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase mb-4 sm:mb-6 group-hover:border-gold/30 group-hover:text-gold-hover transition-all duration-500">
+        <div className="inline-flex px-2.5 sm:px-3 py-1 rounded-md border border-slate-200/60 text-slate-500 text-[9px] sm:text-[11px] font-mono font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase mb-4 sm:mb-6 group-hover:border-gold/30 group-hover:text-gold-hover transition-all duration-500">
           {prog.category}
         </div>
 
@@ -59,7 +59,7 @@ function ProgramCard({ prog }: { prog: Program }) {
 
         <div className="flex flex-col gap-2 sm:gap-2.5">
           <div className="flex items-center gap-2.5 text-slate-400">
-            <div className="p-1 sm:p-0 rounded-lg sm:rounded-none bg-gold/10 sm:bg-transparent">
+            <div className="p-1 sm:p-0 rounded-lg sm:rounded-none">
               <Users className="w-3.5 h-3.5 text-gold/70 shrink-0" />
             </div>
             <span className="font-mono text-[10px] sm:text-[10.5px] uppercase tracking-wider">
@@ -70,7 +70,7 @@ function ProgramCard({ prog }: { prog: Program }) {
             </span>
           </div>
           <div className="flex items-center gap-2.5 text-slate-400">
-            <div className="p-1 sm:p-0 rounded-lg sm:rounded-none bg-gold/10 sm:bg-transparent">
+            <div className="p-1 sm:p-0 rounded-lg sm:rounded-none">
               <Calendar className="w-3.5 h-3.5 text-gold/70 shrink-0" />
             </div>
             <span className="font-mono text-[10px] sm:text-[10.5px] uppercase tracking-wider">
@@ -357,7 +357,7 @@ export default function ProgramsSection() {
         >
           <div
             ref={eyebrowRef}
-            className="border border-gold/20 bg-gradient-to-br from-white to-slate-50 px-4 py-1.5 rounded-full inline-flex items-center gap-2 mb-3 shadow-sm"
+            className="border border-gold/20 px-4 py-1.5 rounded-full inline-flex items-center gap-2 mb-3"
           >
             <BookOpen className="w-3.5 h-3.5 text-gold" />
             <span className="text-[11.5px] text-gold font-mono tracking-[0.18em] font-medium uppercase">
@@ -395,7 +395,7 @@ export default function ProgramsSection() {
                 className={`min-h-[44px] px-4 sm:px-6 py-3 rounded-2xl font-mono text-[10px] sm:text-[12.5px] font-black uppercase tracking-[0.14em] sm:tracking-[0.2em] border transition-all duration-500 cursor-pointer relative group shrink-0 focus-ring ${
                   isActive
                     ? "bg-navy-deep text-gold border-navy-deep shadow-xl"
-                    : "bg-gradient-to-br from-white to-slate-50 border border-slate-100 text-slate-500 hover:text-navy-deep hover:border-slate-300 shadow-sm"
+                    : "border border-slate-200/60 text-slate-500 hover:text-navy-deep hover:border-slate-300"
                 }`}
                 aria-pressed={isActive}
               >

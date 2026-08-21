@@ -154,16 +154,16 @@ export default function Flowchart() {
   return (
     <section
       id="process"
-      className="relative py-8 md:py-12 bg-transparent border-t border-slate-100 overflow-hidden select-none scroll-mt-24"
+      className="relative py-8 md:py-12 bg-transparent border-t border-slate-200/60 overflow-hidden select-none scroll-mt-24"
     >
-      {/* Background handled by the single AmbientCanvas — no section-level overlay */}
+      {/* Section background comes from <body> — no section-level overlay */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
           <div
             ref={eyebrowRef}
-            className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/70 backdrop-blur-md border border-black/[0.06] rounded-full mb-3.5 shadow-sm"
+            className="inline-flex items-center gap-1.5 px-3 py-1 border border-gold/20 rounded-full mb-3.5"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
             <span className="text-[10.5px] text-navy-deep font-mono tracking-widest font-bold uppercase">
@@ -218,7 +218,7 @@ export default function Flowchart() {
             return (
               <div
                 key={step.step}
-                className="card-premium group relative flex flex-col justify-between bg-white/65 rounded-[1.75rem] sm:rounded-[2rem] p-5 sm:p-6 z-10 overflow-hidden"
+                className="card-premium group relative flex flex-col justify-between rounded-[1.75rem] sm:rounded-[2rem] p-5 sm:p-6 z-10 overflow-hidden"
               >
                 {/* Gold gradient sweep on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/0 via-gold/5 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -233,8 +233,8 @@ export default function Flowchart() {
 
                   {/* Main Icon Badge */}
                   <div className="flex justify-center mb-6">
-                    <div className="relative p-1.5 rounded-full border border-slate-100 bg-slate-50/50">
-                      <div className="flex items-center justify-center w-14 h-14 rounded-full bg-white border border-slate-200 text-navy-deep shadow-sm transition-all duration-500 group-hover:bg-gold/10 group-hover:border-gold/30">
+                    <div className="relative p-1.5 rounded-full border border-slate-200/60">
+                      <div className="flex items-center justify-center w-14 h-14 rounded-full border border-slate-200/80 text-navy-deep transition-all duration-500 group-hover:border-gold/30 group-hover:text-gold">
                         {step.icon}
                       </div>
                     </div>
@@ -301,8 +301,8 @@ export default function Flowchart() {
 
                 {/* Golden Output Subcard */}
                 <div className="relative mt-auto pt-1">
-                  <div className="bg-gold/5 border border-gold/15 rounded-2xl p-4 flex gap-3 items-start text-left hover:bg-gold/10 hover:border-gold/30 transition-all duration-300">
-                    <div className="p-1.5 bg-white border border-gold/20 rounded-lg shrink-0 shadow-sm">
+                  <div className="border border-gold/20 rounded-2xl p-4 flex gap-3 items-start text-left hover:border-gold/40 transition-all duration-300">
+                    <div className="p-1.5 border border-gold/20 rounded-lg shrink-0">
                       {step.outputIcon}
                     </div>
                     <div>

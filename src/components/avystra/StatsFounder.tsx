@@ -129,13 +129,13 @@ export default function StatsFounder() {
       id="team"
       className="relative py-8 md:py-12 bg-transparent border-none overflow-hidden animate-fade-in scroll-mt-24"
     >
-      {/* Background handled by the single AmbientCanvas — no section-level overlay */}
+      {/* Section background comes from <body> — no section-level overlay */}
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* SECTION 1: STATS */}
         <div className="mb-8 text-center">
           <div className="mb-8">
-            <div ref={eyebrowRef} className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/70 backdrop-blur-md border border-black/[0.06] rounded-full mb-3 shadow-sm">
+            <div ref={eyebrowRef} className="inline-flex items-center gap-1.5 px-3 py-1 border border-danger/20 rounded-full mb-3">
               <AlertTriangle className="w-3.5 h-3.5 text-danger" />
               <span className="text-[10.5px] text-danger font-mono tracking-widest font-bold uppercase">
                 The Numbers Don&apos;t Lie
@@ -200,7 +200,7 @@ export default function StatsFounder() {
                 {/* Decorative offset frame */}
                 <div className="absolute -top-3 -right-3 w-full h-full rounded-2xl border border-gold/20 pointer-events-none" />
 
-                <div className="relative rounded-2xl p-2.5 shadow-[0_20px_50px_-15px_rgba(11,27,46,0.15)] bg-gradient-to-br from-white to-slate-50 border border-slate-200/60">
+                <div className="relative rounded-2xl p-2.5 shadow-[0_20px_50px_-15px_rgba(11,27,46,0.15)] border border-slate-200/60">
                   <div className="relative overflow-hidden rounded-xl aspect-[4/5] bg-slate-50/40 flex items-center justify-center border border-white/40 p-0.5">
                     {!photoFailed ? (
                       <img
@@ -311,10 +311,10 @@ export default function StatsFounder() {
               {credentials.map((cred, i) => (
                 <div
                   key={i}
-                  className="card-premium p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-white to-slate-50 flex flex-col"
+                  className="card-premium p-4 sm:p-5 rounded-2xl flex flex-col"
                 >
                   {/* Icon */}
-                  <div className="p-2 bg-gold/10 rounded-xl w-fit mb-3 shrink-0">
+                  <div className="p-2 border border-gold/20 rounded-xl w-fit mb-3 shrink-0">
                     {cred.icon}
                   </div>
                   <span className="text-sm sm:text-base font-display font-black text-navy-deep tracking-tight uppercase leading-tight block">

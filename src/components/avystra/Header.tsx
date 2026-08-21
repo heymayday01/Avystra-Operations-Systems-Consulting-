@@ -136,8 +136,8 @@ export default function Header() {
         ref={headerRef}
         className={`w-full max-w-6xl pointer-events-auto transition-[background-color,border-color,box-shadow,padding] duration-300 ease-out-expo rounded-[22px] ${
           scrolled || isOpen
-            ? "py-2 px-3 sm:px-4 lg:py-2 lg:px-4 border border-black/[0.06] bg-white/70 shadow-[0_2px_16px_-4px_rgba(0,0,0,0.08),0_8px_32px_-8px_rgba(0,0,0,0.06)] backdrop-blur-xl backdrop-saturate-150"
-            : "py-2.5 px-3 sm:px-5 lg:px-6 bg-white/50 backdrop-blur-lg border border-black/[0.04] shadow-sm"
+            ? "py-2 px-3 sm:px-4 lg:py-2 lg:px-4 border border-navy-deep/[0.08] bg-cream-bg/80 shadow-[0_2px_16px_-4px_rgba(0,0,0,0.06),0_8px_32px_-8px_rgba(0,0,0,0.04)] backdrop-blur-xl backdrop-saturate-150"
+            : "py-2.5 px-3 sm:px-5 lg:px-6 bg-cream-bg/40 backdrop-blur-lg border border-navy-deep/[0.06]"
         }`}
       >
         <div className="flex items-center gap-4 lg:gap-6">
@@ -158,7 +158,7 @@ export default function Header() {
           <nav
             ref={navRef}
             aria-label="Main navigation"
-            className="hidden lg:flex items-center gap-0.5 relative bg-white/40 px-1 py-1 rounded-full border border-black/[0.05]"
+            className="hidden lg:flex items-center gap-0.5 relative px-1 py-1 rounded-full border border-navy-deep/[0.06]"
             onMouseLeave={() => setHoveredIndex(null)}
           >
             {navItems.map((item, i) => {
@@ -213,7 +213,7 @@ export default function Header() {
           <div className="lg:hidden flex items-center shrink-0">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="relative w-11 h-11 flex items-center justify-center text-navy-deep focus-ring rounded-full bg-white/70 border border-white/40 transition-colors duration-300 hover:bg-white/80 active:bg-white/90"
+              className="relative w-11 h-11 flex items-center justify-center text-navy-deep focus-ring rounded-full border border-navy-deep/[0.08] transition-colors duration-300 hover:border-gold/30 active:bg-navy-deep/[0.03]"
               style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
               aria-label="Toggle Menu"
               aria-expanded={isOpen}
@@ -245,7 +245,7 @@ export default function Header() {
           style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
         >
           <div className="overflow-hidden">
-            <div className="mt-2 pt-2 pb-1.5 space-y-1 bg-navy-deep/[0.03] backdrop-blur-md rounded-3xl border border-navy-deep/[0.06] p-2"
+            <div className="mt-2 pt-2 pb-1.5 space-y-1 backdrop-blur-md rounded-3xl border border-navy-deep/[0.08] p-2"
               style={{
                 opacity: isOpen ? 1 : 0,
                 transform: isOpen ? "translateY(0)" : "translateY(-8px)",

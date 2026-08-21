@@ -246,31 +246,31 @@
   }
 
   body {
-    /* NAVY during loading (matches the loading screen so there's no white
-       flash before paint). Switches to CREAM via html.page-ready below once
-       the loading screen exits — so the body never shows navy behind content
-       during mobile scroll (which caused the glitch screen).
-       The transition is SYNCHRONIZED with the page wrapper's opacity fade
-       (0.25s) so the background color change happens in lockstep with the
-       content fade-in — no gray flash in between. */
-    background-color: var(--color-navy-deep);
+    /* Refined static background — warm ivory base with subtle gold radial
+       glows + a faint grain texture for depth. Replaces the WebGL
+       AmbientCanvas (removed for stability). This is GPU-cheap, instant,
+       and never flickers. The grain is a tiny inline SVG noise (data URI)
+       at 3% opacity — adds tactile depth without distracting. */
+    background-color: var(--color-cream-bg);
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(184, 146, 78, 0.10) 0%, transparent 42%),
+      radial-gradient(circle at 88% 78%, rgba(184, 146, 78, 0.07) 0%, transparent 48%),
+      radial-gradient(circle at 50% 50%, rgba(212, 178, 106, 0.04) 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    background-attachment: fixed, fixed, fixed, scroll;
+    background-size: 100% 100%, 100% 100%, 100% 100%, 220px 220px;
     color: #4A5568;
     font-family: var(--font-sans);
     position: relative;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    /* Smooth transition from navy → cream, matching the page wrapper fade.
-       Duration matches the 0.25s opacity transition on the page wrapper. */
-    transition: background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* After page-ready (loading screen gone), body becomes cream to match the
-     page content. This eliminates the navy flash that appeared on mobile when
-     scrolling fast and the content hadn't repainted yet. The transition on
-     `body` (above) makes this change smooth instead of a hard snap. */
+  /* After page-ready (loading screen gone), keep the same warm background.
+     No color transition needed anymore — the background is consistent. */
   html.page-ready body {
-    background-color: #EFE9DC;
+    background-color: var(--color-cream-bg);
   }
 
   /* Typographic defaults for better readability */
@@ -322,46 +322,43 @@ body::-webkit-scrollbar {
    Nav links: 150ms, opacity + underline. */
 
 /* Premium card hover — smooth layered interaction.
-   Transform (GPU-composited) creates physical lift, border + shadow
-   follow at slightly different durations for a refined, non-mechanical feel.
+   Per the redesign brief: NO card backgrounds. Cards are transparent —
+   the page background (warm ivory + gold glows + grain) shows through.
+   Cards use a subtle border + hover shadow + hover border-gold to
+   define edges without filling them with color.
    NOTE: Doubled class selector (.card-premium.card-premium) boosts specificity
    to 0-2-0 so it beats .js .reveal (also 0-2-0) — without this, the reveal
    system's transition/transform overrides the hover interaction. */
 .card-premium.card-premium {
+  background: transparent;
   transition: transform var(--dur-standard) var(--ease-out),
               border-color var(--dur-micro) var(--ease-sine),
-              box-shadow var(--dur-standard) var(--ease-out),
-              backdrop-filter var(--dur-standard) var(--ease-out);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: var(--shadow-card-rest);
-  /* Glassmorphism — Apple-style: strong blur, subtle saturation.
-     Background opacity comes from the element's bg-white/65 class. */
-  backdrop-filter: blur(16px) saturate(1.2);
-  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+              box-shadow var(--dur-standard) var(--ease-out);
+  border: 1px solid rgba(11, 27, 46, 0.08);
+  box-shadow: none;
 }
 .card-premium.card-premium:hover {
   transform: translateY(-3px);
-  border-color: rgba(var(--gold-rgb), 0.25);
+  border-color: rgba(var(--gold-rgb), 0.30);
   box-shadow: var(--shadow-card-hover);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
 }
 
 /* Premium card hover — dark section variant (heavier shadow) */
 .card-premium-dark.card-premium-dark {
+  background: rgba(255, 255, 255, 0.04);
   transition: transform var(--dur-standard) var(--ease-out),
               border-color var(--dur-micro) var(--ease-sine),
               box-shadow var(--dur-standard) var(--ease-out);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px) saturate(1.3);
-  -webkit-backdrop-filter: blur(10px) saturate(1.3);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .card-premium-dark.card-premium-dark:hover {
   transform: translateY(-4px);
-  border-color: rgba(var(--gold-rgb), 0.4);
+  border-color: rgba(var(--gold-rgb), 0.40);
   box-shadow: var(--shadow-card-hover-dark);
-  backdrop-filter: blur(14px) saturate(1.5);
-  -webkit-backdrop-filter: blur(14px) saturate(1.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 /* Premium button hover — smooth bg shift + gold glow.
@@ -438,24 +435,20 @@ body::-webkit-scrollbar {
 }
 
 /* Premium card — hover only (entrance via GSAP).
-   Glassmorphism: frosted-glass over the animated WebGL background. */
+   Redesigned: NO background fill. Transparent so the page's warm
+   background shows through. Defined by a subtle gold-tinted border. */
 .hero-card-premium {
-  background: rgba(255, 255, 255, 0.65);
-  border: 1px solid rgba(var(--gold-rgb), 0.15);
-  box-shadow: 0 4px 24px -8px rgba(var(--navy-rgb), 0.08), 0 0 0 1px rgba(var(--gold-rgb), 0.08);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  background: transparent;
+  border: 1px solid rgba(var(--gold-rgb), 0.18);
+  box-shadow: none;
   transition: transform var(--dur-standard) var(--ease-out),
               box-shadow var(--dur-standard) var(--ease-out),
-              border-color var(--dur-standard) var(--ease-sine),
-              backdrop-filter var(--dur-standard) var(--ease-out);
+              border-color var(--dur-standard) var(--ease-sine);
 }
 .hero-card-premium:hover {
   transform: translateY(-3px);
-  border-color: rgba(var(--gold-rgb), 0.25);
-  box-shadow: 0 12px 36px -10px rgba(var(--navy-rgb), 0.08), 0 0 0 1px rgba(var(--gold-rgb), 0.12);
-  backdrop-filter: blur(24px) saturate(1.6);
-  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  border-color: rgba(var(--gold-rgb), 0.35);
+  box-shadow: 0 12px 36px -12px rgba(var(--navy-rgb), 0.10);
 }
 
 /* Gold divider — static (entrance via GSAP) */
@@ -1001,18 +994,6 @@ html {
    (isTouch state + style props) because Tailwind v4 strips @media (hover: none)
    blocks with custom class selectors from the compiled output. */
 
-/* ═══ GLASS CARD INNER GLOW ═══
-   Subtle inner highlight on glass cards — creates a "lit from within"
-   premium effect. Only on desktop (no backdrop-filter cost on mobile). */
-@media (min-width: 769px) {
-  .card-premium.card-premium::before,
-  .hero-card-premium::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: 0;
-  }
-}
+/* ═══ CARD INNER ACCENT (optional, hover-only) ═══
+   Removed the glass-card inner-glow pseudo-element — cards are now
+   transparent by design. Hover lift + border-gold is sufficient. */
