@@ -454,6 +454,7 @@ export default function OGIDiagnostic() {
                             clearFieldError();
                           }}
                           placeholder="e.g. Kirankumar Pandey"
+                          autoComplete="name"
                           className={`w-full bg-slate-50 border border-slate-200 focus:border-gold focus:ring-1 focus:ring-gold/20 rounded-xl py-3.5 pl-11 pr-12 text-slate-800 placeholder-slate-400/80 font-sans text-sm focus:outline-none transition-all ${
                             isNameValid ? "ogi-input-valid" : ""
                           } ${
@@ -491,6 +492,7 @@ export default function OGIDiagnostic() {
                             clearFieldError();
                           }}
                           placeholder="e.g. Founder, CEO, VP of Operations"
+                          autoComplete="organization-title"
                           className={`w-full bg-slate-50 border border-slate-200 focus:border-gold focus:ring-1 focus:ring-gold/20 rounded-xl py-3.5 pl-11 pr-12 text-slate-800 placeholder-slate-400/80 font-sans text-sm focus:outline-none transition-all ${
                             isRoleValid ? "ogi-input-valid" : ""
                           } ${
@@ -736,20 +738,18 @@ export default function OGIDiagnostic() {
 
             {/* HALFWAY NUDGE SCREEN */}
             {screen === "NUDGE" && (
-              <motion.div
+              <motion.button
                 key="nudge"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.05 }}
                 transition={{ duration: 0.4, ease: EASE }}
-                role="status"
-                aria-live="polite"
-                aria-label="Halfway through the assessment. Continuing to Team Accountability questions."
+                aria-label="Halfway through the assessment. Tap to continue to Team Accountability questions."
                 onClick={() => {
                   setScreen("QUESTIONS");
                   setCurrentQuestionIndex(8);
                 }}
-                className="p-6 sm:p-10 md:p-12 flex flex-col items-center justify-center h-full flex-grow text-center relative cursor-pointer group focus-ring min-h-[420px]"
+                className="p-6 sm:p-10 md:p-12 flex flex-col items-center justify-center h-full flex-grow text-center relative cursor-pointer group focus-ring min-h-[420px] w-full border-none bg-transparent"
                 id="ogi-screen-nudge"
               >
                 <div className="absolute top-4 right-4 text-[10px] sm:text-[10.5px] font-mono text-slate-500 uppercase tracking-wider sm:tracking-widest px-3 py-1.5 rounded-full bg-white/80 border border-navy-deep/[0.08]">
@@ -785,7 +785,7 @@ export default function OGIDiagnostic() {
                   Next: Team Accountability
                   <ChevronRight className="w-3.5 h-3.5 animate-pulse" />
                 </motion.p>
-              </motion.div>
+              </motion.button>
             )}
 
             {/* LOADING SCREEN */}
@@ -796,6 +796,9 @@ export default function OGIDiagnostic() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3, ease: EASE }}
+                role="status"
+                aria-live="polite"
+                aria-label="Analyzing your responses. Please wait."
                 className="p-8 sm:p-10 md:p-12 flex flex-col items-center justify-center h-full flex-grow text-center bg-navy-deep text-white relative min-h-[420px]"
                 id="ogi-screen-loading"
               >

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { generateOgiSubmissionsExcel } from "@/lib/excel-export";
 import { rateLimit } from "@/lib/rate-limit";
+import { requireAdminSession } from "@/lib/admin-auth";
 
 /**
  * GET /api/ogi/export
@@ -9,10 +10,22 @@ import { rateLimit } from "@/lib/rate-limit";
  * returns it as a download. Also reachable at /ogi-submissions.xlsx (rewritten
  * to this route in next.config.ts).
  *
+ * SECURITY: Requires admin session authentication. Without this, anyone could
+ * download the full submissions table (PII leak — name, phone, email).
+ *
  * Rate-limited to 10 requests per IP per hour (the DB query + workbook build is
  * moderately expensive).
  */
 export async function GET(request: Request) {
+  // ── Admin auth check — prevents PII leak ──
+  const session = await requireAdminSession(request);
+  if (!session) {
+    return NextResponse.json(
+      { success: false, error: "Unauthorized. Admin login required." },
+      { status: 401 }
+    );
+  }
+
   const rl = rateLimit(request, { limit: 10, windowMs: 60 * 60 * 1000 });
   if (!rl.success) {
     return NextResponse.json(
@@ -23,8 +36,11 @@ export async function GET(request: Request) {
 
   try {
     const fileBuffer = await generateOgiSubmissionsExcel();
-    const timestamp = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-    const filename = `ogi-submissions-${timestamp}.xlsx`;
+    // Include time (HH-MM) to prevent same-day export filename collisions
+    const now = new Date();
+    const date = now.toISOString().slice(0, 10); // YYYY-MM-DD
+    const time = `${String(now.getHours()).padStart(2, "0")}-${String(now.getMinutes()).padStart(2, "0")}`;
+    const filename = `ogi-submissions-${date}-${time}.xlsx`;
 
     return new NextResponse(new Uint8Array(fileBuffer), {
       status: 200,

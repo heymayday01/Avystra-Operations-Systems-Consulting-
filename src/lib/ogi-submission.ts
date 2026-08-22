@@ -29,26 +29,26 @@ const DEDUPE_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
 export const SubmissionSchema = z.object({
   name: z
     .string()
-    .min(1, "Name is required")
+    .min(2, "Name must be at least 2 characters")
     .max(120, "Name is too long")
     .transform((s) => s.replace(/[\r\n]/g, " ").trim()),
   role: z
     .string()
-    .min(1, "Role is required")
+    .min(2, "Role must be at least 2 characters")
     .max(120, "Role is too long")
     .transform((s) => s.replace(/[\r\n]/g, " ").trim()),
   contact: z
     .string()
-    .min(1, "Contact is required")
+    .min(10, "Contact number must be at least 10 digits")
     .max(200, "Contact is too long")
+    .regex(/^[0-9+\-\s()]{10,}$/, "Contact must be a valid phone number")
     .transform((s) => s.replace(/[\r\n]/g, " ").trim()),
   email: z
     .string()
     .email("Invalid email address")
     .max(200, "Email is too long")
-    .optional()
-    .or(z.literal(""))
-    .transform((s) => (s ? s.trim() : undefined)),
+    .refine((s) => s.length > 0, "Email is required")
+    .transform((s) => s.trim()),
   answers: z
     .record(z.string(), z.union([z.number(), z.string()]))
     .refine(
