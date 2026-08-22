@@ -57,7 +57,9 @@ export default function Hero() {
   // - Marquee: 1.15s delay (final element, pure fade)
   // Total cascade: ~1.75s (premium, not rushed)
   const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0, duration: 0.6, y: 16 });
-  const chipsRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.4, duration: 0.6, y: 16 });
+  // chipsRef is used as a scroll position reference only — chips animate
+  // individually via CSS .hero-chip class (not via GSAP container reveal).
+  const chipsRef = useRef<HTMLDivElement>(null);
   const cardRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.65, duration: 0.6, y: 16 });
   const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.85, duration: 0.6, y: 16 });
   const trustRef = useGsapReveal<HTMLDivElement>("fade", { delay: 1.0, duration: 0.6, y: 16 });
@@ -154,9 +156,11 @@ export default function Hero() {
             </span>
           </h1>
 
-          {/* Feature chips — individual stagger via inline transition-delay.
-              Each chip appears 80ms after the previous (wave pattern).
-              Mobile: flex-col (single column stack). Desktop: flex-wrap (3+2). */}
+          {/* Feature chips — each chip animates in individually with a stagger.
+              Uses CSS animation (not GSAP) per chip so each has its own delay.
+              Mobile: flex-col (single column stack). Desktop: flex-wrap (3+2).
+              The parent container is NOT animated by GSAP — chips animate
+              individually via the .hero-chip class + pageReady delays. */}
           <div ref={chipsRef} className="flex flex-col sm:flex-row sm:flex-wrap items-center gap-2.5 sm:gap-3 mb-5 sm:mb-12 w-full sm:max-w-3xl mx-auto sm:justify-center">
             {[
               { label: "Hired experienced people", Icon: UserPlus },
@@ -167,10 +171,10 @@ export default function Hero() {
             ].map(({ label, Icon }, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-200 ease-out-expo"
+                className="hero-chip flex items-center gap-2 px-4 py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-200 ease-out-expo"
                 style={{
                   boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)",
-                  transitionDelay: pageReady ? `${0.4 + idx * 0.08}s` : "0s",
+                  animationDelay: pageReady ? `${0.4 + idx * 0.1}s` : "0s",
                 }}
               >
                 <Icon className="w-3.5 h-3.5 text-gold shrink-0" />

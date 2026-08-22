@@ -467,6 +467,36 @@ body::-webkit-scrollbar {
   box-shadow: 0 0 0 2px var(--color-gold), 0 0 0 4px var(--color-cream-bg);
 }
 
+/* ═══ HERO FEATURE CHIPS — individual stagger animation ═══
+   Each chip animates in independently with opacity + translateY + scale.
+   The stagger is set via inline animationDelay (0.4s + idx * 0.1s).
+   Gated behind .page-ready so they start after the loading screen. */
+.hero-chip {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0) scale(0.96);
+}
+.page-ready .hero-chip {
+  animation: hero-chip-reveal 0.6s var(--ease-out) forwards;
+}
+@keyframes hero-chip-reveal {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero-chip {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
 /* ═══ HERO H1 LINE REVEAL — CSS only (per user instruction, NOT GSAP) ═══
    opacity + translateY only = GPU-cheap, no iOS clipping.
    Gated behind .page-ready — starts AFTER loading screen fades.
