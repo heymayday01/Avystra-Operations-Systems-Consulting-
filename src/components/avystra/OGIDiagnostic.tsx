@@ -374,7 +374,7 @@ export default function OGIDiagnostic() {
                     ].map((item) => (
                       <div
                         key={item.code}
-                        className="p-3 sm:p-3.5 rounded-xl border border-navy-deep/[0.08] bg-white/90 flex flex-col items-center group hover:border-gold/40 transition-all duration-300"
+                        className="p-3 sm:p-3.5 rounded-xl border border-navy-deep/[0.08] bg-white/90 flex flex-col items-center group hover:border-gold/40 transition-all duration-200"
                         style={{ boxShadow: "0 1px 3px rgba(11,27,46,0.06), inset 0 1px 0 rgba(255,255,255,0.9)" }}
                       >
                         <span
@@ -678,7 +678,7 @@ export default function OGIDiagnostic() {
                       {Array.from({ length: 16 }).map((_, i) => (
                         <div
                           key={i}
-                          className={`h-1 rounded-full transition-all duration-300 ${
+                          className={`h-1 rounded-full transition-all duration-200 ${
                             i === currentQuestionIndex
                               ? "w-4"
                               : answers[questions[i].id] !== undefined
@@ -714,7 +714,7 @@ export default function OGIDiagnostic() {
                           whileTap={{ scale: 0.92 }}
                           whileHover={{ y: -2 }}
                           transition={{ duration: 0.15, ease: EASE }}
-                          className={`relative py-4 sm:py-5 px-2 sm:px-3 text-xs sm:text-sm text-center rounded-xl font-display font-semibold transition-all duration-300 border cursor-pointer select-none focus-ring min-h-[52px] ${
+                          className={`relative py-4 sm:py-5 px-2 sm:px-3 text-xs sm:text-sm text-center rounded-xl font-display font-semibold transition-all duration-200 border cursor-pointer select-none focus-ring min-h-[52px] ${
                             isSelected
                               ? "bg-navy-deep border-navy-deep text-white shadow-md shadow-slate-900/10 scale-[1.02]"
                               : "bg-slate-50 border-black/[0.06] hover:border-gold hover:bg-white hover:shadow-sm text-slate-600 hover:text-navy-deep active:bg-slate-100"

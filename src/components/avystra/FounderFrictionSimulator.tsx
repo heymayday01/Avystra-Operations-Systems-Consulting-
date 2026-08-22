@@ -268,7 +268,7 @@ export default function FounderFrictionSimulator() {
           <button
             onClick={() => setIsResolved(false)}
             aria-label="Show bottlenecked state"
-            className={`toggle-pill-btn relative z-10 w-1/2 text-center text-[12px] font-mono tracking-[0.14em] font-bold h-full transition-colors duration-500 ease-out-expo focus-ring ${
+            className={`toggle-pill-btn relative z-10 w-1/2 text-center text-[12px] font-mono tracking-[0.14em] font-bold h-full transition-colors duration-300 ease-out-expo focus-ring ${
               !isResolved ? "text-white" : "text-white/60 hover:text-white/75"
             }`}
           >
@@ -277,7 +277,7 @@ export default function FounderFrictionSimulator() {
           <button
             onClick={() => setIsResolved(true)}
             aria-label="Show AVYSTRA system state"
-            className={`toggle-pill-btn relative z-10 w-1/2 text-center text-[12px] font-mono tracking-[0.14em] font-bold h-full transition-colors duration-500 ease-out-expo focus-ring ${
+            className={`toggle-pill-btn relative z-10 w-1/2 text-center text-[12px] font-mono tracking-[0.14em] font-bold h-full transition-colors duration-300 ease-out-expo focus-ring ${
               isResolved ? "text-white" : "text-white/60 hover:text-white/75"
             }`}
           >
@@ -345,18 +345,18 @@ export default function FounderFrictionSimulator() {
                 {/* Header: number + icon + label */}
                 <div className="flex items-center gap-2.5 mb-3">
                   <span
-                    className="text-[10.5px] font-mono font-bold tracking-[0.15em] transition-colors duration-500"
+                    className="text-[10.5px] font-mono font-bold tracking-[0.15em] transition-colors duration-300"
                     style={{ color: accent }}
                   >
                     {outcome.number}
                   </span>
                   <Icon
-                    className="w-[18px] h-[18px] shrink-0 transition-colors duration-500"
+                    className="w-[18px] h-[18px] shrink-0 transition-colors duration-300"
                     strokeWidth={1.5}
                     style={{ color: accent }}
                   />
                   <span
-                    className="text-[12.5px] font-mono font-bold tracking-[0.15em] uppercase transition-colors duration-500"
+                    className="text-[12.5px] font-mono font-bold tracking-[0.15em] uppercase transition-colors duration-300"
                     style={{ color: accent }}
                   >
                     {outcome.name}
@@ -364,7 +364,7 @@ export default function FounderFrictionSimulator() {
                 </div>
 
                 <div
-                  className="h-px mb-3 transition-colors duration-500"
+                  className="h-px mb-3 transition-colors duration-300"
                   style={{ background: `linear-gradient(to right, ${accentSoft}, transparent)` }}
                 />
 
@@ -377,7 +377,7 @@ export default function FounderFrictionSimulator() {
                     {outcome.issues.map((issue, idx) => (
                       <div key={idx} className="flex items-start gap-2 text-left">
                         <span
-                          className="text-[11.5px] font-bold shrink-0 mt-1 transition-colors duration-500"
+                          className="text-[11.5px] font-bold shrink-0 mt-1 transition-colors duration-300"
                           style={{ color: "color-mix(in srgb, var(--color-danger) 60%, transparent)" }}
                         >
                           ◆
@@ -395,7 +395,7 @@ export default function FounderFrictionSimulator() {
                   >
                     <div className="flex items-start gap-2 text-left">
                       <ShieldCheck
-                        className="w-3.5 h-3.5 shrink-0 mt-0.5 transition-colors duration-500"
+                        className="w-3.5 h-3.5 shrink-0 mt-0.5 transition-colors duration-300"
                         strokeWidth={2}
                         style={{ color: "var(--color-success)" }}
                       />
@@ -430,12 +430,12 @@ export default function FounderFrictionSimulator() {
 
             <div className="mt-5 text-center">
               <div
-                className="text-[13px] font-mono font-bold tracking-[0.18em] uppercase transition-colors duration-500"
+                className="text-[13px] font-mono font-bold tracking-[0.18em] uppercase transition-colors duration-300"
                 style={{ color: accent }}
               >
                 {isResolved ? "AVYSTRA SYSTEM" : "FOUNDER"}
               </div>
-              <div className="text-[12px] font-sans text-white/55 mt-1 transition-colors duration-500">
+              <div className="text-[12px] font-sans text-white/55 mt-1 transition-colors duration-300">
                 {isResolved ? "The system that holds" : "Single point of failure"}
               </div>
             </div>
@@ -471,12 +471,12 @@ export default function FounderFrictionSimulator() {
 
             <div className="mt-5 mb-10 text-center">
               <div
-                className="text-[12px] font-mono font-bold tracking-[0.18em] uppercase transition-colors duration-500"
+                className="text-[12px] font-mono font-bold tracking-[0.18em] uppercase transition-colors duration-300"
                 style={{ color: accent }}
               >
                 {isResolved ? "AVYSTRA SYSTEM" : "FOUNDER"}
               </div>
-              <div className="text-[12px] font-sans text-white/55 mt-1 transition-colors duration-500">
+              <div className="text-[12px] font-sans text-white/55 mt-1 transition-colors duration-300">
                 {isResolved ? "The system that holds" : "Single point of failure"}
               </div>
             </div>
@@ -497,18 +497,18 @@ export default function FounderFrictionSimulator() {
 
                   <div className="flex items-center gap-2.5 mb-3">
                     <span
-                      className="text-[10.5px] font-mono font-bold tracking-[0.15em] transition-colors duration-500"
+                      className="text-[10.5px] font-mono font-bold tracking-[0.15em] transition-colors duration-300"
                       style={{ color: accent }}
                     >
                       {outcome.number}
                     </span>
                     <Icon
-                      className="w-[18px] h-[18px] shrink-0 transition-colors duration-500"
+                      className="w-[18px] h-[18px] shrink-0 transition-colors duration-300"
                       strokeWidth={1.5}
                       style={{ color: accent }}
                     />
                     <span
-                      className="text-[12.5px] font-mono font-bold tracking-[0.15em] uppercase transition-colors duration-500"
+                      className="text-[12.5px] font-mono font-bold tracking-[0.15em] uppercase transition-colors duration-300"
                       style={{ color: accent }}
                     >
                       {outcome.name}
@@ -516,7 +516,7 @@ export default function FounderFrictionSimulator() {
                   </div>
 
                   <div
-                    className="h-px mb-3 transition-colors duration-500"
+                    className="h-px mb-3 transition-colors duration-300"
                     style={{ background: `linear-gradient(to right, ${accentSoft}, transparent)` }}
                   />
 

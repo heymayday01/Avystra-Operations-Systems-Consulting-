@@ -94,14 +94,14 @@ export default function Footer({ leadCount }: FooterProps) {
             >
               <a
                 href="mailto:info@avystra.co.in"
-                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/5 border border-white/10 text-slate-200 hover:bg-gold/10 hover:border-gold/30 hover:text-gold transition-all duration-300 text-[13px] font-medium focus-ring"
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/5 border border-white/10 text-slate-200 hover:bg-gold/10 hover:border-gold/30 hover:text-gold transition-all duration-200 text-[13px] font-medium focus-ring"
               >
                 <Mail className="w-3.5 h-3.5 text-gold" />
                 <span>info@avystra.co.in</span>
               </a>
               <a
                 href="tel:+918596059607"
-                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/5 border border-white/10 text-slate-200 hover:bg-gold/10 hover:border-gold/30 hover:text-gold transition-all duration-300 text-[13px] font-medium focus-ring"
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/5 border border-white/10 text-slate-200 hover:bg-gold/10 hover:border-gold/30 hover:text-gold transition-all duration-200 text-[13px] font-medium focus-ring"
               >
                 <Phone className="w-3.5 h-3.5 text-gold" />
                 <span>+91 85960 59607</span>
@@ -125,7 +125,7 @@ export default function Footer({ leadCount }: FooterProps) {
                     }}
                     className="text-slate-300 hover:text-gold transition-colors cursor-pointer inline-flex items-center gap-2 group text-[14px] focus-ring"
                   >
-                    <span className="w-0 group-hover:w-3 h-px bg-gold transition-all duration-300" />
+                    <span className="w-0 group-hover:w-3 h-px bg-gold transition-all duration-200" />
                     <span className="group-hover:translate-x-0.5 transition-transform duration-300">
                       {item.label}
                     </span>

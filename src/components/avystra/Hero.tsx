@@ -46,14 +46,14 @@ export default function Hero() {
   // Trust (GSAP):     0.7s  delay, 0.5s dur  → finishes at 1.20s
   // Marquee (GSAP):   0.8s  delay, 0.5s dur, y:0 (pure fade — no slide gap)
   // Squiggle (FM):    0.4s  delay, 0.8s dur  → draws under line 3 as it settles
-  const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0, duration: 0.5, y: 10 });
-  const chipsRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.3, duration: 0.5, y: 10 });
-  const cardRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.45, duration: 0.5, y: 10 });
-  const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.6, duration: 0.5, y: 10 });
-  const trustRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.7, duration: 0.5, y: 10 });
+  const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0, duration: 0.6, y: 16 });
+  const chipsRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.25, duration: 0.6, y: 16 });
+  const cardRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.4, duration: 0.6, y: 16 });
+  const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.55, duration: 0.6, y: 16 });
+  const trustRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.7, duration: 0.6, y: 16 });
   // Marquee: pure fade (y:0) — a slide-up would leave a visible cream gap
   // below the navy band as it animates into place.
-  const marqueeRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.8, duration: 0.5, y: 0 });
+  const marqueeRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.85, duration: 0.6, y: 0 });
 
   const reducedMotion = useSyncExternalStore(
     reducedMotionSubscribe,
@@ -160,7 +160,7 @@ export default function Hero() {
             ].map(({ label, Icon }, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-500 ease-out-expo"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-300 ease-out-expo"
                 style={{ boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)" }}
               >
                 <Icon className="w-3.5 h-3.5 text-gold shrink-0" />
@@ -271,8 +271,8 @@ export default function Hero() {
               "Execution Systems",
             ].map((label, i) => (
               <div key={i} className="flex items-center gap-2 sm:gap-2.5 group cursor-default justify-center sm:justify-start">
-                <span className="w-1 h-1 rounded-full bg-gold/40 group-hover:bg-gold transition-colors duration-500" />
-                <span className="font-mono text-[8.5px] sm:text-[11px] font-bold text-navy-deep/60 uppercase tracking-[0.1em] sm:tracking-[0.16em] group-hover:text-navy-deep transition-colors duration-500">
+                <span className="w-1 h-1 rounded-full bg-gold/40 group-hover:bg-gold transition-colors duration-300" />
+                <span className="font-mono text-[8.5px] sm:text-[11px] font-bold text-navy-deep/60 uppercase tracking-[0.1em] sm:tracking-[0.16em] group-hover:text-navy-deep transition-colors duration-300">
                   {label}
                 </span>
               </div>

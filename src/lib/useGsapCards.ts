@@ -57,8 +57,8 @@ export function useGsapCards<T extends HTMLElement = HTMLDivElement>(
     if (!el) return;
 
     const {
-      stagger = 0.08,
-      duration = 0.48,
+      stagger = 0.1,
+      duration = 0.6,
       y: yVal = 24,
       start = "top 85%",
       cardSelector: sel,
@@ -84,7 +84,7 @@ export function useGsapCards<T extends HTMLElement = HTMLDivElement>(
             opacity: 1,
             y: 0,
             duration,
-            ease: "power3.out",
+            ease: "expo.out",
             stagger,
             clearProps: "transform",
           });

@@ -80,7 +80,7 @@ export default function Flowchart() {
       description:
         "We start by identifying exactly where and how performance is breaking down in your organization — using a structured assessment, not assumptions or guesswork.",
       icon: (
-        <Search className="w-6 h-6 transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110" />
+        <Search className="w-6 h-6 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
       ),
       outputIcon: <Users className="w-4 h-4 text-gold" />,
       outputLabel: "OUTPUT",
@@ -98,7 +98,7 @@ export default function Flowchart() {
       description:
         "Based on what we find, we design a focused plan built specifically for your organization's gaps — not a generic module relabeled with your company name.",
       icon: (
-        <Lightbulb className="w-6 h-6 transition-transform duration-500 group-hover:scale-110" />
+        <Lightbulb className="w-6 h-6 transition-transform duration-300 group-hover:scale-110" />
       ),
       outputIcon: <ClipboardCheck className="w-4 h-4 text-gold" />,
       outputLabel: "OUTPUT",
@@ -134,7 +134,7 @@ export default function Flowchart() {
       description:
         "30-day follow-up checkpoint and a written impact report — so leadership can see measurable outcomes, not just participant satisfaction scores from the day.",
       icon: (
-        <TrendingUp className="w-6 h-6 transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        <TrendingUp className="w-6 h-6 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
       ),
       outputIcon: <TrendingUp className="w-4 h-4 text-gold" />,
       outputLabel: "OUTPUT",
@@ -234,7 +234,7 @@ export default function Flowchart() {
                   {/* Main Icon Badge */}
                   <div className="flex justify-center mb-6">
                     <div className="relative p-1.5 rounded-full border border-navy-deep/[0.08] bg-white/90" style={{ boxShadow: "0 1px 3px rgba(11,27,46,0.06), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
-                      <div className="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-white to-slate-50 border border-navy-deep/[0.06] text-navy-deep transition-all duration-500 group-hover:border-gold/40 group-hover:text-gold" style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.8)" }}>
+                      <div className="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-white to-slate-50 border border-navy-deep/[0.06] text-navy-deep transition-all duration-300 group-hover:border-gold/40 group-hover:text-gold" style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.8)" }}>
                         {step.icon}
                       </div>
                     </div>
@@ -261,7 +261,7 @@ export default function Flowchart() {
                       onClick={() => toggleExpand(idx)}
                       aria-label={`Toggle key activities for ${step.title} step`}
                       aria-expanded={isExpanded}
-                      className="w-full flex items-center justify-between min-h-[44px] py-3 px-3 rounded-lg hover:bg-slate-50 text-[11.5px] font-mono font-bold uppercase tracking-wider text-slate-500 hover:text-navy-deep transition-all duration-300 focus-ring"
+                      className="w-full flex items-center justify-between min-h-[44px] py-3 px-3 rounded-lg hover:bg-slate-50 text-[11.5px] font-mono font-bold uppercase tracking-wider text-slate-500 hover:text-navy-deep transition-all duration-200 focus-ring"
                     >
                       <span>Key Activities</span>
                       <ChevronDown
@@ -301,7 +301,7 @@ export default function Flowchart() {
 
                 {/* Golden Output Subcard */}
                 <div className="relative mt-auto pt-1">
-                  <div className="rounded-2xl p-4 flex gap-3 items-start text-left transition-all duration-300" style={{ background: "rgba(184,146,78,0.08)", border: "1px solid rgba(184,146,78,0.20)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}>
+                  <div className="rounded-2xl p-4 flex gap-3 items-start text-left transition-all duration-200" style={{ background: "rgba(184,146,78,0.08)", border: "1px solid rgba(184,146,78,0.20)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}>
                     <div className="p-1.5 border border-gold/25 rounded-lg shrink-0" style={{ background: "rgba(255,255,255,0.5)" }}>
                       {step.outputIcon}
                     </div>

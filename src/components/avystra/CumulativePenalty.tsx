@@ -109,10 +109,10 @@ export default function CumulativePenalty() {
                 return (
                   <div
                     key={index}
-                    className="flex items-center gap-4 sm:gap-5 p-3 sm:p-4 rounded-2xl hover:bg-navy-deep/[0.04] transition-colors duration-300 group"
+                    className="flex items-center gap-4 sm:gap-5 p-3 sm:p-4 rounded-2xl hover:bg-navy-deep/[0.04] transition-colors duration-200 group"
                   >
                     {/* Icon */}
-                    <div className="p-2.5 sm:p-3 rounded-xl text-gold shrink-0 group-hover:scale-110 transition-all duration-300" style={{ background: "rgba(184,146,78,0.12)", border: "1px solid rgba(184,146,78,0.28)" }}>
+                    <div className="p-2.5 sm:p-3 rounded-xl text-gold shrink-0 group-hover:scale-110 transition-all duration-200" style={{ background: "rgba(184,146,78,0.12)", border: "1px solid rgba(184,146,78,0.28)" }}>
                       <Icon className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
                     </div>
 

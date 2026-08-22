@@ -172,10 +172,10 @@ export default function FourPillars() {
                 key={pillar.id}
                 className="pillar-card-new group relative h-full flex flex-col"
               >
-                <div className="card-premium relative h-full rounded-3xl p-6 sm:p-7 md:p-8 flex flex-col justify-between overflow-hidden transition-all duration-500 ease-out-expo group-hover:-translate-y-1.5 group-hover:shadow-[0_20px_50px_-15px_rgba(11,27,46,0.12)]">
+                <div className="card-premium relative h-full rounded-3xl p-6 sm:p-7 md:p-8 flex flex-col justify-between overflow-hidden transition-all duration-300 ease-out-expo group-hover:-translate-y-1.5 group-hover:shadow-[0_20px_50px_-15px_rgba(11,27,46,0.12)]">
                   {/* Background number — large, low-contrast */}
                   <span
-                    className="absolute top-5 right-6 text-6xl font-display font-black select-none z-0 transition-colors duration-500"
+                    className="absolute top-5 right-6 text-6xl font-display font-black select-none z-0 transition-colors duration-300"
                     style={{ color: "rgba(184, 146, 78, 0.12)" }}
                   >
                     {pillar.num}
@@ -184,7 +184,7 @@ export default function FourPillars() {
                   <div className="relative z-10">
                     {/* Icon with accent color */}
                     <div
-                      className="inline-flex p-3.5 rounded-2xl border border-navy-deep/[0.08] bg-white/90 mb-6 transition-all duration-500 group-hover:scale-110"
+                      className="inline-flex p-3.5 rounded-2xl border border-navy-deep/[0.08] bg-white/90 mb-6 transition-all duration-300 group-hover:scale-110"
                       style={{ color: pillar.accent, boxShadow: "0 1px 3px rgba(11,27,46,0.06), inset 0 1px 0 rgba(255,255,255,0.9)" }}
                     >
                       {pillar.icon}
@@ -192,7 +192,7 @@ export default function FourPillars() {
 
                     {/* Category label */}
                     <span
-                      className="block text-[10px] font-mono font-bold uppercase tracking-[0.22em] mb-3 transition-opacity duration-300"
+                      className="block text-[10px] font-mono font-bold uppercase tracking-[0.22em] mb-3 transition-opacity duration-200"
                       style={{ color: pillar.accent, opacity: 0.7 }}
                     >
                       {pillar.category}
@@ -210,11 +210,11 @@ export default function FourPillars() {
                   </div>
 
                   {/* Footer — phase number + arrow */}
-                  <div className="relative z-10 mt-8 pt-5 border-t border-slate-100 flex items-center justify-between transition-colors duration-300 group-hover:border-gold/15">
+                  <div className="relative z-10 mt-8 pt-5 border-t border-slate-100 flex items-center justify-between transition-colors duration-200 group-hover:border-gold/15">
                     <span className="text-[10.5px] font-mono font-bold text-slate-400 uppercase tracking-widest">
                       Phase {pillar.num}
                     </span>
-                    <ArrowRight className="w-4 h-4 text-gold transform -translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500 ease-out-expo" />
+                    <ArrowRight className="w-4 h-4 text-gold transform -translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out-expo" />
                   </div>
 
                   {/* Accent top border (appears on hover) */}

@@ -207,7 +207,7 @@ export default function Header() {
             <a
               href="#consult"
               onClick={(e) => handleScrollTo(e, "consult")}
-              className="relative inline-flex items-center gap-2 bg-navy-deep text-white font-display text-[10.5px] uppercase tracking-[0.18em] font-bold px-4 sm:px-5 xl:px-6 py-2.5 rounded-full hover:bg-navy-soft transition-colors duration-300 group overflow-hidden shine-on-hover whitespace-nowrap focus-ring"
+              className="relative inline-flex items-center gap-2 bg-navy-deep text-white font-display text-[10.5px] uppercase tracking-[0.18em] font-bold px-4 sm:px-5 xl:px-6 py-2.5 rounded-full hover:bg-navy-soft transition-colors duration-200 group overflow-hidden shine-on-hover whitespace-nowrap focus-ring"
             >
               <span className="relative z-10 whitespace-nowrap">Check Your OGI Score</span>
               <ArrowUpRight className="w-3 h-3 text-gold group-hover:rotate-45 transition-transform duration-300 relative z-10" />
@@ -218,7 +218,7 @@ export default function Header() {
           <div className="lg:hidden flex items-center shrink-0">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="relative w-11 h-11 flex items-center justify-center text-navy-deep focus-ring rounded-full border border-navy-deep/[0.08] bg-white/85 backdrop-blur-md transition-colors duration-300 hover:border-gold/40"
+              className="relative w-11 h-11 flex items-center justify-center text-navy-deep focus-ring rounded-full border border-navy-deep/[0.08] bg-white/85 backdrop-blur-md transition-colors duration-200 hover:border-gold/40"
               style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)" }}
               aria-label="Toggle Menu"
               aria-expanded={isOpen}
@@ -263,7 +263,7 @@ export default function Header() {
                   href={item.href}
                   onClick={(e) => handleScrollTo(e, item.href.substring(1))}
                   key={item.name}
-                  className="flex items-center gap-3 px-4 py-3.5 min-h-[52px] rounded-xl bg-transparent hover:bg-navy-deep/[0.04] border border-transparent hover:border-gold/20 transition-all duration-300 font-sans group cursor-pointer focus-ring"
+                  className="flex items-center gap-3 px-4 py-3.5 min-h-[52px] rounded-xl bg-transparent hover:bg-navy-deep/[0.04] border border-transparent hover:border-gold/20 transition-all duration-200 font-sans group cursor-pointer focus-ring"
                   style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
                 >
                   <span className="font-mono text-[10.5px] font-bold text-gold tracking-widest opacity-90 shrink-0">

@@ -38,12 +38,12 @@ function ProgramCard({ prog }: { prog: Program }) {
 
       <div className="relative z-10">
         {/* Category Pill Tag */}
-        <div className="inline-flex px-2.5 sm:px-3 py-1 rounded-md border border-navy-deep/[0.08] bg-white/90 text-slate-600 text-[9px] sm:text-[11px] font-mono font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase mb-4 sm:mb-6 group-hover:border-gold/40 group-hover:text-gold-hover transition-all duration-500" style={{ boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
+        <div className="inline-flex px-2.5 sm:px-3 py-1 rounded-md border border-navy-deep/[0.08] bg-white/90 text-slate-600 text-[9px] sm:text-[11px] font-mono font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase mb-4 sm:mb-6 group-hover:border-gold/40 group-hover:text-gold-hover transition-all duration-300" style={{ boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
           {prog.category}
         </div>
 
         {/* Program Title */}
-        <h3 className="font-display font-bold text-base sm:text-xl text-navy-deep tracking-tight leading-snug mb-2 sm:mb-3 uppercase group-hover:text-gold transition-colors duration-500">
+        <h3 className="font-display font-bold text-base sm:text-xl text-navy-deep tracking-tight leading-snug mb-2 sm:mb-3 uppercase group-hover:text-gold transition-colors duration-300">
           {prog.title}
         </h3>
 
@@ -89,7 +89,7 @@ function ProgramCard({ prog }: { prog: Program }) {
           )}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn-premium flex items-center justify-center gap-2 w-full min-h-[44px] py-3 sm:py-3.5 px-4 rounded-xl bg-navy-deep text-gold hover:bg-gold hover:text-navy-deep transition-colors duration-500 ease-out-expo cursor-pointer text-[10px] sm:text-[10.5px] font-mono font-black uppercase tracking-[0.18em] sm:tracking-[0.2em] group/btn focus-ring"
+          className="btn-premium flex items-center justify-center gap-2 w-full min-h-[44px] py-3 sm:py-3.5 px-4 rounded-xl bg-navy-deep text-gold hover:bg-gold hover:text-navy-deep transition-colors duration-300 ease-out-expo cursor-pointer text-[10px] sm:text-[10.5px] font-mono font-black uppercase tracking-[0.18em] sm:tracking-[0.2em] group/btn focus-ring"
           aria-label={`Enquire about ${prog.title} program`}
         >
           <span>Enquire Now</span>
@@ -392,7 +392,7 @@ export default function ProgramsSection() {
               <button
                 key={cat.key}
                 onClick={() => setActiveTab(cat.key)}
-                className={`min-h-[44px] px-4 sm:px-6 py-3 rounded-2xl font-mono text-[10px] sm:text-[12.5px] font-black uppercase tracking-[0.14em] sm:tracking-[0.2em] border transition-all duration-500 cursor-pointer relative group shrink-0 focus-ring ${
+                className={`min-h-[44px] px-4 sm:px-6 py-3 rounded-2xl font-mono text-[10px] sm:text-[12.5px] font-black uppercase tracking-[0.14em] sm:tracking-[0.2em] border transition-all duration-300 cursor-pointer relative group shrink-0 focus-ring ${
                   isActive
                     ? "bg-navy-deep text-gold border-navy-deep shadow-xl"
                     : "border border-navy-deep/[0.08] bg-white/90 text-slate-600 hover:text-navy-deep hover:border-gold/40"
@@ -470,7 +470,7 @@ export default function ProgramsSection() {
                   key={prog.id}
                   data-carousel-card={index}
                   data-active={index === activeCarouselIndex}
-                  className={`program-carousel-card shrink-0 w-[80%] snap-center transition-all duration-500 ${
+                  className={`program-carousel-card shrink-0 w-[80%] snap-center transition-all duration-300 ${
                     index === activeCarouselIndex
                       ? "opacity-100 scale-100"
                       : "opacity-60 scale-95"
@@ -485,7 +485,7 @@ export default function ProgramsSection() {
 
             {/* Right-edge gradient fade */}
             <div
-              className={`absolute right-0 top-0 bottom-5 w-12 bg-gradient-to-l from-cream-bg via-cream-bg/80 to-transparent pointer-events-none z-10 transition-opacity duration-300 ${
+              className={`absolute right-0 top-0 bottom-5 w-12 bg-gradient-to-l from-cream-bg via-cream-bg/80 to-transparent pointer-events-none z-10 transition-opacity duration-200 ${
                 activeCarouselIndex === filteredPrograms.length - 1
                   ? "opacity-0"
                   : "opacity-100"
@@ -494,7 +494,7 @@ export default function ProgramsSection() {
             />
             {/* Left-edge gradient fade */}
             <div
-              className={`absolute left-0 top-0 bottom-5 w-8 bg-gradient-to-r from-cream-bg via-cream-bg/80 to-transparent pointer-events-none z-10 transition-opacity duration-300 ${
+              className={`absolute left-0 top-0 bottom-5 w-8 bg-gradient-to-r from-cream-bg via-cream-bg/80 to-transparent pointer-events-none z-10 transition-opacity duration-200 ${
                 activeCarouselIndex === 0 ? "opacity-0" : "opacity-100"
               }`}
               aria-hidden="true"

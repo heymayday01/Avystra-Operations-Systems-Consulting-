@@ -132,7 +132,7 @@ export default function TestimonialsSection() {
 
               <div className="relative z-10">
                 {/* Quote Icon Badge */}
-                <div className="w-9 h-9 rounded-full flex items-center justify-center mb-6 text-gold group-hover:border-gold/40 transition-colors duration-500" style={{ background: "rgba(184,146,78,0.10)", border: "1px solid rgba(184,146,78,0.25)" }}>
+                <div className="w-9 h-9 rounded-full flex items-center justify-center mb-6 text-gold group-hover:border-gold/40 transition-colors duration-300" style={{ background: "rgba(184,146,78,0.10)", border: "1px solid rgba(184,146,78,0.25)" }}>
                   <Quote className="w-4 h-4 fill-gold/10" />
                 </div>
 

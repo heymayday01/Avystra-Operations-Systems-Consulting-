@@ -132,7 +132,7 @@ export default function FAQSection() {
                   <div className="flex items-center gap-4 sm:gap-6 flex-1">
                     {/* Index Number Badge */}
                     <span
-                      className={`font-mono text-xs sm:text-sm font-black w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-300 ${
+                      className={`font-mono text-xs sm:text-sm font-black w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-200 ${
                         isOpen
                           ? "bg-gold text-white border border-gold"
                           : "text-gold/80 bg-gold/5 border border-gold/20 group-hover:bg-gold/10"
@@ -142,7 +142,7 @@ export default function FAQSection() {
                     </span>
 
                     <span
-                      className={`font-sans font-medium text-base sm:text-[17px] leading-snug transition-colors duration-300 flex-1 ${
+                      className={`font-sans font-medium text-base sm:text-[17px] leading-snug transition-colors duration-200 flex-1 ${
                         isOpen
                           ? "text-gold"
                           : "text-navy-deep group-hover:text-gold"
@@ -154,7 +154,7 @@ export default function FAQSection() {
 
                   {/* Chevron — CSS-only rotation (no spring physics, no jank) */}
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border transition-all duration-300 ${
+                    className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border transition-all duration-200 ${
                       isOpen
                         ? "border-gold bg-gold text-white rotate-180"
                         : "border-navy-deep/[0.08] bg-white/90 text-slate-500 group-hover:border-gold/40 group-hover:bg-gold/10 group-hover:text-gold"
@@ -178,7 +178,7 @@ export default function FAQSection() {
                 >
                   <div className="overflow-hidden">
                     <div
-                      className="pt-3 pb-1 pl-12 pr-4 sm:pl-14 text-slate-700 text-[15px] sm:text-base leading-relaxed font-normal transition-opacity duration-300"
+                      className="pt-3 pb-1 pl-12 pr-4 sm:pl-14 text-slate-700 text-[15px] sm:text-base leading-relaxed font-normal transition-opacity duration-200"
                       style={{ opacity: isOpen ? 1 : 0 }}
                     >
                       {faq.answer}

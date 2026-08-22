@@ -125,8 +125,8 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
           gsap.to(el, {
             opacity: 1,
             y: 0,
-            duration: duration || 0.48,
-            ease: "power3.out",
+            duration: duration || 0.6,
+            ease: "expo.out",
             delay,
             scrollTrigger: {
               trigger: el,
@@ -141,8 +141,8 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
         gsap.set(wordInners, { yPercent: 110 });
         gsap.to(wordInners, {
           yPercent: 0,
-          duration: duration || 0.6,
-          ease: "power4.out",
+          duration: duration || 0.7,
+          ease: "expo.out",
           stagger,
           delay,
           scrollTrigger: {
@@ -158,8 +158,8 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
         gsap.to(el, {
           opacity: 1,
           y: 0,
-          duration: duration || 0.48,
-          ease: "power3.out",
+          duration: duration || 0.6,
+          ease: "expo.out",
           delay,
           clearProps: "transform",
           scrollTrigger: {
