@@ -46,14 +46,22 @@ export default function Hero() {
   // Trust (GSAP):     0.7s  delay, 0.5s dur  → finishes at 1.20s
   // Marquee (GSAP):   0.8s  delay, 0.5s dur, y:0 (pure fade — no slide gap)
   // Squiggle (FM):    0.4s  delay, 0.8s dur  → draws under line 3 as it settles
+  // ── HERO ENTRANCE CASCADE — Premium orchestrated timing ──
+  // Each group has breathing room before the next starts:
+  // - Eyebrow: fires immediately (0s)
+  // - H1 lines: CSS-driven, 0.05s→0.18s→0.32s (overlaps with eyebrow)
+  // - Chips: 0.4s delay (let H1 "land" first — breathing room)
+  // - Card: 0.65s delay (let chips settle)
+  // - CTAs: 0.85s delay (let card content register)
+  // - Trust: 1.0s delay
+  // - Marquee: 1.15s delay (final element, pure fade)
+  // Total cascade: ~1.75s (premium, not rushed)
   const eyebrowRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0, duration: 0.6, y: 16 });
-  const chipsRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.25, duration: 0.6, y: 16 });
-  const cardRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.4, duration: 0.6, y: 16 });
-  const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.55, duration: 0.6, y: 16 });
-  const trustRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.7, duration: 0.6, y: 16 });
-  // Marquee: pure fade (y:0) — a slide-up would leave a visible cream gap
-  // below the navy band as it animates into place.
-  const marqueeRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.85, duration: 0.6, y: 0 });
+  const chipsRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.4, duration: 0.6, y: 16 });
+  const cardRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.65, duration: 0.6, y: 16 });
+  const ctaRef = useGsapReveal<HTMLDivElement>("fade", { delay: 0.85, duration: 0.6, y: 16 });
+  const trustRef = useGsapReveal<HTMLDivElement>("fade", { delay: 1.0, duration: 0.6, y: 16 });
+  const marqueeRef = useGsapReveal<HTMLDivElement>("fade", { delay: 1.15, duration: 0.6, y: 0 });
 
   const reducedMotion = useSyncExternalStore(
     reducedMotionSubscribe,
@@ -140,16 +148,15 @@ export default function Hero() {
               <span className="relative inline-block font-serif italic font-semibold whitespace-nowrap text-gold">
                 Depend On You?
                 {pageReady && (
-                  <UnderlineSquiggle className="text-gold/50" delay={0.4} duration={0.8} />
+                  <UnderlineSquiggle className="text-gold/50" delay={0.55} duration={0.9} />
                 )}
               </span>
             </span>
           </h1>
 
-          {/* Feature chips — DIFFERENT layouts for mobile vs desktop:
-              Mobile: flex-col (single column stack, center-aligned, auto-width)
-              Desktop: flex-wrap (3+2 centered wrap, auto-width)
-              Both use the same chip styling (px-4 py-2.5, 12px text, icon). */}
+          {/* Feature chips — individual stagger via inline transition-delay.
+              Each chip appears 80ms after the previous (wave pattern).
+              Mobile: flex-col (single column stack). Desktop: flex-wrap (3+2). */}
           <div ref={chipsRef} className="flex flex-col sm:flex-row sm:flex-wrap items-center gap-2.5 sm:gap-3 mb-5 sm:mb-12 w-full sm:max-w-3xl mx-auto sm:justify-center">
             {[
               { label: "Hired experienced people", Icon: UserPlus },
@@ -160,8 +167,11 @@ export default function Hero() {
             ].map(({ label, Icon }, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-300 ease-out-expo"
-                style={{ boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)" }}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-navy-deep/[0.08] bg-white/90 hover:border-gold/40 hover:bg-white transition-[border-color,background-color] duration-200 ease-out-expo"
+                style={{
+                  boxShadow: "0 1px 2px rgba(11,27,46,0.04), inset 0 1px 0 rgba(255,255,255,0.9)",
+                  transitionDelay: pageReady ? `${0.4 + idx * 0.08}s` : "0s",
+                }}
               >
                 <Icon className="w-3.5 h-3.5 text-gold shrink-0" />
                 <span className="text-navy-deep/80 font-sans text-[12px] font-medium whitespace-nowrap">
